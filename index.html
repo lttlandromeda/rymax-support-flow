@@ -1,0 +1,1459 @@
+<meta charset="UTF-8">
+<title>Rymax Support Walkthrough</title>
+<meta name="description" content="A 3-slide interactive walkthrough of the Rymax AI customer-support flow — request form, AI case summary, and specialist dashboard.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,340;9..144,420;9..144,520;9..144,600&family=Open+Sans:wght@400;500;600;700&display=swap">
+
+<style>
+  :root{
+    --stage-bg:#242121;
+    --deck-bg:#403c3b;
+    --deck-title:#faf4ed;
+    --deck-body:#e4dfd8;
+    --deck-muted:rgba(228,223,216,.62);
+    --deck-faint:rgba(228,223,216,.34);
+    --deck-line:rgba(250,244,237,.14);
+
+    --app-bg:#faf4ed;
+    --app-surface:#ffffff;
+    --app-border:#eae1d7;
+    --input-bg:#f7ecdc;
+    --input-border:#e8dabf;
+    --tan-highlight:#f1e3ce;
+
+    --ink:#2b2621;
+    --ink-soft:#4c443c;
+    --text-secondary:#6c6259;
+    --text-tertiary:#978c7d;
+    --line:#e8ddcc;
+
+    --accent:#b25f30;
+    --accent-soft:#b25f301c;
+    --success:#3e6a49;
+    --success-soft:#3e6a4914;
+
+    --radius-card:14px;
+    --radius-input:10px;
+    --radius-pill:999px;
+    --shadow-card:0 1px 2px rgba(43,38,34,.06);
+    --shadow-raised:0 24px 60px rgba(0,0,0,.4);
+
+    --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body:'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--stage-bg)}
+  body{
+    font-family:var(--font-body);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+  button{font-family:inherit;-webkit-tap-highlight-color:transparent}
+  h1,h2,p,dl,dd,dt,ol,ul{margin:0}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+  }
+
+  /* ---------- stage / deck shell ---------- */
+  .stage{
+    min-height:100vh;
+    background:var(--stage-bg);
+    display:flex;
+    flex-direction:column;
+  }
+  .deck-shell{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    background:var(--deck-bg);
+  }
+  .deck-left{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:52px 24px 28px;
+  }
+  .deck-left-inner{
+    max-width:560px;
+    width:100%;
+    opacity:0;
+    transform:translateY(10px);
+    animation:panel-in .5s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  @keyframes panel-in{to{opacity:1;transform:translateY(0)}}
+
+  .deck-eyebrow{
+    margin:0 0 20px;
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:1.7px;
+    text-transform:uppercase;
+    color:var(--deck-faint);
+  }
+  .deck-title{
+    font-family:var(--font-display);
+    font-weight:520;
+    font-size:clamp(32px,5vw,50px);
+    line-height:1.08;
+    color:var(--deck-title);
+    text-wrap:balance;
+  }
+  .deck-subtitle{
+    margin:18px 0 0;
+    font-size:16.5px;
+    line-height:1.55;
+    color:var(--deck-body);
+    max-width:46ch;
+  }
+  .deck-note{
+    margin:18px 0 0;
+    font-size:12.5px;
+    line-height:1.6;
+    color:var(--deck-muted);
+    max-width:46ch;
+  }
+  .deck-note b{color:var(--deck-title);font-weight:600}
+  .live-tag{
+    display:inline-flex;align-items:center;gap:6px;
+    color:var(--accent);
+    font-weight:700;
+    letter-spacing:.3px;
+    margin-right:4px;
+  }
+  .live-tag::before{
+    content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-soft);
+  }
+
+  .deck-buttons{display:flex;gap:10px;margin-top:30px}
+  .deck-btn{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:12px 20px;
+    border:1px solid var(--deck-line);
+    border-radius:var(--radius-pill);
+    background:transparent;
+    color:var(--deck-body);
+    font-size:12.5px;font-weight:600;letter-spacing:.2px;
+    cursor:pointer;
+    transition:background .16s ease,border-color .16s ease,color .16s ease, transform .16s ease;
+  }
+  .deck-btn:hover{border-color:rgba(250,244,237,.4);color:var(--deck-title)}
+  .deck-btn:active{transform:scale(.97)}
+  .deck-btn--next{background:var(--deck-title);color:#2c2825;border-color:var(--deck-title)}
+  .deck-btn--next:hover{background:#fff;color:#2c2825}
+  .deck-btn svg{display:block}
+
+  .deck-hint{margin:12px 0 0;font-size:11px;color:var(--deck-faint);letter-spacing:.3px}
+  .deck-hint .kbd{display:none}
+
+  .deck-dots{display:flex;gap:7px;margin-top:26px}
+  .deck-dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--deck-line);
+    border:none;padding:0;cursor:pointer;
+    transition:background .2s ease, width .2s ease;
+  }
+  .deck-dot.is-active{background:var(--deck-title);width:18px;border-radius:4px}
+
+  .deck-caption{margin:40px 0 0;font-size:10.5px;letter-spacing:.6px;color:rgba(228,223,216,.2)}
+
+  /* ---------- right side / browser mock ---------- */
+  .deck-right{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:8px 20px 44px;
+  }
+  .browser-frame{
+    width:min(720px,100%);
+    background:linear-gradient(160deg,#4c4645,#312d2c 45%,#1d1a19);
+    border-radius:20px;
+    padding:10px;
+    box-shadow:var(--shadow-raised), inset 0 1px rgba(255,255,255,.08);
+    display:flex;
+    flex-direction:column;
+    opacity:0;
+    transform:translateY(14px);
+    animation:panel-in .55s cubic-bezier(.22,1,.36,1) .08s forwards;
+  }
+  .browser-chrome{
+    display:flex;align-items:center;gap:14px;
+    padding:10px 14px;
+    flex:0 0 auto;
+  }
+  .traffic{display:flex;gap:7px;flex-shrink:0}
+  .traffic span{width:11px;height:11px;border-radius:50%;display:block}
+  .traffic span:nth-child(1){background:#ec6a5e}
+  .traffic span:nth-child(2){background:#f4bf4f}
+  .traffic span:nth-child(3){background:#61c454}
+  .browser-nav{display:flex;gap:6px;color:rgba(255,255,255,.32);flex-shrink:0}
+  .browser-url{
+    flex:1;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    background:rgba(255,255,255,.08);
+    border-radius:7px;
+    padding:6px 10px;
+    color:rgba(255,255,255,.72);
+    font-size:12px;
+    min-width:0;
+  }
+  .browser-url span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .browser-viewport{
+    background:var(--app-bg);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.05);
+    display:flex;
+    flex-direction:column;
+    flex:1;
+    min-height:0;
+  }
+  .app-topbar{
+    display:flex;align-items:center;
+    padding:16px 28px;
+    border-bottom:1px solid var(--line);
+    flex:0 0 auto;
+  }
+  .app-topbar__title{font-size:15px;font-weight:700;color:var(--ink)}
+
+  .app-scroll{
+    position:relative;
+    display:flex;
+    flex:1;
+    min-height:0;
+  }
+  #appMount{
+    --mount-pad-x:28px;
+    --mount-pad-top:30px;
+    height:min(560px,62vh);
+    flex:1;
+    min-height:0;
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding:var(--mount-pad-top) var(--mount-pad-x) 40px;
+    scrollbar-width:none;
+  }
+  #appMount::-webkit-scrollbar{display:none}
+  .scroll-thumb{
+    position:absolute;
+    top:0;
+    right:4px;
+    width:4px;
+    border-radius:4px;
+    background:rgba(43,38,33,.32);
+    opacity:0;
+    transition:opacity .45s ease;
+    pointer-events:none;
+  }
+  .scroll-thumb.is-visible{opacity:1}
+
+  /* ---------- shared app UI atoms ---------- */
+  .app-h2{
+    font-family:var(--font-display);
+    font-weight:500;
+    font-size:26px;
+    line-height:1.2;
+    color:var(--ink);
+    text-align:center;
+    text-wrap:balance;
+  }
+  .app-sub{
+    margin:10px auto 0;
+    font-size:13.5px;
+    color:var(--text-secondary);
+    text-align:center;
+    max-width:38ch;
+  }
+  .app-sub--nowrap{max-width:none;margin-bottom:22px}
+  .eyebrow-mini{
+    text-align:center;
+    font-size:10.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+    color:var(--text-tertiary);
+    margin-bottom:8px;
+  }
+  .card{
+    background:var(--app-surface);
+    border:1px solid var(--app-border);
+    border-radius:var(--radius-card);
+    box-shadow:var(--shadow-card);
+    padding:26px;
+  }
+  .card + .card{margin-top:16px}
+  .card-label{
+    font-size:10.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;
+    color:var(--text-tertiary);
+    margin-bottom:14px;
+  }
+  .pill-badge{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:6px 12px;
+    border:1px solid var(--app-border);
+    border-radius:var(--radius-pill);
+    font-size:11px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;
+    color:var(--text-secondary);
+    background:var(--app-surface);
+  }
+  .pill-badge--accent{color:var(--accent);border-color:var(--accent-soft);background:var(--accent-soft)}
+  .pill-badge b{font-variant-numeric:tabular-nums}
+
+  .btn-primary{
+    width:100%;
+    padding:15px 20px;
+    background:var(--ink);
+    color:var(--app-bg);
+    border:none;border-radius:var(--radius-input);
+    font-size:14px;font-weight:600;
+    cursor:pointer;
+    transition:background .15s ease, opacity .15s ease, transform .1s ease;
+  }
+  .btn-primary:hover:not(:disabled){background:#171310}
+  .btn-primary:active:not(:disabled){transform:scale(.99)}
+  .btn-primary:disabled{opacity:.35;cursor:not-allowed}
+
+  .btn-outline{
+    padding:12px 18px;
+    background:transparent;
+    border:1px solid var(--app-border);
+    border-radius:var(--radius-input);
+    color:var(--ink);
+    font-size:13.5px;font-weight:600;
+    cursor:pointer;
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .btn-outline:hover{background:#2e2e2e0c}
+
+  .btn-ghost{
+    padding:12px 18px;
+    background:transparent;border:1px solid transparent;
+    border-radius:var(--radius-input);
+    color:var(--text-secondary);
+    font-size:13.5px;font-weight:600;
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+  }
+  .btn-ghost:hover{background:#2e2e2e0c;color:var(--ink)}
+
+  /* ---------- slide 1 : request form ---------- */
+  .stepper{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:26px}
+  .step-pill{
+    padding:8px 14px;border-radius:var(--radius-pill);
+    font-size:11.5px;font-weight:700;
+    border:1px solid var(--app-border);
+    color:var(--text-secondary);
+    transition:background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .step-pill.is-active{background:var(--ink);color:var(--app-bg);border-color:var(--ink)}
+  .step-line{width:34px;height:1px;background:var(--app-border)}
+
+  .app-step{display:none}
+  .app-step.is-active{display:block;animation:step-in .35s ease both}
+  @keyframes step-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+  .field{margin-bottom:18px}
+  .field:last-of-type{margin-bottom:0}
+  .field label{
+    display:block;font-size:11.5px;font-weight:600;color:var(--text-secondary);margin-bottom:7px;
+  }
+  .field-label-like{
+    display:block;font-size:11.5px;font-weight:600;color:var(--text-secondary);margin-bottom:7px;
+  }
+  .field input, .field textarea{
+    width:100%;
+    background:#fff;
+    border:1px solid var(--input-border);
+    border-radius:var(--radius-input);
+    padding:13px 15px;
+    font-size:14px;font-family:inherit;color:var(--ink);
+    cursor:pointer;
+    outline:none;
+    transition:box-shadow .2s ease, outline-color .2s ease;
+  }
+  .field input::placeholder, .field textarea::placeholder{color:var(--text-tertiary)}
+  .field input.is-typing, .field textarea.is-typing{
+    box-shadow:0 0 0 3px rgba(43,38,33,.16);
+    outline:1.5px solid var(--ink);
+  }
+  .field-help{margin-top:7px;font-size:11px;color:var(--text-tertiary)}
+
+  .step-footnote{margin-top:18px;text-align:center}
+  .step-footnote p{margin-top:9px;font-size:11.5px;color:var(--text-tertiary)}
+
+  .cat-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:22px 0 6px}
+  .cat-pill{
+    padding:9px 15px;
+    border-radius:var(--radius-pill);
+    border:1px solid var(--app-border);
+    background:var(--app-surface);
+    color:var(--ink);
+    font-size:12.5px;font-weight:600;
+    cursor:pointer;
+    transition:background .15s ease,color .15s ease,transform .12s ease, border-color .15s ease;
+  }
+  .cat-pill:hover{border-color:#d8c9ae}
+  .cat-pill.is-active{background:var(--ink);color:var(--app-bg);border-color:var(--ink)}
+  .cat-pill.is-disabled{
+    color:var(--text-tertiary);
+    border-style:dashed;
+    cursor:not-allowed;
+    background:transparent;
+  }
+  .cat-pill.is-disabled:hover{border-color:var(--app-border)}
+  .cat-pill.shake{animation:shake .32s ease}
+  @keyframes shake{
+    20%{transform:translateX(-4px)}
+    50%{transform:translateX(3px)}
+    80%{transform:translateX(-2px)}
+    100%{transform:translateX(0)}
+  }
+
+  .cat-panel{margin-top:22px;animation:step-in .3s ease both}
+
+  .choice-row{display:flex;gap:8px;margin-top:6px}
+  .choice-pill{
+    flex:1;
+    padding:11px 14px;
+    border-radius:var(--radius-input);
+    border:1px solid var(--app-border);
+    background:var(--app-surface);
+    color:var(--ink);
+    font-size:13px;font-weight:600;
+    text-align:center;
+    cursor:pointer;
+    transition:background .15s ease,color .15s ease,border-color .15s ease;
+  }
+  .choice-pill:hover{border-color:#d8c9ae}
+  .choice-pill.is-active{background:var(--ink);color:var(--app-bg);border-color:var(--ink)}
+
+  .item-card{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 16px;
+    border:1.5px solid var(--app-border);
+    border-radius:12px;
+    margin-bottom:10px;
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .item-card:hover{border-color:#d8c9ae}
+  .item-card.is-selected{border-color:var(--ink);background:var(--tan-highlight)}
+  .item-thumb{width:44px;height:44px;border-radius:8px;background:var(--app-border);flex-shrink:0}
+  .item-text{flex:1;min-width:0}
+  .item-name{display:block;font-size:13.5px;font-weight:600;color:var(--ink)}
+  .item-meta{display:block;font-size:11.5px;color:var(--text-tertiary);margin-top:2px}
+  .item-check{
+    width:20px;height:20px;border-radius:50%;flex-shrink:0;
+    border:1.5px solid var(--app-border);
+    display:flex;align-items:center;justify-content:center;
+    color:transparent;
+  }
+  .item-card.is-selected .item-check{background:var(--ink);border-color:var(--ink);color:var(--app-bg)}
+
+  .photo-row{display:flex;align-items:flex-start;gap:10px;margin-top:8px}
+  .photo-box{flex:1;cursor:pointer}
+  .photo-box-empty{
+    aspect-ratio:1.2;
+    border:1.5px dashed var(--input-border);
+    border-radius:10px;
+    background:var(--input-bg);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    font-size:10.5px;color:var(--text-tertiary);text-align:center;
+    padding:8px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .photo-box-empty svg{opacity:.55}
+  .photo-box-added{
+    display:none;
+    aspect-ratio:1.2;
+    flex-direction:column;
+    padding:10px;
+    background:#fff;
+    border:1px solid var(--input-border);
+    border-radius:10px;
+  }
+  .photo-thumb{flex:1;width:100%;border-radius:8px;background:#e5e5e5}
+  .photo-added-label{
+    margin-top:8px;
+    font-size:11px;font-weight:400;color:#8a8a8a;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .photo-box.is-added .photo-box-empty{display:none}
+  .photo-box.is-added .photo-box-added{display:flex}
+
+  .success-banner{
+    margin-top:16px;
+    display:flex;align-items:flex-start;gap:10px;
+    padding:14px 16px;
+    background:var(--success-soft);
+    border:1px solid var(--success);
+    border-radius:12px;
+    color:var(--success);
+    font-size:12.5px;line-height:1.5;
+    animation:step-in .3s ease both;
+  }
+  .success-banner b{display:block;font-size:13px;margin-bottom:2px}
+
+  .lookup-skeleton{margin-top:16px}
+  .skel-line{height:11px;border-radius:6px;background:linear-gradient(90deg,var(--app-border) 25%,#f3e9da 37%,var(--app-border) 63%);background-size:400% 100%;animation:shimmer 1.3s ease infinite}
+  .skel-line + .skel-line{margin-top:10px}
+  @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+  .lookup-label{margin-top:12px;font-size:11.5px;color:var(--text-tertiary);text-align:center}
+
+  .lookup-result{
+    margin-top:16px;
+    background:#fff;
+    border:1px solid var(--input-border);
+    border-radius:12px;
+    padding:18px;
+    animation:step-in .3s ease both;
+  }
+  .kv-list{display:flex;flex-direction:column}
+  .kv-row{
+    display:flex;justify-content:space-between;gap:16px;
+    padding:11px 0;
+    border-bottom:1px solid var(--line);
+    font-size:13px;
+  }
+  .kv-row:last-child{border-bottom:none;padding-bottom:0}
+  .kv-row:first-child{padding-top:0}
+  .kv-row dt{color:var(--text-tertiary);flex-shrink:0}
+  .kv-row dd{color:var(--ink);text-align:right;font-weight:600}
+  .lookup-result .kv-row{border-bottom-color:rgba(43,38,34,.08)}
+
+  .check-row{display:flex;align-items:center;gap:9px;margin:16px 0 18px;font-size:12.5px;color:var(--ink)}
+  .check-row input{width:16px;height:16px;accent-color:var(--ink);cursor:pointer}
+
+  /* ---------- slide 2 : AI summary ---------- */
+  .loading-row{
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    padding:40px 0;
+  }
+  .loading-row[hidden]{display:none}
+  .loading-row .dot{width:7px;height:7px;border-radius:50%;background:var(--text-tertiary);animation:bounce 1s ease infinite}
+  .loading-row .dot:nth-child(2){animation-delay:.15s}
+  .loading-row .dot:nth-child(3){animation-delay:.3s}
+  @keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-5px);opacity:1}}
+  .loading-label{margin-left:8px;font-size:12px;color:var(--text-tertiary)}
+
+  .summary-content > *{opacity:0;animation:step-in .4s ease both}
+  .summary-content > *:nth-child(1){animation-delay:.05s}
+  .summary-content > *:nth-child(2){animation-delay:.16s}
+  .summary-content > *:nth-child(3){animation-delay:.27s}
+  .summary-content > *:nth-child(4){animation-delay:.38s}
+  .badge-row{display:flex;gap:8px;justify-content:center;margin:16px 0 20px}
+  .rec-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+  .rec-list li{display:flex;gap:12px;font-size:13px;line-height:1.55;color:var(--ink-soft)}
+  .rec-num{
+    flex-shrink:0;width:20px;height:20px;border-radius:50%;
+    background:var(--tan-highlight);color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:700;
+  }
+
+  /* ---------- slide 3 : specialist dashboard ---------- */
+  .tabs-row{
+    display:flex;gap:4px;
+    flex-wrap:wrap;
+    overflow:visible;
+    background:var(--app-surface);
+    margin:calc(-1 * var(--mount-pad-top)) calc(-1 * var(--mount-pad-x)) 20px;
+    padding:14px var(--mount-pad-x) 0;
+    border-bottom:1px solid var(--app-border);
+    position:sticky;
+    top:calc(-1 * var(--mount-pad-top));
+    z-index:2;
+  }
+  .tab{
+    flex-shrink:0;
+    padding:10px 14px 12px;
+    border:none;border-bottom:2px solid transparent;
+    margin-bottom:-1px;
+    background:transparent;
+    font-size:12.5px;font-weight:600;color:var(--text-tertiary);
+    cursor:pointer;
+    white-space:nowrap;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab.is-active{color:var(--ink);font-weight:700;border-bottom-color:var(--ink)}
+
+  .dash-note{
+    font-size:12.5px;
+    color:var(--text-secondary);
+    line-height:1.5;
+    padding-bottom:18px;
+    margin-bottom:4px;
+    border-bottom:1px solid var(--line);
+  }
+  .kv-list--info .kv-row{gap:20px;align-items:flex-start}
+  .kv-list--info dt{width:128px;flex-shrink:0}
+  .kv-list--info dd{flex:1;text-align:left;font-weight:400}
+
+  .dash-banner{
+    margin-top:18px;
+    padding:16px 18px;
+    background:var(--success-soft);
+    border:1px solid var(--success);
+    color:var(--success);
+    border-radius:12px;
+    font-size:13px;font-weight:600;line-height:1.5;
+    animation:step-in .3s ease both;
+  }
+
+  .composer{
+    margin-top:24px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    animation:step-in .3s ease both;
+  }
+  .composer .btn-primary{margin-top:16px}
+  .composer[hidden]{display:none}
+  .cat-row[hidden]{display:none}
+  .composer .field textarea{cursor:default;resize:vertical;min-height:90px}
+
+  /* ---------- responsive ---------- */
+  @media (min-width:900px){
+    .deck-shell{display:grid;grid-template-columns:44% 56%;height:100vh;overflow:hidden}
+    .deck-left{align-items:flex-end;padding:0 60px 0 56px}
+    .deck-left-inner{padding:56px 0}
+    .deck-right{padding:0 56px 0 16px}
+    .deck-hint .kbd{display:inline}
+    .browser-frame{height:min(920px, calc(100vh - 32px))}
+    #appMount{height:auto}
+  }
+  @media (max-width:640px){
+    .deck-buttons{flex-wrap:wrap}
+    #appMount{height:min(520px,58vh);--mount-pad-x:18px;--mount-pad-top:24px;padding:var(--mount-pad-top) var(--mount-pad-x) 32px}
+    .browser-chrome{padding:8px 10px}
+  }
+</style>
+
+<div class="stage">
+  <div class="deck-shell">
+    <div class="deck-left">
+      <div class="deck-left-inner" id="deckLeftInner">
+        <p class="deck-eyebrow" id="deckEyebrow">Walkthrough · 1 / 3</p>
+        <h1 class="deck-title" id="deckTitle">Customer Request</h1>
+        <p class="deck-subtitle" id="deckSubtitle"></p>
+        <p class="deck-note" id="deckNote"></p>
+
+        <div class="deck-buttons">
+          <button class="deck-btn deck-btn--prev" id="prevBtn" aria-label="Previous slide">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            Prev
+          </button>
+          <button class="deck-btn deck-btn--next" id="nextBtn" aria-label="Next slide">
+            Next
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+        <p class="deck-hint"><span class="kbd">←  →</span> arrow keys also navigate</p>
+
+        <div class="deck-dots" id="deckDots"></div>
+        <p class="deck-caption">Rymax — Customer Support AI POC · Prototype v0.1</p>
+      </div>
+    </div>
+
+    <div class="deck-right">
+      <div class="browser-frame" id="browserFrame">
+        <div class="browser-chrome">
+          <div class="traffic"><span></span><span></span><span></span></div>
+          <div class="browser-nav">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
+          <div class="browser-url">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+            <span id="urlBar">rymax.customersupport.com</span>
+          </div>
+        </div>
+        <div class="browser-viewport">
+          <div class="app-topbar"><span class="app-topbar__title">Support</span></div>
+          <div class="app-scroll">
+            <div id="appMount"></div>
+            <div class="scroll-thumb" id="scrollThumb"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var motionOK = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var appMount = document.getElementById('appMount');
+  var scrollThumb = document.getElementById('scrollThumb');
+  var renderGen = 0;
+
+  var scrollHideTimer = null;
+  var scrollThumbDisabled = true;
+  var MIN_THUMB = 28;
+
+  function updateThumb(){
+    var trackHeight = appMount.clientHeight;
+    var contentHeight = appMount.scrollHeight;
+    if(contentHeight <= trackHeight + 1){
+      scrollThumbDisabled = true;
+      scrollThumb.classList.remove('is-visible');
+      return;
+    }
+    scrollThumbDisabled = false;
+    var thumbHeight = Math.max(MIN_THUMB, trackHeight * (trackHeight / contentHeight));
+    var maxTravel = trackHeight - thumbHeight;
+    var scrollRange = contentHeight - trackHeight;
+    var progress = scrollRange > 0 ? appMount.scrollTop / scrollRange : 0;
+    scrollThumb.style.height = thumbHeight + 'px';
+    scrollThumb.style.transform = 'translateY(' + (maxTravel * progress) + 'px)';
+  }
+
+  function showThumb(){
+    updateThumb();
+    if(scrollThumbDisabled) return;
+    scrollThumb.classList.add('is-visible');
+    clearTimeout(scrollHideTimer);
+    scrollHideTimer = setTimeout(function(){
+      scrollThumb.classList.remove('is-visible');
+    }, 500);
+  }
+
+  appMount.addEventListener('scroll', showThumb, { passive: true });
+  window.addEventListener('resize', updateThumb);
+
+  /* ---------------- shared helpers ---------------- */
+  function typeText(el, text, opts){
+    opts = opts || {};
+    var speed = opts.speed || 26;
+    var isInput = (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA');
+    if(!motionOK){
+      if(isInput) el.value = text; else el.textContent = text;
+      if(opts.onDone) opts.onDone();
+      return;
+    }
+    var i = 0;
+    el.classList.add('is-typing');
+    (function step(){
+      i++;
+      var s = text.slice(0, i);
+      if(isInput) el.value = s; else el.textContent = s;
+      if(i < text.length){
+        setTimeout(step, speed + Math.random()*22);
+      } else {
+        el.classList.remove('is-typing');
+        if(opts.onDone) opts.onDone();
+      }
+    })();
+  }
+
+  function animateCount(el, target, duration){
+    if(!duration){ el.textContent = target; return; }
+    var start = performance.now();
+    function frame(t){
+      var p = Math.min(1, (t - start) / duration);
+      el.textContent = Math.round(target * p);
+      if(p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function shake(el){
+    el.classList.remove('shake'); void el.offsetWidth;
+    el.classList.add('shake');
+  }
+
+  var svgPhoto = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="8.5" cy="10" r="1.5"></circle><path d="M21 15l-5-5L5 19"></path></svg>';
+
+  /* ---------------- slide 1 : request form ---------------- */
+  function renderSlide1(mount){
+    mount.innerHTML =
+      '<div class="stepper">' +
+        '<span class="step-pill is-active" data-pill="1">1 &middot; Your details</span>' +
+        '<span class="step-line"></span>' +
+        '<span class="step-pill" data-pill="2">2 &middot; Your request</span>' +
+      '</div>' +
+
+      '<div class="app-step is-active" data-step="1">' +
+        '<h2 class="app-h2">First, a few details about you</h2>' +
+        '<p class="app-sub app-sub--nowrap">We\'ll use this to find your account and route your case faster.</p>' +
+        '<div class="card">' +
+          '<div class="field"><label for="fName">Full name</label>' +
+            '<input id="fName" type="text" readonly placeholder="Click to fill in" data-fill="Marcus Reyes"></div>' +
+          '<div class="field"><label for="fEmail">Email or phone</label>' +
+            '<input id="fEmail" type="text" readonly placeholder="Click to fill in" data-fill="marcus.reyes@email.com"></div>' +
+          '<div class="field"><label for="fOrder">Order number</label>' +
+            '<input id="fOrder" type="text" readonly placeholder="Click to fill in" data-fill="#4821">' +
+            '<p class="field-help">Optional &mdash; helps us pull up your order instantly</p></div>' +
+          '<button class="btn-primary" id="continueBtn" style="margin-top:18px" disabled>Continue</button>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="app-step" data-step="2">' +
+        '<h2 class="app-h2">What can we help with?</h2>' +
+        '<p class="app-sub">Pick a category &mdash; the right questions will appear below.</p>' +
+        '<div class="cat-row" id="catRow">' +
+          '<button class="cat-pill" data-cat="damaged">Damaged item or empty box</button>' +
+          '<button class="cat-pill" data-cat="wrong">Wrong item or size</button>' +
+          '<button class="cat-pill" data-cat="cancel">Cancel an order</button>' +
+          '<button class="cat-pill" data-cat="track">Where is my order</button>' +
+          '<button class="cat-pill" data-cat="pricing">Pricing &amp; points</button>' +
+          '<button class="cat-pill" data-cat="other">Something else</button>' +
+        '</div>' +
+
+        '<div class="cat-panel" id="panelDamaged" hidden>' +
+          '<div class="field"><label for="damagedOrder">Order number</label>' +
+            '<input id="damagedOrder" type="text" readonly></div>' +
+          '<div class="field"><label for="issueText">Describe what happened</label>' +
+            '<textarea id="issueText" rows="2" readonly placeholder="Click to fill in" data-fill="The box arrived crushed and the sweater inside is torn near the collar."></textarea></div>' +
+          '<p class="field-label-like" style="margin-top:18px">Add photos &mdash; helps us approve faster</p>' +
+          '<div class="photo-row">' +
+            '<div class="photo-box" data-photo="1">' +
+              '<div class="photo-box-empty">' + svgPhoto + '<span>Box outside</span></div>' +
+              '<div class="photo-box-added"><span class="photo-thumb"></span><span class="photo-added-label">1 &middot; Box outside &mdash; added</span></div>' +
+            '</div>' +
+            '<div class="photo-box" data-photo="2">' +
+              '<div class="photo-box-empty">' + svgPhoto + '<span>Shipping label</span></div>' +
+              '<div class="photo-box-added"><span class="photo-thumb"></span><span class="photo-added-label">2 &middot; Shipping label &mdash; added</span></div>' +
+            '</div>' +
+            '<div class="photo-box" data-photo="3">' +
+              '<div class="photo-box-empty">' + svgPhoto + '<span>What was inside</span></div>' +
+              '<div class="photo-box-added"><span class="photo-thumb"></span><span class="photo-added-label">3 &middot; What was inside &mdash; added</span></div>' +
+            '</div>' +
+          '</div>' +
+          '<p class="field-label-like" style="margin-top:18px">What would you like?</p>' +
+          '<div class="choice-row">' +
+            '<button type="button" class="choice-pill" data-choice="refund">Refund</button>' +
+            '<button type="button" class="choice-pill" data-choice="exchange">Exchange for a new one</button>' +
+          '</div>' +
+          '<button class="btn-primary" id="submitDamaged" style="margin-top:20px" disabled>Submit request</button>' +
+        '</div>' +
+
+        '<div class="cat-panel" id="panelWrong" hidden>' +
+          '<div class="field"><label for="wrongOrder">Order number</label>' +
+            '<input id="wrongOrder" type="text" readonly></div>' +
+          '<div class="field"><label for="wrongReceived">What you received</label>' +
+            '<input id="wrongReceived" type="text" readonly placeholder="Click to fill in" data-fill="Canvas Weekender Bag, Black"></div>' +
+          '<div class="field"><label for="wrongExpected">What you should have received</label>' +
+            '<input id="wrongExpected" type="text" readonly placeholder="Click to fill in" data-fill="Merino Crew Sweater, Navy, M"></div>' +
+          '<p class="field-label-like" style="margin-top:18px">Add photos &mdash; helps us approve faster</p>' +
+          '<div class="photo-row">' +
+            '<div class="photo-box" data-photo="1">' +
+              '<div class="photo-box-empty">' + svgPhoto + '<span>Box outside</span></div>' +
+              '<div class="photo-box-added"><span class="photo-thumb"></span><span class="photo-added-label">1 &middot; Box outside &mdash; added</span></div>' +
+            '</div>' +
+            '<div class="photo-box" data-photo="2">' +
+              '<div class="photo-box-empty">' + svgPhoto + '<span>Shipping label</span></div>' +
+              '<div class="photo-box-added"><span class="photo-thumb"></span><span class="photo-added-label">2 &middot; Shipping label &mdash; added</span></div>' +
+            '</div>' +
+            '<div class="photo-box" data-photo="3">' +
+              '<div class="photo-box-empty">' + svgPhoto + '<span>What was inside</span></div>' +
+              '<div class="photo-box-added"><span class="photo-thumb"></span><span class="photo-added-label">3 &middot; What was inside &mdash; added</span></div>' +
+            '</div>' +
+          '</div>' +
+          '<p class="field-label-like" style="margin-top:18px">What would you like?</p>' +
+          '<div class="choice-row">' +
+            '<button type="button" class="choice-pill" data-choice="refund">Refund</button>' +
+            '<button type="button" class="choice-pill" data-choice="exchange">Exchange for correct item</button>' +
+          '</div>' +
+          '<button class="btn-primary" id="submitWrong" style="margin-top:20px" disabled>Submit request</button>' +
+        '</div>' +
+
+        '<div class="cat-panel" id="panelTrack" hidden>' +
+          '<div class="field"><label for="trackOrder">Order number</label>' +
+            '<input id="trackOrder" type="text" readonly></div>' +
+          '<div class="lookup-skeleton" id="lookupSkeleton" hidden>' +
+            '<div class="skel-line" style="width:60%"></div>' +
+            '<div class="skel-line" style="width:80%"></div>' +
+            '<div class="skel-line" style="width:45%"></div>' +
+            '<p class="lookup-label">Looking up your order&hellip;</p>' +
+          '</div>' +
+          '<div class="lookup-result" id="lookupResult" hidden>' +
+            '<p class="card-label">Found it &mdash; here\'s the latest status</p>' +
+            '<div class="kv-list">' +
+              '<div class="kv-row"><dt>Status</dt><dd>Shipped &mdash; in transit</dd></div>' +
+              '<div class="kv-row"><dt>Carrier</dt><dd>UPS &middot; 1Z999AA10123456784</dd></div>' +
+              '<div class="kv-row"><dt>Arriving by</dt><dd>Sep 12, end of day</dd></div>' +
+            '</div>' +
+          '</div>' +
+          '<label class="check-row"><input type="checkbox" id="notifyChk" checked> Notify me by SMS when it\'s delivered</label>' +
+          '<button class="btn-primary" id="trackBtn">Track my order</button>' +
+        '</div>' +
+
+        '<div class="cat-panel" id="panelCancel" hidden>' +
+          '<div class="field"><label for="cancelOrder">Order number</label>' +
+            '<input id="cancelOrder" type="text" readonly></div>' +
+          '<div class="field"><label for="cancelReason">Reason for cancelling</label>' +
+            '<textarea id="cancelReason" rows="2" readonly placeholder="Click to fill in" data-fill="Found a better price for the same item elsewhere."></textarea></div>' +
+          '<button class="btn-primary" id="submitCancel" style="margin-top:20px" disabled>Cancel order</button>' +
+        '</div>' +
+
+        '<div class="cat-panel" id="panelOther" hidden>' +
+          '<div class="field"><label for="otherQuestion">Your question</label>' +
+            '<textarea id="otherQuestion" rows="2" readonly placeholder="Click to fill in" data-fill="Do you ship to Canada, and how long does delivery usually take?"></textarea></div>' +
+          '<p class="field-label-like" style="margin-top:18px">Add a photo &mdash; optional</p>' +
+          '<div class="photo-row">' +
+            '<div class="photo-box" data-photo="1" style="flex:0 0 33%">' +
+              '<div class="photo-box-empty">' + svgPhoto + '<span>Attach a photo</span></div>' +
+              '<div class="photo-box-added"><span class="photo-thumb"></span><span class="photo-added-label">Photo added</span></div>' +
+            '</div>' +
+          '</div>' +
+          '<button class="btn-primary" id="submitOther" style="margin-top:20px" disabled>Send message</button>' +
+        '</div>' +
+
+        '<div class="cat-panel" id="panelPricing" hidden>' +
+          '<div class="field"><label for="pricingQuestion">Your question</label>' +
+            '<textarea id="pricingQuestion" rows="2" readonly placeholder="Click to fill in" data-fill="How many points do I need for the next reward tier?"></textarea></div>' +
+          '<button class="btn-primary" id="submitPricing" style="margin-top:20px" disabled>Send message</button>' +
+        '</div>' +
+      '</div>';
+
+    var step1 = mount.querySelector('[data-step="1"]');
+    var step2 = mount.querySelector('[data-step="2"]');
+    var continueBtn = mount.querySelector('#continueBtn');
+    var fName = mount.querySelector('#fName');
+    var fEmail = mount.querySelector('#fEmail');
+
+    function checkStep1(){
+      continueBtn.disabled = !(fName.value && fEmail.value);
+    }
+    step1.querySelectorAll('input[data-fill]').forEach(function(input){
+      input.addEventListener('click', function(){
+        if(input.value) return;
+        typeText(input, input.dataset.fill, { onDone: checkStep1 });
+      });
+    });
+    continueBtn.addEventListener('click', function(){
+      step1.classList.remove('is-active');
+      step2.classList.add('is-active');
+      mount.querySelectorAll('.step-pill').forEach(function(p){ p.classList.toggle('is-active', p.dataset.pill === '2'); });
+    });
+
+    var panelDamaged = mount.querySelector('#panelDamaged');
+    var panelWrong = mount.querySelector('#panelWrong');
+    var panelTrack = mount.querySelector('#panelTrack');
+    var panelCancel = mount.querySelector('#panelCancel');
+    var panelOther = mount.querySelector('#panelOther');
+    var panelPricing = mount.querySelector('#panelPricing');
+
+    mount.querySelectorAll('.cat-pill').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if(btn.classList.contains('is-disabled')){ shake(btn); return; }
+        mount.querySelectorAll('.cat-pill').forEach(function(b){ b.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        var cat = btn.dataset.cat;
+        panelDamaged.hidden = cat !== 'damaged';
+        panelWrong.hidden = cat !== 'wrong';
+        panelTrack.hidden = cat !== 'track';
+        panelCancel.hidden = cat !== 'cancel';
+        panelOther.hidden = cat !== 'other';
+        panelPricing.hidden = cat !== 'pricing';
+        if(cat === 'damaged') initDamaged();
+        if(cat === 'wrong') initWrong();
+        if(cat === 'track') initTrack();
+        if(cat === 'cancel') initCancel();
+        if(cat === 'other') initOther();
+        if(cat === 'pricing') initPricing();
+      });
+    });
+
+    var submitDamagedBtn = panelDamaged.querySelector('#submitDamaged');
+    var damagedOrder = panelDamaged.querySelector('#damagedOrder');
+    var damagedChoice = null;
+    function checkDamaged(){
+      submitDamagedBtn.disabled = !(damagedOrder.value.trim() && issueText.value.trim() && damagedChoice);
+    }
+    function initDamaged(){
+      damagedOrder.value = '#4821';
+      checkDamaged();
+    }
+    var issueText = panelDamaged.querySelector('#issueText');
+    issueText.addEventListener('click', function(){
+      if(issueText.value) return;
+      typeText(issueText, issueText.dataset.fill, { speed:16, onDone: checkDamaged });
+    });
+    panelDamaged.querySelectorAll('.photo-box').forEach(function(box){
+      box.addEventListener('click', function(){ box.classList.toggle('is-added'); });
+    });
+    panelDamaged.querySelectorAll('.choice-pill').forEach(function(pill){
+      pill.addEventListener('click', function(){
+        panelDamaged.querySelectorAll('.choice-pill').forEach(function(p){ p.classList.remove('is-active'); });
+        pill.classList.add('is-active');
+        damagedChoice = pill.dataset.choice;
+        checkDamaged();
+      });
+    });
+    panelDamaged.querySelector('#submitDamaged').addEventListener('click', function(e){
+      var btn = e.currentTarget;
+      if(btn.disabled) return;
+      btn.disabled = true;
+      btn.textContent = 'Request submitted';
+      var banner = document.createElement('div');
+      banner.className = 'success-banner';
+      banner.innerHTML = '<b>Request submitted</b>We\'ve logged the damage and will follow up with your ' + (damagedChoice === 'exchange' ? 'exchange' : 'refund') + '.';
+      btn.insertAdjacentElement('afterend', banner);
+    });
+
+    var submitWrongBtn = panelWrong.querySelector('#submitWrong');
+    var wrongOrder = panelWrong.querySelector('#wrongOrder');
+    var wrongReceived = panelWrong.querySelector('#wrongReceived');
+    var wrongExpected = panelWrong.querySelector('#wrongExpected');
+    var wrongChoice = null;
+    function checkWrong(){
+      submitWrongBtn.disabled = !(wrongOrder.value.trim() && wrongReceived.value.trim() && wrongExpected.value.trim() && wrongChoice);
+    }
+    function initWrong(){
+      wrongOrder.value = '#4821';
+      checkWrong();
+    }
+    [wrongReceived, wrongExpected].forEach(function(input){
+      input.addEventListener('click', function(){
+        if(input.value) return;
+        typeText(input, input.dataset.fill, { onDone: checkWrong });
+      });
+    });
+    panelWrong.querySelectorAll('.photo-box').forEach(function(box){
+      box.addEventListener('click', function(){ box.classList.toggle('is-added'); });
+    });
+    panelWrong.querySelectorAll('.choice-pill').forEach(function(pill){
+      pill.addEventListener('click', function(){
+        panelWrong.querySelectorAll('.choice-pill').forEach(function(p){ p.classList.remove('is-active'); });
+        pill.classList.add('is-active');
+        wrongChoice = pill.dataset.choice;
+        checkWrong();
+      });
+    });
+    submitWrongBtn.addEventListener('click', function(e){
+      var btn = e.currentTarget;
+      if(btn.disabled) return;
+      btn.disabled = true;
+      btn.textContent = 'Request submitted';
+      var banner = document.createElement('div');
+      banner.className = 'success-banner';
+      banner.innerHTML = '<b>Request submitted</b>We\'ve logged the mismatch and will follow up with your ' + (wrongChoice === 'exchange' ? 'exchange' : 'refund') + '.';
+      btn.insertAdjacentElement('afterend', banner);
+    });
+
+    var trackTimer = null;
+    function initTrack(){
+      var orderField = panelTrack.querySelector('#trackOrder');
+      var skeleton = panelTrack.querySelector('#lookupSkeleton');
+      var result = panelTrack.querySelector('#lookupResult');
+      orderField.value = '#4821';
+      result.hidden = true;
+      skeleton.hidden = false;
+      clearTimeout(trackTimer);
+      trackTimer = setTimeout(function(){
+        skeleton.hidden = true;
+        result.hidden = false;
+      }, motionOK ? 650 : 0);
+    }
+    panelTrack.querySelector('#trackBtn').addEventListener('click', function(e){
+      var btn = e.currentTarget;
+      if(btn.disabled) return;
+      var notify = panelTrack.querySelector('#notifyChk').checked;
+      btn.disabled = true;
+      btn.textContent = 'Tracking confirmed';
+      var banner = document.createElement('div');
+      banner.className = 'success-banner';
+      banner.innerHTML = '<b>All set</b>' + (notify ? 'We\'ll text you the moment it\'s delivered.' : 'Tracking saved to your account.');
+      btn.insertAdjacentElement('afterend', banner);
+    });
+
+    var submitCancelBtn = panelCancel.querySelector('#submitCancel');
+    var cancelOrder = panelCancel.querySelector('#cancelOrder');
+    var cancelReason = panelCancel.querySelector('#cancelReason');
+    function checkCancel(){
+      submitCancelBtn.disabled = !(cancelOrder.value.trim() && cancelReason.value.trim());
+    }
+    function initCancel(){
+      cancelOrder.value = '#4821';
+      checkCancel();
+    }
+    cancelReason.addEventListener('click', function(){
+      if(cancelReason.value) return;
+      typeText(cancelReason, cancelReason.dataset.fill, { speed:16, onDone: checkCancel });
+    });
+    submitCancelBtn.addEventListener('click', function(e){
+      var btn = e.currentTarget;
+      if(btn.disabled) return;
+      btn.disabled = true;
+      btn.textContent = 'Cancellation requested';
+      var banner = document.createElement('div');
+      banner.className = 'success-banner';
+      banner.innerHTML = '<b>Cancellation requested</b>We\'ll confirm as soon as the order is stopped from shipping.';
+      btn.insertAdjacentElement('afterend', banner);
+    });
+
+    var submitOtherBtn = panelOther.querySelector('#submitOther');
+    var otherQuestion = panelOther.querySelector('#otherQuestion');
+    function checkOther(){
+      submitOtherBtn.disabled = !otherQuestion.value.trim();
+    }
+    function initOther(){
+      checkOther();
+    }
+    otherQuestion.addEventListener('click', function(){
+      if(otherQuestion.value) return;
+      typeText(otherQuestion, otherQuestion.dataset.fill, { speed:16, onDone: checkOther });
+    });
+    panelOther.querySelectorAll('.photo-box').forEach(function(box){
+      box.addEventListener('click', function(){ box.classList.toggle('is-added'); });
+    });
+    submitOtherBtn.addEventListener('click', function(e){
+      var btn = e.currentTarget;
+      if(btn.disabled) return;
+      btn.disabled = true;
+      btn.textContent = 'Message sent';
+      var banner = document.createElement('div');
+      banner.className = 'success-banner';
+      banner.innerHTML = '<b>Message sent</b>A specialist will get back to you by email.';
+      btn.insertAdjacentElement('afterend', banner);
+    });
+
+    var submitPricingBtn = panelPricing.querySelector('#submitPricing');
+    var pricingQuestion = panelPricing.querySelector('#pricingQuestion');
+    function checkPricing(){
+      submitPricingBtn.disabled = !pricingQuestion.value.trim();
+    }
+    function initPricing(){
+      checkPricing();
+    }
+    pricingQuestion.addEventListener('click', function(){
+      if(pricingQuestion.value) return;
+      typeText(pricingQuestion, pricingQuestion.dataset.fill, { speed:16, onDone: checkPricing });
+    });
+    submitPricingBtn.addEventListener('click', function(e){
+      var btn = e.currentTarget;
+      if(btn.disabled) return;
+      btn.disabled = true;
+      btn.textContent = 'Message sent';
+      var banner = document.createElement('div');
+      banner.className = 'success-banner';
+      banner.innerHTML = '<b>Message sent</b>A specialist will get back to you by email.';
+      btn.insertAdjacentElement('afterend', banner);
+    });
+  }
+
+  /* ---------------- slide 2 : AI case summary ---------------- */
+  function renderSlide2(mount){
+    mount.innerHTML =
+      '<p class="eyebrow-mini">AI Summary</p>' +
+      '<h2 class="app-h2">Preparing the case file</h2>' +
+      '<p class="app-sub">Rymax AI reviewed the request and extracted everything a specialist will need.</p>' +
+      '<div class="loading-row" id="summaryLoading"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="loading-label">Reading the request&hellip;</span></div>' +
+      '<div class="summary-content" id="summaryContent" hidden>' +
+        '<div class="badge-row">' +
+          '<span class="pill-badge pill-badge--accent">Confidence <b id="confVal">0</b>%</span>' +
+          '<span class="pill-badge">Auto-drafted &middot; 2 sec</span>' +
+        '</div>' +
+        '<div class="card">' +
+          '<p class="card-label">What support will see</p>' +
+          '<div class="kv-list">' +
+            '<div class="kv-row"><dt>Customer</dt><dd>Marcus Reyes</dd></div>' +
+            '<div class="kv-row"><dt>Order</dt><dd>#4821 &middot; Merino Sweater, M</dd></div>' +
+            '<div class="kv-row"><dt>Category</dt><dd>Damaged item or empty box</dd></div>' +
+            '<div class="kv-row"><dt>Priority</dt><dd>Standard</dd></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="card">' +
+          '<p class="card-label">Issue reported</p>' +
+          '<p style="font-size:13px;line-height:1.6;color:var(--ink-soft);font-style:italic">&ldquo;The box arrived crushed and the sweater inside is torn near the collar.&rdquo;</p>' +
+        '</div>' +
+        '<div class="card">' +
+          '<p class="card-label">Recommended solution</p>' +
+          '<ol class="rec-list">' +
+            '<li><span class="rec-num">1</span>Confirm order #4821 is eligible for replacement &mdash; delivered Sep 6, within the return policy window.</li>' +
+            '<li><span class="rec-num">2</span>Offer a free replacement of the Merino Crew Sweater, Navy, size M, at no cost to the customer.</li>' +
+            '<li><span class="rec-num">3</span>Send a prepaid return label for the damaged item &mdash; no additional photos required for this case type.</li>' +
+          '</ol>' +
+        '</div>' +
+      '</div>';
+
+    var loading = mount.querySelector('#summaryLoading');
+    var content = mount.querySelector('#summaryContent');
+    var confVal = mount.querySelector('#confVal');
+    var myGen = ++renderGen;
+    setTimeout(function(){
+      if(myGen !== renderGen) return;
+      loading.hidden = true;
+      content.hidden = false;
+      animateCount(confVal, 92, motionOK ? 700 : 0);
+    }, motionOK ? 900 : 0);
+  }
+
+  /* ---------------- slide 3 : specialist dashboard ---------------- */
+  var CASE_ORDER = ['4821', '5560', '5561', '5544'];
+  var CASES = {
+    '4821': {
+      shortName: 'Marcus R.',
+      customerLine: 'Marcus Reyes &middot; marcus.reyes@email.com',
+      orderLine: '#4821 &middot; Merino Crew Sweater, Navy, M &middot; $135.90',
+      category: 'Damaged item or empty box',
+      issueLine: '&ldquo;The box arrived crushed and the sweater inside is torn near the collar.&rdquo;',
+      priority: 'Standard &mdash; no safety concern',
+      steps: [
+        'Confirm order #4821 is eligible for replacement &mdash; delivered Sep 6, within policy window.',
+        'Offer a free replacement of the Merino Crew Sweater, Navy, size M.',
+        'Send a prepaid return label &mdash; no additional photos required for this case type.'
+      ],
+      replyToName: 'Marcus',
+      replies: {
+        approve: "Dear Mr. Reyes,\n\nThank you for contacting Rymax Customer Support regarding order #4821. We have reviewed your case and confirmed that the Merino Crew Sweater (Navy, M) qualifies for a complimentary replacement. Your new item will be shipped today, along with a prepaid return label for the damaged product.\n\nWe apologize for the inconvenience and thank you for your understanding.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Mr. Reyes,\n\nThank you for contacting Rymax Customer Support regarding order #4821. After carefully reviewing your account and order history, we are unable to approve a free replacement for this claim, as it does not meet our current eligibility criteria.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Mr. Reyes,\n\nThank you for your patience regarding order #4821. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+      },
+      finishMsg: {
+        approve: 'Approved — the replacement is being packed now. Marcus was notified by email just now.',
+        decline: 'Declined — Marcus was offered a discount code instead and notified by email just now.',
+        escalate: 'Escalated — a specialist will call Marcus within the hour. Marcus was notified by email just now.'
+      }
+    },
+    '5560': {
+      shortName: 'Dana K.',
+      customerLine: 'Dana Keller &middot; dana.keller@email.com',
+      orderLine: '#5560 &middot; Merino Crew Sweater, Navy, S &middot; $128.90',
+      category: 'Wrong item or size',
+      issueLine: '&ldquo;I ordered a size S but received a size L instead.&rdquo;',
+      priority: 'Standard &mdash; no safety concern',
+      steps: [
+        'Confirm order #5560 was delivered Sep 7 with the incorrect size shipped in error.',
+        'Offer a free exchange for the correct size (S) of the Merino Crew Sweater, Navy.',
+        'Send a prepaid return label for the incorrect item &mdash; no additional photos required.'
+      ],
+      replyToName: 'Dana',
+      replies: {
+        approve: "Dear Ms. Keller,\n\nThank you for contacting Rymax Customer Support regarding order #5560. We have confirmed the mix-up and are shipping the correct size (S) of your Merino Crew Sweater today, along with a prepaid label to return the incorrect item.\n\nWe apologize for the inconvenience and thank you for your understanding.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Ms. Keller,\n\nThank you for contacting Rymax Customer Support regarding order #5560. After carefully reviewing your account and order history, we are unable to approve a free exchange for this claim, as it does not meet our current eligibility criteria.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Ms. Keller,\n\nThank you for your patience regarding order #5560. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+      },
+      finishMsg: {
+        approve: 'Approved — the correct size is being packed now. Dana was notified by email just now.',
+        decline: 'Declined — Dana was offered a discount code instead and notified by email just now.',
+        escalate: 'Escalated — a specialist will call Dana within the hour. Dana was notified by email just now.'
+      }
+    },
+    '5561': {
+      shortName: 'Theo P.',
+      customerLine: 'Theo Patterson &middot; theo.patterson@email.com',
+      orderLine: '#5561 &middot; Trail Runner Jacket, Charcoal, L &middot; $189.00',
+      category: 'Cancel an order',
+      issueLine: '&ldquo;I found the same jacket for less elsewhere and would like to cancel before it ships.&rdquo;',
+      priority: 'Standard &mdash; order not yet shipped',
+      steps: [
+        'Confirm order #5561 has not yet shipped &mdash; cancellation is available at no charge.',
+        'Process a full refund of $189.00 to the original payment method.',
+        'Send a confirmation email once the cancellation is complete.'
+      ],
+      replyToName: 'Theo',
+      replies: {
+        approve: "Dear Mr. Patterson,\n\nThank you for contacting Rymax Customer Support regarding order #5561. We have confirmed that your order has not yet shipped and have cancelled it as requested. A full refund of $189.00 will be credited to your original payment method within 3-5 business days.\n\nWe're sorry to see this order go and hope to serve you again soon.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Mr. Patterson,\n\nThank you for contacting Rymax Customer Support regarding order #5561. After reviewing your order, we found that it has already entered the fulfillment process and cannot be cancelled at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Mr. Patterson,\n\nThank you for your patience regarding order #5561. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+      },
+      finishMsg: {
+        approve: 'Approved — the order has been cancelled and refunded. Theo was notified by email just now.',
+        decline: 'Declined — Theo was offered a discount code instead and notified by email just now.',
+        escalate: 'Escalated — a specialist will call Theo within the hour. Theo was notified by email just now.'
+      }
+    },
+    '5544': {
+      shortName: 'Priya S.',
+      customerLine: 'Priya Sharma &middot; priya.sharma@email.com',
+      orderLine: '#5544 &middot; Alpine Daypack, Moss Green &middot; $79.50',
+      category: 'Where is my order',
+      issueLine: '&ldquo;My order shows as shipped 6 days ago but tracking hasn&rsquo;t updated since.&rdquo;',
+      priority: 'Standard &mdash; delivery delayed',
+      steps: [
+        'Confirm order #5544 shipped Sep 3 via UPS &mdash; tracking shows it is currently in transit.',
+        'Proactively apply a $10 shipping credit for the delay.',
+        'Enable SMS delivery notifications so Priya is alerted the moment it arrives.'
+      ],
+      replyToName: 'Priya',
+      replies: {
+        approve: "Dear Ms. Sharma,\n\nThank you for contacting Rymax Customer Support regarding order #5544. We have confirmed with our carrier that your package is currently in transit and expected to arrive within 2 business days. As an apology for the delay, we have applied a $10 credit to your account.\n\nWe have also enabled SMS notifications so you'll be alerted the moment it's delivered.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Ms. Sharma,\n\nThank you for contacting Rymax Customer Support regarding order #5544. After reviewing your shipment, we found that it is on track to arrive within the carrier's standard delivery window, so we are unable to process a refund or credit at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Ms. Sharma,\n\nThank you for your patience regarding order #5544. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+      },
+      finishMsg: {
+        approve: 'Approved — a shipping credit was applied and SMS alerts are on. Priya was notified by email just now.',
+        decline: 'Declined — Priya was offered a discount code instead and notified by email just now.',
+        escalate: 'Escalated — a specialist will call Priya within the hour. Priya was notified by email just now.'
+      }
+    }
+  };
+
+  function renderSlide3(mount){
+    var activeId = CASE_ORDER[0];
+
+    function draw(){
+      var c = CASES[activeId];
+      mount.innerHTML =
+        '<div class="tabs-row" id="tabsRow">' +
+          CASE_ORDER.map(function(id){
+            return '<button class="tab' + (id === activeId ? ' is-active' : '') + '" data-tab="' + id + '">#' + id + ' &middot; ' + CASES[id].shortName + '</button>';
+          }).join('') +
+        '</div>' +
+        '<div class="card">' +
+          '<p class="dash-note">Case summary ready &mdash; everything below was compiled automatically before this reached you.</p>' +
+          '<div class="kv-list kv-list--info">' +
+            '<div class="kv-row"><dt>Customer</dt><dd>' + c.customerLine + '</dd></div>' +
+            '<div class="kv-row"><dt>Order</dt><dd>' + c.orderLine + '</dd></div>' +
+            '<div class="kv-row"><dt>Category</dt><dd>' + c.category + '</dd></div>' +
+            '<div class="kv-row"><dt>Issue reported</dt><dd>' + c.issueLine + '</dd></div>' +
+            '<div class="kv-row"><dt>Priority</dt><dd>' + c.priority + '</dd></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="card">' +
+          '<p class="card-label">Recommended solution</p>' +
+          '<ol class="rec-list">' +
+            c.steps.map(function(step, i){ return '<li><span class="rec-num">' + (i + 1) + '</span>' + step + '</li>'; }).join('') +
+          '</ol>' +
+        '</div>' +
+        '<p class="field-label-like" style="margin-top:18px">Choose how to respond</p>' +
+        '<div class="cat-row" id="actionRow" style="justify-content:flex-start;margin:8px 0 0">' +
+          '<button type="button" class="cat-pill" data-action="approve">Approve the request</button>' +
+          '<button type="button" class="cat-pill" data-action="decline">Decline the request</button>' +
+          '<button type="button" class="cat-pill" data-action="escalate">Escalate to a phone call</button>' +
+        '</div>' +
+        '<div class="composer" id="composer" hidden>' +
+          '<div class="field"><label for="replyInput">Reply to ' + c.replyToName + '</label>' +
+            '<textarea id="replyInput" rows="7" readonly></textarea></div>' +
+          '<button class="btn-primary" id="sendBtn">Send reply</button>' +
+        '</div>' +
+        '<div class="dash-banner" id="dashBanner" hidden></div>';
+
+      mount.querySelectorAll('.tab').forEach(function(tab){
+        tab.addEventListener('click', function(){
+          var id = tab.dataset.tab;
+          if(id === activeId) return;
+          activeId = id;
+          draw();
+        });
+      });
+
+      var actionRow = mount.querySelector('#actionRow');
+      var composer = mount.querySelector('#composer');
+      var replyInput = mount.querySelector('#replyInput');
+      var sendBtn = mount.querySelector('#sendBtn');
+      var dashBanner = mount.querySelector('#dashBanner');
+      var selectedAction = null;
+
+      actionRow.querySelectorAll('.cat-pill').forEach(function(pill){
+        pill.addEventListener('click', function(){
+          actionRow.querySelectorAll('.cat-pill').forEach(function(p){ p.classList.remove('is-active'); });
+          pill.classList.add('is-active');
+          selectedAction = pill.dataset.action;
+          replyInput.value = c.replies[selectedAction];
+          composer.hidden = false;
+        });
+      });
+
+      sendBtn.addEventListener('click', function(){
+        if(!replyInput.value || !selectedAction) return;
+        actionRow.hidden = true;
+        composer.hidden = true;
+        dashBanner.hidden = false;
+        dashBanner.textContent = '✓ ' + c.finishMsg[selectedAction];
+      });
+    }
+
+    draw();
+  }
+
+  /* ---------------- deck orchestration ---------------- */
+  var SLIDES = [
+    {
+      id:'request-form',
+      eyebrow:'Walkthrough &middot; 1 / 3',
+      title:'Customer Request',
+      subtitle:"The customer submits one simple form — contact details, order number, and a plain-language description of the issue. No chat, no back-and-forth: the AI gets complete, structured information in a single pass, every time.",
+      note:'',
+      url:'rymax.customersupport.com/new-request',
+      render: renderSlide1
+    },
+    {
+      id:'case-summary',
+      eyebrow:'Walkthrough &middot; 2 / 3',
+      title:'AI Case Summary',
+      subtitle:'The moment the form is submitted, Rymax AI compiles a case file — customer, order, issue — and drafts a recommended resolution, all in seconds and fully automatic. Nothing for the customer to wait on.',
+      note:'',
+      url:'rymax.customersupport.com/ai/cases/4821',
+      render: renderSlide2
+    },
+    {
+      id:'specialist-dashboard',
+      eyebrow:'Walkthrough &middot; 3 / 3',
+      title:'Specialist Dashboard',
+      subtitle:"The case lands in the specialist's queue alongside their other open tickets, showing the AI summary, recommendation, and full context in one view — with one-click actions to approve, edit, or escalate.",
+      note:'',
+      url:'rymax-agent.customersupport.com/queue',
+      render: renderSlide3
+    }
+  ];
+
+  var current = 0;
+  var eyebrowEl = document.getElementById('deckEyebrow');
+  var titleEl = document.getElementById('deckTitle');
+  var subtitleEl = document.getElementById('deckSubtitle');
+  var noteEl = document.getElementById('deckNote');
+  var urlBarEl = document.getElementById('urlBar');
+  var leftInner = document.getElementById('deckLeftInner');
+  var dotsEl = document.getElementById('deckDots');
+
+  SLIDES.forEach(function(s, i){
+    var dot = document.createElement('button');
+    dot.className = 'deck-dot' + (i === 0 ? ' is-active' : '');
+    dot.setAttribute('aria-label', 'Go to slide ' + (i+1));
+    dot.addEventListener('click', function(){ applySlide(i); });
+    dotsEl.appendChild(dot);
+  });
+
+  function applySlide(index, opts){
+    opts = opts || {};
+    current = (index + SLIDES.length) % SLIDES.length;
+    var s = SLIDES[current];
+
+    eyebrowEl.innerHTML = s.eyebrow;
+    titleEl.textContent = s.title;
+    subtitleEl.textContent = s.subtitle;
+    noteEl.innerHTML = s.note;
+    noteEl.hidden = !s.note;
+    urlBarEl.textContent = s.url;
+
+    dotsEl.querySelectorAll('.deck-dot').forEach(function(d, i){ d.classList.toggle('is-active', i === current); });
+
+    appMount.innerHTML = '';
+    s.render(appMount);
+    appMount.scrollTop = 0;
+    scrollThumb.classList.remove('is-visible');
+    updateThumb();
+    setTimeout(updateThumb, 1000);
+
+    if(opts.pushHash !== false && location.hash !== '#' + s.id){
+      history.replaceState(null, '', '#' + s.id);
+    }
+
+    leftInner.classList.remove('deck-left-inner');
+    void leftInner.offsetWidth;
+    leftInner.style.animation = 'none';
+    void leftInner.offsetWidth;
+    leftInner.style.animation = '';
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', function(){ applySlide(current - 1); });
+  document.getElementById('nextBtn').addEventListener('click', function(){ applySlide(current + 1); });
+  window.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight') applySlide(current + 1);
+    if(e.key === 'ArrowLeft') applySlide(current - 1);
+  });
+  window.addEventListener('hashchange', function(){
+    var idx = SLIDES.findIndex(function(s){ return '#' + s.id === location.hash; });
+    if(idx >= 0 && idx !== current) applySlide(idx, {pushHash:false});
+  });
+
+  var initIdx = SLIDES.findIndex(function(s){ return '#' + s.id === location.hash; });
+  applySlide(initIdx >= 0 ? initIdx : 0, {pushHash:false});
+})();
+</script>
