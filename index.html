@@ -49,6 +49,8 @@
 
   *,*::before,*::after{box-sizing:border-box}
   html,body{margin:0;padding:0;background:var(--stage-bg)}
+  html{scrollbar-width:none}
+  html::-webkit-scrollbar{display:none}
   body{
     font-family:var(--font-body);
     color:var(--ink);
@@ -147,8 +149,8 @@
     flex-shrink:0;
     width:64px;height:64px;
     border-radius:12px;
-    background:var(--accent-soft);
-    color:var(--accent);
+    background:var(--ink);
+    color:var(--app-bg);
     display:flex;align-items:center;justify-content:center;
   }
   .menu-card-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
@@ -243,12 +245,23 @@
     min-height:0;
   }
   .app-topbar{
-    display:flex;align-items:center;
+    display:flex;align-items:center;justify-content:space-between;
     padding:16px 28px;
     border-bottom:1px solid var(--line);
     flex:0 0 auto;
   }
   .app-topbar__title{font-size:15px;font-weight:700;color:var(--ink)}
+  .browser-frame.is-admin .app-topbar{background:var(--app-surface)}
+  .topbar-account{display:none;align-items:center;gap:9px}
+  .browser-frame.is-admin .topbar-account{display:flex}
+  .topbar-account-avatar{
+    width:28px;height:28px;flex-shrink:0;
+    border-radius:50%;
+    background:var(--ink);color:var(--app-bg);
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:700;
+  }
+  .topbar-account-name{font-size:12.5px;font-weight:600;color:var(--ink)}
 
   .app-scroll{
     position:relative;
@@ -599,8 +612,10 @@
     display:flex;flex-direction:column;
     border-right:1px solid var(--app-border);
     overflow-y:auto;
+    scrollbar-width:none;
     padding:16px 12px 24px;
   }
+  .admin-rail::-webkit-scrollbar{display:none}
   .admin-search{
     width:100%;
     padding:9px 12px;
@@ -614,25 +629,80 @@
   }
   .admin-search::placeholder{color:var(--text-tertiary)}
   .admin-search:focus{box-shadow:0 0 0 3px rgba(43,38,33,.12)}
-  .filter-chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
-  .filter-chip{
-    padding:6px 11px;
-    border-radius:var(--radius-pill);
+  .rail-toolbar{display:flex;gap:6px;margin-bottom:6px;position:relative}
+
+  /* custom dropdown (replaces native <select>) */
+  .ddown{position:relative}
+  .ddown-trigger{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    width:100%;
+    background:#fff;
+    font-family:inherit;
+    outline:none;
+    cursor:pointer;
+    transition:border-color .15s ease,box-shadow .15s ease;
+  }
+  .ddown-trigger-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ddown-chevron{flex-shrink:0;color:var(--text-secondary);transition:transform .15s ease}
+  .ddown.is-open .ddown-chevron{transform:rotate(180deg)}
+  .ddown-menu{
+    position:absolute;left:0;right:0;top:calc(100% + 6px);
+    background:#fff;
+    border:1px solid var(--app-border);
+    border-radius:12px;
+    box-shadow:0 14px 30px rgba(43,38,33,.16);
+    padding:6px;
+    max-height:240px;overflow-y:auto;scrollbar-width:none;
+    z-index:30;
+    display:none;
+  }
+  .ddown-menu::-webkit-scrollbar{display:none}
+  .ddown.is-open .ddown-menu{display:block}
+  .ddown-option{
+    display:block;width:100%;text-align:left;
+    padding:9px 11px;
+    border:none;border-radius:8px;background:none;
+    font-family:inherit;font-size:12.5px;color:var(--ink);
+    cursor:pointer;
+  }
+  .ddown-option:hover{background:var(--app-bg)}
+  .ddown-option.is-selected{background:var(--ink);color:var(--app-bg);font-weight:700}
+
+  .ddown--rail{flex:1;min-width:0}
+  .ddown--rail .ddown-trigger{
+    padding:8px 10px;
+    border-radius:var(--radius-input);
+    border:1px solid var(--app-border);
+    color:var(--ink);
+    font-size:11.5px;font-weight:700;
+  }
+  .ddown--rail .ddown-trigger:hover{border-color:#d8c9ae}
+  .ddown--rail.is-open .ddown-trigger{border-color:#d8c9ae;box-shadow:0 0 0 3px rgba(43,38,33,.12)}
+
+  .ddown--field{width:100%}
+  .ddown--field .ddown-trigger{
+    padding:12px 14px;
+    border-radius:var(--radius-input);
+    border:1px solid var(--input-border);
+    color:var(--ink);
+    font-size:13.5px;
+  }
+  .ddown--field .ddown-trigger:hover{border-color:#d8c9ae}
+  .ddown--field.is-open .ddown-trigger{box-shadow:0 0 0 3px rgba(43,38,33,.12)}
+
+  .rail-sort-btn{
+    flex:0 0 auto;
+    width:33px;height:33px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:var(--radius-input);
     border:1px solid var(--app-border);
     background:transparent;
     color:var(--text-secondary);
-    font-size:10.5px;font-weight:700;
     cursor:pointer;
-    white-space:nowrap;
     transition:background .15s ease,color .15s ease,border-color .15s ease;
   }
-  .filter-chip:hover{border-color:#d8c9ae}
-  .filter-chip.is-active{background:var(--ink);color:var(--app-bg);border-color:var(--ink)}
-  .rail-section-label{
-    font-size:10px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;
-    color:var(--text-tertiary);
-    padding:14px 8px 6px;
-  }
+  .rail-sort-btn:hover{border-color:#d8c9ae;color:var(--ink)}
+  .rail-sort-btn.is-active{background:var(--ink);color:var(--app-bg);border-color:var(--ink)}
   .rail-empty{padding:14px 8px;font-size:11.5px;color:var(--text-tertiary);line-height:1.5}
   .case-row{
     display:flex;flex-direction:column;gap:3px;
@@ -651,21 +721,30 @@
   .status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block}
 
   /* main : case thread */
-  .admin-main{flex:1;min-width:0;background:var(--app-surface);overflow-y:auto;padding:26px 32px}
+  .admin-main{flex:1;min-width:0;background:#faf4ed;overflow-y:auto;scrollbar-width:none;padding:26px 32px}
+  .admin-main::-webkit-scrollbar{display:none}
   .admin-case-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
   .admin-case-header h3{font-family:var(--font-display);font-weight:520;font-size:19px;color:var(--ink)}
-  .status-pill{
+  .ddown--status{display:inline-block}
+  .ddown--status .ddown-trigger{
+    width:auto;
     display:inline-flex;align-items:center;gap:6px;
-    padding:5px 11px;
+    padding:5px 10px 5px 11px;
     border-radius:var(--radius-pill);
     border:1px solid var(--app-border);
+    background:transparent;
     font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;
     color:var(--text-secondary);
   }
-  .ai-note{padding:14px 16px;font-size:13px;color:var(--ink-soft);line-height:1.5}
-
+  .ddown--status .ddown-trigger-label{display:inline-flex;align-items:center;gap:6px}
+  .ddown--status .ddown-chevron{width:8px;height:8px}
+  .ddown--status .ddown-trigger:hover{border-color:#d8c9ae;background:#fff}
+  .ddown--status.is-open .ddown-trigger{border-color:#d8c9ae;background:#fff;box-shadow:0 0 0 3px rgba(43,38,33,.12)}
+  .ddown--status .ddown-menu{left:0;right:auto;min-width:200px}
+  .ddown--status .ddown-option{display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12.5px;font-weight:600}
   /* right : actions + case file */
-  .admin-right{width:290px;flex:0 0 290px;background:var(--app-surface);border-left:1px solid var(--app-border);overflow-y:auto;padding:26px 22px}
+  .admin-right{width:290px;flex:0 0 290px;background:var(--app-surface);border-left:1px solid var(--app-border);overflow-y:auto;scrollbar-width:none;padding:26px 22px}
+  .admin-right::-webkit-scrollbar{display:none}
   .action-group{display:flex;flex-direction:column;gap:9px}
   .action-group + .action-group{margin-top:10px}
   .action-btn{
@@ -717,15 +796,13 @@
   /* action zone : email composer + transfer/hold forms + outcome banner */
   .composer-inline{margin-top:18px;animation:step-in .3s ease both}
   .composer-inline .kv-list{margin-bottom:16px}
-  .composer-inline .field select{
-    width:100%;background:#fff;border:1px solid var(--input-border);border-radius:var(--radius-input);
-    padding:12px 14px;font-size:13.5px;font-family:inherit;color:var(--ink);outline:none;cursor:pointer;
-  }
   .composer-inline textarea{
     width:100%;border:1px solid var(--input-border);border-radius:var(--radius-input);
     padding:13px 15px;font-size:13.5px;line-height:1.55;font-family:inherit;color:var(--ink);
     outline:none;resize:vertical;min-height:150px;
+    scrollbar-width:none;
   }
+  .composer-inline textarea::-webkit-scrollbar{display:none}
   .composer-inline textarea:focus{box-shadow:0 0 0 3px rgba(43,38,33,.12)}
   .composer-hint{margin:8px 0 0;font-size:11px;color:var(--text-tertiary)}
   .composer-actions{display:flex;gap:10px;margin-top:14px}
@@ -832,7 +909,13 @@
           </div>
         </div>
         <div class="browser-viewport">
-          <div class="app-topbar"><span class="app-topbar__title">Support</span></div>
+          <div class="app-topbar">
+            <span class="app-topbar__title">Support</span>
+            <div class="topbar-account">
+              <span class="topbar-account-avatar">RS</span>
+              <span class="topbar-account-name">Rymax Specialist</span>
+            </div>
+          </div>
           <div class="app-scroll">
             <div id="appMount"></div>
             <div class="scroll-thumb" id="scrollThumb"></div>
@@ -1370,7 +1453,7 @@
   }
 
   /* ---------------- admin flow : specialist CRM dashboard ---------------- */
-  var CASE_ORDER = ['4821', '5560', '5561', '5544'];
+  var CASE_ORDER = ['4821', '5560', '5561', '5544', '6002', '6003', '6004', '6005'];
   var CASES = {
     '4821': {
       orderId: '4821',
@@ -1379,7 +1462,10 @@
       customerLine: 'Marcus Reyes &middot; marcus.reyes@email.com',
       orderLine: '#4821 &middot; Merino Crew Sweater, Navy, M &middot; $135.90',
       category: 'Damaged item or empty box',
+      categoryKey: 'damaged',
       categoryShort: 'Damaged item',
+      dateLabel: 'Sep 6',
+      dateTs: 6,
       issueLine: '&ldquo;The box arrived crushed and the sweater inside is torn near the collar.&rdquo;',
       issueSummary: 'damaged packaging, torn item',
       priority: 'Standard &mdash; no safety concern',
@@ -1411,7 +1497,10 @@
       customerLine: 'Dana Keller &middot; dana.keller@email.com',
       orderLine: '#5560 &middot; Merino Crew Sweater, Navy, S &middot; $128.90',
       category: 'Wrong item or size',
+      categoryKey: 'wrong',
       categoryShort: 'Wrong size',
+      dateLabel: 'Sep 7',
+      dateTs: 7,
       issueLine: '&ldquo;I ordered a size S but received a size L instead.&rdquo;',
       issueSummary: 'wrong size shipped (L instead of S)',
       priority: 'Standard &mdash; no safety concern',
@@ -1443,7 +1532,10 @@
       customerLine: 'Theo Patterson &middot; theo.patterson@email.com',
       orderLine: '#5561 &middot; Trail Runner Jacket, Charcoal, L &middot; $189.00',
       category: 'Cancel an order',
+      categoryKey: 'cancel',
       categoryShort: 'Cancel order',
+      dateLabel: 'Sep 5',
+      dateTs: 5,
       issueLine: '&ldquo;I found the same jacket for less elsewhere and would like to cancel before it ships.&rdquo;',
       issueSummary: 'wants to cancel before shipment',
       priority: 'Standard &mdash; order not yet shipped',
@@ -1475,7 +1567,10 @@
       customerLine: 'Priya Sharma &middot; priya.sharma@email.com',
       orderLine: '#5544 &middot; Alpine Daypack, Moss Green &middot; $79.50',
       category: 'Where is my order',
+      categoryKey: 'track',
       categoryShort: 'Delivery delayed',
+      dateLabel: 'Sep 9',
+      dateTs: 9,
       issueLine: '&ldquo;My order shows as shipped 6 days ago but tracking hasn&rsquo;t updated since.&rdquo;',
       issueSummary: 'tracking has not updated in 6 days',
       priority: 'Standard &mdash; delivery delayed',
@@ -1499,6 +1594,146 @@
         decline: 'Declined — Priya was offered a discount code instead and notified by email just now.',
         escalate: 'Escalated — a specialist will call Priya within the hour. Priya was notified by email just now.'
       }
+    },
+    '6002': {
+      orderId: '6002',
+      shortName: 'Noah B.',
+      customerName: 'Noah Bennett',
+      customerLine: 'Noah Bennett &middot; noah.bennett@email.com',
+      orderLine: '#6002 &middot; Loyalty account &middot; 1,240 points',
+      category: 'Pricing & points',
+      categoryKey: 'pricing',
+      categoryShort: 'Pricing question',
+      dateLabel: 'Sep 8',
+      dateTs: 8,
+      issueLine: '&ldquo;My order confirmation shows a different price than what was listed on the site, and I&rsquo;m not sure my points were applied.&rdquo;',
+      issueSummary: 'price mismatch, points not applied',
+      priority: 'Standard &mdash; billing review',
+      carrierFact: 'Order placed Sep 8, not yet shipped',
+      confidence: 81,
+      status: 'needs_review',
+      meta: 'Pricing question &middot; summary ready',
+      steps: [
+        'Confirm the listed price at checkout for order #6002 and compare to the charged amount.',
+        'Apply the $12.40 price difference as a refund to the original payment method.',
+        'Manually credit the missing 124 loyalty points to Noah&rsquo;s account.'
+      ],
+      replyToName: 'Noah',
+      replies: {
+        approve: "Dear Mr. Bennett,\n\nThank you for contacting Rymax Customer Support regarding order #6002. We found a $12.40 discrepancy between the listed and charged price and have refunded the difference to your original payment method. We've also credited the missing 124 loyalty points to your account.\n\nWe apologize for the inconvenience and thank you for your understanding.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Mr. Bennett,\n\nThank you for contacting Rymax Customer Support regarding order #6002. After reviewing your order, the price charged matches the price displayed at checkout, so we're unable to issue a refund at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Mr. Bennett,\n\nThank you for your patience regarding order #6002. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+      },
+      finishMsg: {
+        approve: 'Approved — the price difference was refunded and points were credited. Noah was notified by email just now.',
+        decline: 'Declined — Noah was offered a discount code instead and notified by email just now.',
+        escalate: 'Escalated — a specialist will call Noah within the hour. Noah was notified by email just now.'
+      }
+    },
+    '6003': {
+      orderId: '6003',
+      shortName: 'Elena V.',
+      customerName: 'Elena Voss',
+      customerLine: 'Elena Voss &middot; elena.voss@email.com',
+      orderLine: '#6003 &middot; Alpine Daypack, Moss Green &middot; $79.50',
+      category: 'Something else',
+      categoryKey: 'other',
+      categoryShort: 'General inquiry',
+      dateLabel: 'Sep 10',
+      dateTs: 10,
+      issueLine: '&ldquo;I want to update the shipping address on an order I just placed before it ships.&rdquo;',
+      issueSummary: 'requesting address change before shipment',
+      priority: 'Standard &mdash; order not yet shipped',
+      carrierFact: 'Order not yet shipped',
+      confidence: 90,
+      status: 'in_progress',
+      meta: 'General inquiry &middot; in review',
+      steps: [
+        'Confirm order #6003 has not yet shipped &mdash; address changes are available at no charge.',
+        'Update the shipping address to the one Elena provided.',
+        'Send a confirmation email once the address change is complete.'
+      ],
+      replyToName: 'Elena',
+      replies: {
+        approve: "Dear Ms. Voss,\n\nThank you for contacting Rymax Customer Support regarding order #6003. We have updated your shipping address as requested, since the order has not yet shipped.\n\nWe appreciate you reaching out and hope you enjoy your order.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Ms. Voss,\n\nThank you for contacting Rymax Customer Support regarding order #6003. After reviewing your order, we found that it has already entered the fulfillment process, so we're unable to change the shipping address at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Ms. Voss,\n\nThank you for your patience regarding order #6003. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+      },
+      finishMsg: {
+        approve: 'Approved — the shipping address was updated. Elena was notified by email just now.',
+        decline: 'Declined — Elena was offered a discount code instead and notified by email just now.',
+        escalate: 'Escalated — a specialist will call Elena within the hour. Elena was notified by email just now.'
+      }
+    },
+    '6004': {
+      orderId: '6004',
+      shortName: 'Liam O.',
+      customerName: "Liam O'Connor",
+      customerLine: "Liam O'Connor &middot; liam.oconnor@email.com",
+      orderLine: '#6004 &middot; Trail Runner Jacket, Charcoal, M &middot; $189.00',
+      category: 'Damaged item or empty box',
+      categoryKey: 'damaged',
+      categoryShort: 'Damaged item',
+      dateLabel: 'Sep 4',
+      dateTs: 4,
+      issueLine: '&ldquo;The zipper on the jacket is broken and won&rsquo;t stay closed.&rdquo;',
+      issueSummary: 'broken zipper on arrival',
+      priority: 'Standard &mdash; no safety concern',
+      carrierFact: 'Delivered Sep 3, 16:40',
+      confidence: 90,
+      status: 'needs_review',
+      meta: 'Damaged item &middot; summary ready',
+      steps: [
+        'Confirm order #6004 is eligible for replacement &mdash; delivered Sep 3, within policy window.',
+        'Offer a free replacement of the Trail Runner Jacket, Charcoal, size M.',
+        'Send a prepaid return label &mdash; no additional photos required for this case type.'
+      ],
+      replyToName: 'Liam',
+      replies: {
+        approve: "Dear Mr. O'Connor,\n\nThank you for contacting Rymax Customer Support regarding order #6004. We have reviewed your case and confirmed that the Trail Runner Jacket (Charcoal, M) qualifies for a complimentary replacement. Your new item will be shipped today, along with a prepaid return label for the damaged product.\n\nWe apologize for the inconvenience and thank you for your understanding.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Mr. O'Connor,\n\nThank you for contacting Rymax Customer Support regarding order #6004. After carefully reviewing your account and order history, we are unable to approve a free replacement for this claim, as it does not meet our current eligibility criteria.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Mr. O'Connor,\n\nThank you for your patience regarding order #6004. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+      },
+      finishMsg: {
+        approve: 'Approved — the replacement is being packed now. Liam was notified by email just now.',
+        decline: 'Declined — Liam was offered a discount code instead and notified by email just now.',
+        escalate: 'Escalated — a specialist will call Liam within the hour. Liam was notified by email just now.'
+      }
+    },
+    '6005': {
+      orderId: '6005',
+      shortName: 'Sofia M.',
+      customerName: 'Sofia Martins',
+      customerLine: 'Sofia Martins &middot; sofia.martins@email.com',
+      orderLine: '#6005 &middot; Alpine Daypack, Slate Grey &middot; $79.50',
+      category: 'Where is my order',
+      categoryKey: 'track',
+      categoryShort: 'Delivery delayed',
+      dateLabel: 'Sep 2',
+      dateTs: 2,
+      issueLine: '&ldquo;Tracking still says label created and it&rsquo;s been over a week.&rdquo;',
+      issueSummary: 'tracking has not updated in over a week',
+      priority: 'Standard &mdash; delivery delayed',
+      carrierFact: 'Label created Aug 26 &middot; UPS &middot; not yet scanned',
+      confidence: 76,
+      status: 'needs_review',
+      meta: 'Delivery delayed &middot; summary ready',
+      steps: [
+        'Confirm order #6005 has had no carrier scan since the label was created Aug 26.',
+        'Proactively apply a $10 shipping credit for the delay.',
+        'Enable SMS delivery notifications so Sofia is alerted the moment it arrives.'
+      ],
+      replyToName: 'Sofia',
+      replies: {
+        approve: "Dear Ms. Martins,\n\nThank you for contacting Rymax Customer Support regarding order #6005. We have confirmed with our carrier that your package has not yet been scanned and are following up on your behalf. As an apology for the delay, we have applied a $10 credit to your account.\n\nWe have also enabled SMS notifications so you'll be alerted the moment it's delivered.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Ms. Martins,\n\nThank you for contacting Rymax Customer Support regarding order #6005. After reviewing your shipment, we found that it is on track to arrive within the carrier's standard delivery window, so we are unable to process a refund or credit at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Ms. Martins,\n\nThank you for your patience regarding order #6005. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+      },
+      finishMsg: {
+        approve: 'Approved — a shipping credit was applied and SMS alerts are on. Sofia was notified by email just now.',
+        decline: 'Declined — Sofia was offered a discount code instead and notified by email just now.',
+        escalate: 'Escalated — a specialist will call Sofia within the hour. Sofia was notified by email just now.'
+      }
     }
   };
 
@@ -1510,8 +1745,17 @@
     transferred: { label: 'Transferred', dot: 'var(--info)' },
     resolved: { label: 'Resolved', dot: 'var(--success)' }
   };
-  var STATUS_FILTERS = ['all', 'needs_review', 'in_progress', 'waiting', 'hold', 'transferred', 'resolved'];
-  var STATUS_GROUPS = ['needs_review', 'in_progress', 'waiting', 'hold', 'transferred', 'resolved'];
+  var STATUS_ORDER = ['needs_review', 'in_progress', 'waiting', 'hold', 'transferred', 'resolved'];
+  var CATEGORY_META = {
+    damaged: { label: 'Damaged item or empty box' },
+    wrong: { label: 'Wrong item or size' },
+    cancel: { label: 'Cancel an order' },
+    track: { label: 'Where is my order' },
+    pricing: { label: 'Pricing & points' },
+    other: { label: 'Something else' }
+  };
+  var CATEGORY_FILTERS = ['all', 'damaged', 'wrong', 'cancel', 'track', 'pricing', 'other'];
+  var CATEGORY_GROUPS = ['damaged', 'wrong', 'cancel', 'track', 'pricing', 'other'];
   var OUTCOME_TITLES = { approve: 'Request approved', decline: 'Request declined', escalate: 'Escalated to a phone call' };
   var TRANSFER_TEAMS = ['Returns & Exchanges Team', 'Billing & Refunds Team', 'Tier 2 Specialist', 'Fraud & Risk Team'];
   var HOLD_REASONS = ['Awaiting parts or inventory', 'Waiting on carrier investigation', 'Needs manager approval', 'Waiting on customer response'];
@@ -1521,6 +1765,48 @@
       return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch];
     });
   }
+
+  /* ---------------- custom dropdown (replaces native <select>) ---------------- */
+  var DDOWN_CHEVRON = '<svg class="ddown-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+
+  function ddownHtml(id, modifierClass, triggerLabel, options, selectedValue){
+    return '<div class="ddown ' + modifierClass + '" id="' + id + '">' +
+        '<button type="button" class="ddown-trigger"><span class="ddown-trigger-label">' + triggerLabel + '</span>' + DDOWN_CHEVRON + '</button>' +
+        '<div class="ddown-menu" role="listbox">' +
+          options.map(function(o){
+            return '<button type="button" class="ddown-option' + (o.value === selectedValue ? ' is-selected' : '') + '" data-value="' + o.value + '" role="option">' + o.label + '</button>';
+          }).join('') +
+        '</div>' +
+      '</div>';
+  }
+
+  function wireDdown(root, id, onSelect){
+    var wrap = root.querySelector('#' + id);
+    if(!wrap) return;
+    var trigger = wrap.querySelector('.ddown-trigger');
+    trigger.addEventListener('click', function(e){
+      e.stopPropagation();
+      var willOpen = !wrap.classList.contains('is-open');
+      document.querySelectorAll('.ddown.is-open').forEach(function(d){ d.classList.remove('is-open'); });
+      if(willOpen) wrap.classList.add('is-open');
+    });
+    wrap.querySelectorAll('.ddown-option').forEach(function(opt){
+      opt.addEventListener('click', function(e){
+        e.stopPropagation();
+        wrap.classList.remove('is-open');
+        wrap.querySelectorAll('.ddown-option').forEach(function(o){ o.classList.toggle('is-selected', o === opt); });
+        trigger.querySelector('.ddown-trigger-label').textContent = opt.textContent;
+        onSelect(opt.dataset.value, opt.textContent);
+      });
+    });
+  }
+
+  document.addEventListener('click', function(){
+    document.querySelectorAll('.ddown.is-open').forEach(function(d){ d.classList.remove('is-open'); });
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') document.querySelectorAll('.ddown.is-open').forEach(function(d){ d.classList.remove('is-open'); });
+  });
 
   function baseFileEntries(c){
     return [
@@ -1534,15 +1820,19 @@
 
   function renderAdminFlow(mount){
     var activeId = CASE_ORDER[0];
-    var filterStatus = 'all';
+    var filterCategory = 'all';
     var searchQuery = '';
+    var sortNewestFirst = true;
     var ui = { openForm: null };
+    var selectedTransferTeam = TRANSFER_TEAMS[0];
+    var selectedHoldReason = HOLD_REASONS[0];
+    var SORT_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 16 4 4 4-4"></path><path d="M7 20V4"></path><path d="m21 8-4-4-4 4"></path><path d="M17 4v16"></path></svg>';
 
     mount.innerHTML =
       '<div class="admin-shell" id="adminShell">' +
         '<div class="admin-rail" id="adminRail">' +
           '<input type="text" class="admin-search" id="railSearch" placeholder="Search by name or order #">' +
-          '<div class="filter-chip-row" id="railChips"></div>' +
+          '<div class="rail-toolbar" id="railChips"></div>' +
           '<div id="railList"></div>' +
         '</div>' +
         '<div class="admin-main" id="adminMain"></div>' +
@@ -1556,7 +1846,7 @@
     var adminRightEl = mount.querySelector('#adminRight');
 
     function matchesCase(c, id){
-      if(filterStatus !== 'all' && c.status !== filterStatus) return false;
+      if(filterCategory !== 'all' && c.categoryKey !== filterCategory) return false;
       if(!searchQuery) return true;
       var hay = (c.shortName + ' ' + c.customerName + ' ' + id + ' ' + c.category).toLowerCase();
       return hay.indexOf(searchQuery.toLowerCase()) !== -1;
@@ -1567,40 +1857,42 @@
       var meta = STATUS_META[c.status];
       return '<button type="button" class="case-row' + (id === activeId ? ' is-active' : '') + '" data-case="' + id + '">' +
           '<span class="case-row-title"><span class="status-dot" style="background:' + meta.dot + '"></span>' + c.shortName + ' &middot; #' + id + '</span>' +
-          '<span class="case-row-meta">' + c.meta + '</span>' +
+          '<span class="case-row-meta">' + c.dateLabel + ' &middot; ' + c.meta + '</span>' +
         '</button>';
     }
 
     function renderRailList(){
       var counts = { all: 0 };
-      STATUS_GROUPS.forEach(function(s){ counts[s] = 0; });
-      CASE_ORDER.forEach(function(id){ counts.all++; counts[CASES[id].status]++; });
+      CATEGORY_GROUPS.forEach(function(k){ counts[k] = 0; });
+      CASE_ORDER.forEach(function(id){ counts.all++; counts[CASES[id].categoryKey]++; });
 
-      railChipsEl.innerHTML = STATUS_FILTERS.map(function(s){
-        if(s !== 'all' && s !== filterStatus && counts[s] === 0) return '';
-        var label = s === 'all' ? 'All' : STATUS_META[s].label;
-        return '<button type="button" class="filter-chip' + (filterStatus === s ? ' is-active' : '') + '" data-filter="' + s + '">' + label + ' &middot; ' + counts[s] + '</button>';
-      }).join('');
+      var filterOptions = CATEGORY_FILTERS.map(function(k){
+        if(k !== 'all' && k !== filterCategory && counts[k] === 0) return null;
+        var label = k === 'all' ? 'All' : CATEGORY_META[k].label;
+        return { value: k, label: label + ' &middot; ' + counts[k] };
+      }).filter(Boolean);
+      var currentFilterLabel = filterOptions.filter(function(o){ return o.value === filterCategory; })[0].label;
+
+      railChipsEl.innerHTML =
+        ddownHtml('railFilterDdown', 'ddown--rail', currentFilterLabel, filterOptions, filterCategory) +
+        '<button type="button" class="rail-sort-btn' + (sortNewestFirst ? ' is-active' : '') + '" id="railSortBtn" aria-label="Sort by date" title="' + (sortNewestFirst ? 'Sorted: newest first' : 'Sorted: oldest first') + '">' + SORT_ICON + '</button>';
 
       var matches = CASE_ORDER.filter(function(id){ return matchesCase(CASES[id], id); });
+      matches.sort(function(a, b){
+        return sortNewestFirst ? CASES[b].dateTs - CASES[a].dateTs : CASES[a].dateTs - CASES[b].dateTs;
+      });
 
-      if(!matches.length){
-        railListEl.innerHTML = '<p class="rail-empty">No requests match this filter.</p>';
-      } else if(filterStatus === 'all' && !searchQuery){
-        railListEl.innerHTML = STATUS_GROUPS.map(function(status){
-          var ids = matches.filter(function(id){ return CASES[id].status === status; });
-          if(!ids.length) return '';
-          return '<p class="rail-section-label">' + STATUS_META[status].label + '</p>' + ids.map(caseRowHtml).join('');
-        }).join('');
-      } else {
-        railListEl.innerHTML = matches.map(caseRowHtml).join('');
-      }
+      railListEl.innerHTML = matches.length
+        ? matches.map(caseRowHtml).join('')
+        : '<p class="rail-empty">No requests match this filter.</p>';
 
-      railChipsEl.querySelectorAll('.filter-chip').forEach(function(chip){
-        chip.addEventListener('click', function(){
-          filterStatus = chip.dataset.filter;
-          renderRailList();
-        });
+      wireDdown(railChipsEl, 'railFilterDdown', function(value){
+        filterCategory = value;
+        renderRailList();
+      });
+      railChipsEl.querySelector('#railSortBtn').addEventListener('click', function(){
+        sortNewestFirst = !sortNewestFirst;
+        renderRailList();
       });
       railListEl.querySelectorAll('.case-row').forEach(function(row){
         row.addEventListener('click', function(){
@@ -1642,11 +1934,13 @@
     }
 
     function transferFormHtml(){
+      selectedTransferTeam = TRANSFER_TEAMS[0];
       return (
         '<div class="card composer-inline">' +
           '<p class="card-label">Transfer this case</p>' +
-          '<div class="field"><label for="transferTeam">Send to</label>' +
-            '<select id="transferTeam">' + TRANSFER_TEAMS.map(function(t){ return '<option>' + t + '</option>'; }).join('') + '</select></div>' +
+          '<div class="field"><label>Send to</label>' +
+            ddownHtml('transferTeamDdown', 'ddown--field', selectedTransferTeam, TRANSFER_TEAMS.map(function(t){ return { value: t, label: t }; }), selectedTransferTeam) +
+          '</div>' +
           '<div class="field"><label for="transferNote">Note for the receiving team (optional)</label>' +
             '<textarea id="transferNote" rows="3" placeholder="Add context for whoever picks this up..."></textarea></div>' +
           '<div class="composer-actions">' +
@@ -1658,11 +1952,13 @@
     }
 
     function holdFormHtml(){
+      selectedHoldReason = HOLD_REASONS[0];
       return (
         '<div class="card composer-inline">' +
           '<p class="card-label">Put this case on hold</p>' +
-          '<div class="field"><label for="holdReason">Reason</label>' +
-            '<select id="holdReason">' + HOLD_REASONS.map(function(r){ return '<option>' + r + '</option>'; }).join('') + '</select></div>' +
+          '<div class="field"><label>Reason</label>' +
+            ddownHtml('holdReasonDdown', 'ddown--field', selectedHoldReason, HOLD_REASONS.map(function(r){ return { value: r, label: r }; }), selectedHoldReason) +
+          '</div>' +
           '<div class="field"><label for="holdUntil">Follow up by (optional)</label>' +
             '<input id="holdUntil" type="text" placeholder="e.g. Sep 18"></div>' +
           '<div class="composer-actions">' +
@@ -1697,13 +1993,17 @@
         zone = holdFormHtml();
       }
 
+      var statusOptions = STATUS_ORDER.map(function(s){
+        return { value: s, label: '<span class="status-dot" style="background:' + STATUS_META[s].dot + '"></span>' + STATUS_META[s].label };
+      });
+      var statusTriggerLabel = '<span class="status-dot" style="background:' + meta.dot + '"></span>' + meta.label;
+
       adminMainEl.innerHTML =
         '<div class="admin-case-header">' +
           '<h3>#' + c.orderId + ' &middot; ' + c.customerName + '</h3>' +
-          '<span class="status-pill"><span class="status-dot" style="background:' + meta.dot + '"></span>' + meta.label + '</span>' +
+          ddownHtml('statusDdown', 'ddown--status', statusTriggerLabel, statusOptions, c.status) +
         '</div>' +
-        '<div class="card ai-note">Case summary ready &mdash; everything below was compiled automatically before this reached you.</div>' +
-        '<div class="card" style="margin-top:16px">' +
+        '<div class="card">' +
           '<p class="card-label">What support will see</p>' +
           '<div class="kv-list kv-list--info">' +
             '<div class="kv-row"><dt>Customer</dt><dd>' + c.customerLine + '</dd></div>' +
@@ -1712,8 +2012,7 @@
             '<div class="kv-row"><dt>Issue reported</dt><dd>' + c.issueLine + '</dd></div>' +
             '<div class="kv-row"><dt>Priority</dt><dd>' + c.priority + '</dd></div>' +
           '</div>' +
-        '</div>' +
-        '<div class="card" style="margin-top:16px">' +
+          '<div class="action-divider"></div>' +
           '<p class="card-label">Recommended solution</p>' +
           '<ol class="rec-list">' +
             c.steps.map(function(step, i){ return '<li><span class="rec-num">' + (i + 1) + '</span>' + step + '</li>'; }).join('') +
@@ -1722,6 +2021,11 @@
         '<div id="actionZone">' + zone + '</div>';
 
       wireMainEvents();
+
+      if(zone){
+        var zoneEl = adminMainEl.querySelector('#actionZone');
+        if(zoneEl) zoneEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
 
     function fileRowsHtml(c){
@@ -1765,6 +2069,11 @@
         ) : '');
 
       wireRightEvents();
+
+      if(ui.noteOpen){
+        var noteFormEl = adminRightEl.querySelector('.note-add-form');
+        if(noteFormEl) noteFormEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
 
     function refreshCase(){
@@ -1774,6 +2083,17 @@
 
     function wireMainEvents(){
       var c = CASES[activeId];
+
+      wireDdown(adminMainEl, 'statusDdown', function(value){
+        if(value === c.status) return;
+        c.status = value;
+        c.meta = c.categoryShort + ' &middot; ' + STATUS_META[value].label.toLowerCase();
+        c.outcome = null;
+        ui.openForm = null;
+        renderRailList();
+        refreshCase();
+      });
+
       var sendBtn = adminMainEl.querySelector('#sendBtn');
       var discardBtn = adminMainEl.querySelector('#discardBtn');
       var confirmTransferBtn = adminMainEl.querySelector('#confirmTransferBtn');
@@ -1802,9 +2122,12 @@
           refreshCase();
         });
       }
+      wireDdown(adminMainEl, 'transferTeamDdown', function(value){ selectedTransferTeam = value; });
+      wireDdown(adminMainEl, 'holdReasonDdown', function(value){ selectedHoldReason = value; });
+
       if(confirmTransferBtn){
         confirmTransferBtn.addEventListener('click', function(){
-          var team = adminMainEl.querySelector('#transferTeam').value;
+          var team = selectedTransferTeam;
           var note = adminMainEl.querySelector('#transferNote').value.trim();
           c.prevStatus = c.status; c.prevMeta = c.meta;
           c.status = 'transferred';
@@ -1818,7 +2141,7 @@
       }
       if(confirmHoldBtn){
         confirmHoldBtn.addEventListener('click', function(){
-          var reason = adminMainEl.querySelector('#holdReason').value;
+          var reason = selectedHoldReason;
           var until = adminMainEl.querySelector('#holdUntil').value.trim();
           c.prevStatus = c.status; c.prevMeta = c.meta;
           c.status = 'hold';
@@ -1949,6 +2272,7 @@
     flowTitleEl.textContent = f.title;
     urlBarEl.textContent = f.url;
     browserFrameEl.classList.toggle('is-wide', !!f.wide);
+    browserFrameEl.classList.toggle('is-admin', key === 'admin');
     replay(flowTopbar);
 
     appMount.innerHTML = '';
