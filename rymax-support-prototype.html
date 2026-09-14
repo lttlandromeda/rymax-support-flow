@@ -1,6 +1,6 @@
 <meta charset="UTF-8">
 <title>Rymax Support Walkthrough</title>
-<meta name="description" content="A 3-slide interactive walkthrough of the Rymax AI customer-support flow — request form, AI case summary, and specialist dashboard.">
+<meta name="description" content="An interactive walkthrough of the Rymax AI customer-support flows — pick the customer request flow or the specialist admin dashboard from a main menu.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,340;9..144,420;9..144,520;9..144,600&family=Open+Sans:wght@400;500;600;700&display=swap">
@@ -32,6 +32,10 @@
     --accent-soft:#b25f301c;
     --success:#3e6a49;
     --success-soft:#3e6a4914;
+    --warning:#a8763a;
+    --warning-soft:#a8763a14;
+    --info:#5b7a9d;
+    --info-soft:#5b7a9d14;
 
     --radius-card:14px;
     --radius-input:10px;
@@ -45,6 +49,8 @@
 
   *,*::before,*::after{box-sizing:border-box}
   html,body{margin:0;padding:0;background:var(--stage-bg)}
+  html{scrollbar-width:none}
+  html::-webkit-scrollbar{display:none}
   body{
     font-family:var(--font-body);
     color:var(--ink);
@@ -59,33 +65,15 @@
     *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
   }
 
-  /* ---------- stage / deck shell ---------- */
+  @keyframes panel-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ---------- stage ---------- */
   .stage{
     min-height:100vh;
     background:var(--stage-bg);
     display:flex;
     flex-direction:column;
   }
-  .deck-shell{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    background:var(--deck-bg);
-  }
-  .deck-left{
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    padding:52px 24px 28px;
-  }
-  .deck-left-inner{
-    max-width:560px;
-    width:100%;
-    opacity:0;
-    transform:translateY(10px);
-    animation:panel-in .5s cubic-bezier(.22,1,.36,1) forwards;
-  }
-  @keyframes panel-in{to{opacity:1;transform:translateY(0)}}
 
   .deck-eyebrow{
     margin:0 0 20px;
@@ -98,42 +86,23 @@
   .deck-title{
     font-family:var(--font-display);
     font-weight:520;
-    font-size:clamp(32px,5vw,50px);
-    line-height:1.08;
+    font-size:clamp(30px,4.4vw,44px);
+    line-height:1.1;
     color:var(--deck-title);
     text-wrap:balance;
   }
   .deck-subtitle{
-    margin:18px 0 0;
-    font-size:16.5px;
+    margin:16px 0 0;
+    font-size:15.5px;
     line-height:1.55;
     color:var(--deck-body);
-    max-width:46ch;
+    max-width:56ch;
   }
-  .deck-note{
-    margin:18px 0 0;
-    font-size:12.5px;
-    line-height:1.6;
-    color:var(--deck-muted);
-    max-width:46ch;
-  }
-  .deck-note b{color:var(--deck-title);font-weight:600}
-  .live-tag{
-    display:inline-flex;align-items:center;gap:6px;
-    color:var(--accent);
-    font-weight:700;
-    letter-spacing:.3px;
-    margin-right:4px;
-  }
-  .live-tag::before{
-    content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);
-    box-shadow:0 0 0 3px var(--accent-soft);
-  }
+  .deck-caption{margin:40px 0 0;font-size:10.5px;letter-spacing:.6px;color:rgba(228,223,216,.2)}
 
-  .deck-buttons{display:flex;gap:10px;margin-top:30px}
   .deck-btn{
     display:inline-flex;align-items:center;gap:7px;
-    padding:12px 20px;
+    padding:11px 18px;
     border:1px solid var(--deck-line);
     border-radius:var(--radius-pill);
     background:transparent;
@@ -144,33 +113,95 @@
   }
   .deck-btn:hover{border-color:rgba(250,244,237,.4);color:var(--deck-title)}
   .deck-btn:active{transform:scale(.97)}
-  .deck-btn--next{background:var(--deck-title);color:#2c2825;border-color:var(--deck-title)}
-  .deck-btn--next:hover{background:#fff;color:#2c2825}
   .deck-btn svg{display:block}
 
-  .deck-hint{margin:12px 0 0;font-size:11px;color:var(--deck-faint);letter-spacing:.3px}
-  .deck-hint .kbd{display:none}
-
-  .deck-dots{display:flex;gap:7px;margin-top:26px}
-  .deck-dot{
-    width:6px;height:6px;border-radius:50%;
-    background:var(--deck-line);
-    border:none;padding:0;cursor:pointer;
-    transition:background .2s ease, width .2s ease;
-  }
-  .deck-dot.is-active{background:var(--deck-title);width:18px;border-radius:4px}
-
-  .deck-caption{margin:40px 0 0;font-size:10.5px;letter-spacing:.6px;color:rgba(228,223,216,.2)}
-
-  /* ---------- right side / browser mock ---------- */
-  .deck-right{
+  /* ---------- main menu ---------- */
+  .menu-view{
+    flex:1;
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:8px 20px 44px;
+    padding:56px 24px;
   }
+  .menu-view[hidden], .flow-view[hidden]{display:none}
+  .menu-inner{
+    max-width:640px;
+    width:100%;
+    opacity:0;
+    transform:translateY(10px);
+    animation:panel-in .5s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .menu-cards{display:flex;flex-direction:column;gap:14px;margin-top:36px}
+  .menu-card{
+    display:flex;align-items:center;gap:18px;
+    width:100%;
+    padding:18px;
+    background:var(--tan-highlight);
+    border:1px solid transparent;
+    border-radius:16px;
+    cursor:pointer;
+    text-align:left;
+    transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+  }
+  .menu-card:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(0,0,0,.25);border-color:rgba(178,95,48,.35)}
+  .menu-card:active{transform:translateY(0)}
+  .menu-card-icon{
+    flex-shrink:0;
+    width:64px;height:64px;
+    border-radius:12px;
+    background:var(--ink);
+    color:var(--app-bg);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .menu-card-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+  .menu-card-title{
+    font-family:var(--font-display);
+    font-weight:520;
+    font-size:22px;
+    color:var(--ink);
+  }
+  .menu-card-sub{font-size:12.5px;font-weight:600;color:var(--text-secondary)}
+  .menu-card-arrow{flex-shrink:0;color:var(--text-tertiary)}
+
+  /* ---------- flow view ---------- */
+  .flow-view{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+  }
+  .flow-topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:20px;
+    width:min(860px,100%);
+    margin:0 auto;
+    padding:28px 24px 0;
+    flex-wrap:wrap;
+    opacity:0;
+    transform:translateY(10px);
+    animation:panel-in .45s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .flow-eyebrow{
+    margin:0 0 4px;
+    font-size:10.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+    color:var(--deck-faint);
+  }
+  .flow-title{
+    font-family:var(--font-display);
+    font-weight:520;
+    font-size:clamp(20px,2.6vw,26px);
+    color:var(--deck-title);
+  }
+  .flow-stage{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px 24px 44px;
+    min-height:0;
+  }
+
+  /* ---------- browser mock ---------- */
   .browser-frame{
-    width:min(720px,100%);
+    width:min(860px,100%);
     background:linear-gradient(160deg,#4c4645,#312d2c 45%,#1d1a19);
     border-radius:20px;
     padding:10px;
@@ -214,12 +245,23 @@
     min-height:0;
   }
   .app-topbar{
-    display:flex;align-items:center;
+    display:flex;align-items:center;justify-content:space-between;
     padding:16px 28px;
     border-bottom:1px solid var(--line);
     flex:0 0 auto;
   }
   .app-topbar__title{font-size:15px;font-weight:700;color:var(--ink)}
+  .browser-frame.is-admin .app-topbar{background:var(--app-surface)}
+  .topbar-account{display:none;align-items:center;gap:9px}
+  .browser-frame.is-admin .topbar-account{display:flex}
+  .topbar-account-avatar{
+    width:28px;height:28px;flex-shrink:0;
+    border-radius:50%;
+    background:var(--ink);color:var(--app-bg);
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:700;
+  }
+  .topbar-account-name{font-size:12.5px;font-weight:600;color:var(--ink)}
 
   .app-scroll{
     position:relative;
@@ -230,7 +272,7 @@
   #appMount{
     --mount-pad-x:28px;
     --mount-pad-top:30px;
-    height:min(560px,62vh);
+    height:min(560px,66vh);
     flex:1;
     min-height:0;
     overflow-y:auto;
@@ -338,7 +380,7 @@
   }
   .btn-ghost:hover{background:#2e2e2e0c;color:var(--ink)}
 
-  /* ---------- slide 1 : request form ---------- */
+  /* ---------- customer flow : request form ---------- */
   .stepper{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:26px}
   .step-pill{
     padding:8px 14px;border-radius:var(--radius-pill);
@@ -383,9 +425,10 @@
   .step-footnote{margin-top:18px;text-align:center}
   .step-footnote p{margin-top:9px;font-size:11.5px;color:var(--text-tertiary)}
 
-  .cat-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:22px 0 6px}
+  .cat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:22px 0 6px}
   .cat-pill{
     padding:9px 15px;
+    text-align:center;
     border-radius:var(--radius-pill);
     border:1px solid var(--app-border);
     background:var(--app-surface);
@@ -453,7 +496,11 @@
   .item-card.is-selected .item-check{background:var(--ink);border-color:var(--ink);color:var(--app-bg)}
 
   .photo-row{display:flex;align-items:flex-start;gap:10px;margin-top:8px}
-  .photo-box{flex:1;cursor:pointer}
+  .photo-box{flex:1;cursor:pointer;animation:photo-in .4s ease both}
+  .photo-box:nth-child(1){animation-delay:0s}
+  .photo-box:nth-child(2){animation-delay:.1s}
+  .photo-box:nth-child(3){animation-delay:.2s}
+  @keyframes photo-in{from{opacity:0}to{opacity:1}}
   .photo-box-empty{
     aspect-ratio:1.2;
     border:1.5px dashed var(--input-border);
@@ -462,7 +509,7 @@
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
     font-size:10.5px;color:var(--text-tertiary);text-align:center;
     padding:8px;
-    transition:border-color .15s ease, background .15s ease;
+    transition:border-color .15s ease, background .15s ease, transform .12s ease;
   }
   .photo-box-empty svg{opacity:.55}
   .photo-box-added{
@@ -473,7 +520,10 @@
     background:#fff;
     border:1px solid var(--input-border);
     border-radius:10px;
+    transition:transform .12s ease;
   }
+  .photo-box:active .photo-box-empty,
+  .photo-box:active .photo-box-added{transform:scale(.96)}
   .photo-thumb{flex:1;width:100%;border-radius:8px;background:#e5e5e5}
   .photo-added-label{
     margin-top:8px;
@@ -483,18 +533,25 @@
   .photo-box.is-added .photo-box-empty{display:none}
   .photo-box.is-added .photo-box-added{display:flex}
 
-  .success-banner{
-    margin-top:16px;
-    display:flex;align-items:flex-start;gap:10px;
-    padding:14px 16px;
-    background:var(--success-soft);
-    border:1px solid var(--success);
-    border-radius:12px;
-    color:var(--success);
-    font-size:12.5px;line-height:1.5;
-    animation:step-in .3s ease both;
+  .success-view{animation:step-in .4s ease both}
+  .success-summary{margin-top:22px}
+  .success-summary .kv-list{display:flex;flex-direction:column}
+  .success-summary .kv-row dt{color:var(--text-tertiary)}
+  .success-summary .kv-row dd{max-width:60%}
+  .success-actions{margin-top:26px;text-align:center}
+  .btn-restart{
+    display:inline-flex;align-items:center;
+    padding:10px 20px;
+    background:var(--tan-highlight);
+    border:none;
+    border-radius:var(--radius-pill);
+    color:var(--ink);
+    font-size:12.5px;font-weight:600;
+    cursor:pointer;
+    transition:background .15s ease, transform .1s ease;
   }
-  .success-banner b{display:block;font-size:13px;margin-bottom:2px}
+  .btn-restart:hover{background:#e8d7ba}
+  .btn-restart:active{transform:scale(.97)}
 
   .lookup-skeleton{margin-top:16px}
   .skel-line{height:11px;border-radius:6px;background:linear-gradient(90deg,var(--app-border) 25%,#f3e9da 37%,var(--app-border) 63%);background-size:400% 100%;animation:shimmer 1.3s ease infinite}
@@ -526,24 +583,6 @@
   .check-row{display:flex;align-items:center;gap:9px;margin:16px 0 18px;font-size:12.5px;color:var(--ink)}
   .check-row input{width:16px;height:16px;accent-color:var(--ink);cursor:pointer}
 
-  /* ---------- slide 2 : AI summary ---------- */
-  .loading-row{
-    display:flex;align-items:center;justify-content:center;gap:6px;
-    padding:40px 0;
-  }
-  .loading-row[hidden]{display:none}
-  .loading-row .dot{width:7px;height:7px;border-radius:50%;background:var(--text-tertiary);animation:bounce 1s ease infinite}
-  .loading-row .dot:nth-child(2){animation-delay:.15s}
-  .loading-row .dot:nth-child(3){animation-delay:.3s}
-  @keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-5px);opacity:1}}
-  .loading-label{margin-left:8px;font-size:12px;color:var(--text-tertiary)}
-
-  .summary-content > *{opacity:0;animation:step-in .4s ease both}
-  .summary-content > *:nth-child(1){animation-delay:.05s}
-  .summary-content > *:nth-child(2){animation-delay:.16s}
-  .summary-content > *:nth-child(3){animation-delay:.27s}
-  .summary-content > *:nth-child(4){animation-delay:.38s}
-  .badge-row{display:flex;gap:8px;justify-content:center;margin:16px 0 20px}
   .rec-list{list-style:none;display:flex;flex-direction:column;gap:12px}
   .rec-list li{display:flex;gap:12px;font-size:13px;line-height:1.55;color:var(--ink-soft)}
   .rec-num{
@@ -553,110 +592,310 @@
     font-size:11px;font-weight:700;
   }
 
-  /* ---------- slide 3 : specialist dashboard ---------- */
-  .tabs-row{
-    display:flex;gap:4px;
-    flex-wrap:wrap;
-    overflow:visible;
-    background:var(--app-surface);
-    margin:calc(-1 * var(--mount-pad-top)) calc(-1 * var(--mount-pad-x)) 20px;
-    padding:14px var(--mount-pad-x) 0;
-    border-bottom:1px solid var(--app-border);
-    position:sticky;
-    top:calc(-1 * var(--mount-pad-top));
-    z-index:2;
-  }
-  .tab{
-    flex-shrink:0;
-    padding:10px 14px 12px;
-    border:none;border-bottom:2px solid transparent;
-    margin-bottom:-1px;
-    background:transparent;
-    font-size:12.5px;font-weight:600;color:var(--text-tertiary);
-    cursor:pointer;
-    white-space:nowrap;
-    transition:color .15s ease, border-color .15s ease;
-  }
-  .tab.is-active{color:var(--ink);font-weight:700;border-bottom-color:var(--ink)}
+  /* ---------- admin flow : specialist CRM dashboard ---------- */
+  .browser-frame.is-wide{width:min(1180px,96vw)}
 
-  .dash-note{
-    font-size:12.5px;
-    color:var(--text-secondary);
-    line-height:1.5;
-    padding-bottom:18px;
-    margin-bottom:4px;
-    border-bottom:1px solid var(--line);
-  }
   .kv-list--info .kv-row{gap:20px;align-items:flex-start}
   .kv-list--info dt{width:128px;flex-shrink:0}
   .kv-list--info dd{flex:1;text-align:left;font-weight:400}
 
-  .dash-banner{
-    margin-top:18px;
-    padding:16px 18px;
-    background:var(--success-soft);
-    border:1px solid var(--success);
-    color:var(--success);
-    border-radius:12px;
-    font-size:13px;font-weight:600;line-height:1.5;
-    animation:step-in .3s ease both;
+  .admin-shell{
+    display:flex;
+    align-items:stretch;
+    height:calc(100% + var(--mount-pad-top) + 40px);
+    margin:calc(-1 * var(--mount-pad-top)) calc(-1 * var(--mount-pad-x)) -40px;
   }
 
-  .composer{
-    margin-top:24px;
-    padding-top:20px;
-    border-top:1px solid var(--line);
+  /* rail : filterable request list */
+  .admin-rail{
+    width:225px;flex:0 0 225px;
+    display:flex;flex-direction:column;
+    border-right:1px solid var(--app-border);
+    overflow-y:auto;
+    scrollbar-width:none;
+    padding:16px 12px 24px;
+  }
+  .admin-rail::-webkit-scrollbar{display:none}
+  .admin-search{
+    width:100%;
+    padding:9px 12px;
+    border:1px solid var(--input-border);
+    border-radius:var(--radius-input);
+    background:#fff;
+    font-family:inherit;font-size:12.5px;color:var(--ink);
+    outline:none;
+    margin-bottom:10px;
+    flex-shrink:0;
+  }
+  .admin-search::placeholder{color:var(--text-tertiary)}
+  .admin-search:focus{box-shadow:0 0 0 3px rgba(43,38,33,.12)}
+  .rail-toolbar{display:flex;gap:6px;margin-bottom:6px;position:relative}
+
+  /* custom dropdown (replaces native <select>) */
+  .ddown{position:relative}
+  .ddown-trigger{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    width:100%;
+    background:#fff;
+    font-family:inherit;
+    outline:none;
+    cursor:pointer;
+    transition:border-color .15s ease,box-shadow .15s ease;
+  }
+  .ddown-trigger-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ddown-chevron{flex-shrink:0;color:var(--text-secondary);transition:transform .15s ease}
+  .ddown.is-open .ddown-chevron{transform:rotate(180deg)}
+  .ddown-menu{
+    position:absolute;left:0;right:0;top:calc(100% + 6px);
+    background:#fff;
+    border:1px solid var(--app-border);
+    border-radius:12px;
+    box-shadow:0 14px 30px rgba(43,38,33,.16);
+    padding:6px;
+    max-height:240px;overflow-y:auto;scrollbar-width:none;
+    z-index:30;
+    display:none;
+  }
+  .ddown-menu::-webkit-scrollbar{display:none}
+  .ddown.is-open .ddown-menu{display:block}
+  .ddown-option{
+    display:block;width:100%;text-align:left;
+    padding:9px 11px;
+    border:none;border-radius:8px;background:none;
+    font-family:inherit;font-size:12.5px;color:var(--ink);
+    cursor:pointer;
+  }
+  .ddown-option:hover{background:var(--app-bg)}
+  .ddown-option.is-selected{background:var(--ink);color:var(--app-bg);font-weight:700}
+
+  .ddown--rail{flex:1;min-width:0}
+  .ddown--rail .ddown-trigger{
+    padding:8px 10px;
+    border-radius:var(--radius-input);
+    border:1px solid var(--app-border);
+    color:var(--ink);
+    font-size:11.5px;font-weight:700;
+  }
+  .ddown--rail .ddown-trigger:hover{border-color:#d8c9ae}
+  .ddown--rail.is-open .ddown-trigger{border-color:#d8c9ae;box-shadow:0 0 0 3px rgba(43,38,33,.12)}
+
+  .ddown--field{width:100%}
+  .ddown--field .ddown-trigger{
+    padding:12px 14px;
+    border-radius:var(--radius-input);
+    border:1px solid var(--input-border);
+    color:var(--ink);
+    font-size:13.5px;
+  }
+  .ddown--field .ddown-trigger:hover{border-color:#d8c9ae}
+  .ddown--field.is-open .ddown-trigger{box-shadow:0 0 0 3px rgba(43,38,33,.12)}
+
+  .rail-sort-btn{
+    flex:0 0 auto;
+    width:33px;height:33px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:var(--radius-input);
+    border:1px solid var(--app-border);
+    background:transparent;
+    color:var(--text-secondary);
+    cursor:pointer;
+    transition:background .15s ease,color .15s ease,border-color .15s ease;
+  }
+  .rail-sort-btn:hover{border-color:#d8c9ae;color:var(--ink)}
+  .rail-sort-btn.is-active{background:var(--ink);color:var(--app-bg);border-color:var(--ink)}
+  .rail-empty{padding:14px 8px;font-size:11.5px;color:var(--text-tertiary);line-height:1.5}
+  .case-row{
+    display:flex;flex-direction:column;gap:3px;
+    width:100%;text-align:left;
+    padding:9px 10px;
+    border:1px solid transparent;
+    border-radius:10px;
+    background:transparent;
+    cursor:pointer;
+    transition:background .15s ease,border-color .15s ease;
+  }
+  .case-row:hover{background:#fff}
+  .case-row.is-active{background:#fff;border-color:var(--app-border)}
+  .case-row-title{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--ink)}
+  .case-row-meta{font-size:10.5px;color:var(--text-tertiary);padding-left:13px}
+  .status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block}
+
+  /* main : case thread */
+  .admin-main{flex:1;min-width:0;background:#faf4ed;overflow-y:auto;scrollbar-width:none;padding:26px 32px}
+  .admin-main::-webkit-scrollbar{display:none}
+  .admin-case-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+  .admin-case-header h3{font-family:var(--font-display);font-weight:520;font-size:19px;color:var(--ink)}
+  .ddown--status{display:inline-block}
+  .ddown--status .ddown-trigger{
+    width:auto;
+    display:inline-flex;align-items:center;gap:6px;
+    padding:5px 10px 5px 11px;
+    border-radius:var(--radius-pill);
+    border:1px solid var(--app-border);
+    background:transparent;
+    font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;
+    color:var(--text-secondary);
+  }
+  .ddown--status .ddown-trigger-label{display:inline-flex;align-items:center;gap:6px}
+  .ddown--status .ddown-chevron{width:8px;height:8px}
+  .ddown--status .ddown-trigger:hover{border-color:#d8c9ae;background:#fff}
+  .ddown--status.is-open .ddown-trigger{border-color:#d8c9ae;background:#fff;box-shadow:0 0 0 3px rgba(43,38,33,.12)}
+  .ddown--status .ddown-menu{left:0;right:auto;min-width:200px}
+  .ddown--status .ddown-option{display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12.5px;font-weight:600}
+  /* right : actions + case file */
+  .admin-right{width:290px;flex:0 0 290px;background:var(--app-surface);border-left:1px solid var(--app-border);overflow-y:auto;scrollbar-width:none;padding:26px 22px}
+  .admin-right::-webkit-scrollbar{display:none}
+  .action-group{display:flex;flex-direction:column;gap:9px}
+  .action-group + .action-group{margin-top:10px}
+  .action-btn{
+    width:100%;
+    padding:13px 16px;
+    border:1px solid var(--ink);
+    border-radius:var(--radius-pill);
+    background:#fff;
+    color:var(--ink);
+    font-size:13px;font-weight:600;font-family:inherit;
+    cursor:pointer;
+    transition:background .15s ease,color .15s ease,transform .1s ease;
+  }
+  .action-btn:hover{background:var(--ink);color:var(--app-bg)}
+  .action-btn:active{transform:scale(.98)}
+  .action-btn.is-active{background:var(--ink);color:var(--app-bg)}
+  .action-btn--muted{border-style:dashed;border-color:#d8c9ae;color:var(--text-secondary)}
+  .action-btn--muted:hover{background:var(--tan-highlight);color:var(--ink)}
+  .action-divider{height:1px;background:var(--line);margin:18px 0}
+
+  .file-row{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .file-row:last-child{border-bottom:none}
+  .file-icon{
+    width:21px;height:21px;border-radius:50%;flex-shrink:0;
+    background:var(--tan-highlight);color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-size:10px;font-weight:700;
+  }
+  .file-text{display:flex;flex-direction:column;gap:1px;min-width:0}
+  .file-text b{font-size:12.5px;font-weight:600;color:var(--ink);word-break:break-word}
+  .file-text span{font-size:10.5px;color:var(--text-tertiary)}
+
+  .note-add-link{
+    display:block;
+    background:none;border:none;padding:12px 0 0;
+    font-size:11.5px;font-weight:700;color:var(--accent);
+    cursor:pointer;font-family:inherit;
+  }
+  .note-add-form{margin-top:10px}
+  .note-add-form textarea{
+    width:100%;min-height:64px;
+    border:1px solid var(--input-border);border-radius:var(--radius-input);
+    padding:10px 12px;font-size:12.5px;font-family:inherit;color:var(--ink);
+    outline:none;resize:vertical;
+  }
+  .note-add-actions{display:flex;gap:8px;margin-top:8px}
+  .note-add-actions .btn-primary,.note-add-actions .btn-ghost{width:auto;padding:8px 14px;font-size:12px}
+
+  /* action zone : email composer + transfer/hold forms + outcome banner */
+  .composer-inline{margin-top:18px;animation:step-in .3s ease both}
+  .composer-inline .kv-list{margin-bottom:16px}
+  .composer-inline textarea{
+    width:100%;border:1px solid var(--input-border);border-radius:var(--radius-input);
+    padding:13px 15px;font-size:13.5px;line-height:1.55;font-family:inherit;color:var(--ink);
+    outline:none;resize:vertical;min-height:150px;
+    scrollbar-width:none;
+  }
+  .composer-inline textarea::-webkit-scrollbar{display:none}
+  .composer-inline textarea:focus{box-shadow:0 0 0 3px rgba(43,38,33,.12)}
+  .composer-hint{margin:8px 0 0;font-size:11px;color:var(--text-tertiary)}
+  .composer-actions{display:flex;gap:10px;margin-top:14px}
+  .composer-actions .btn-primary{width:auto;flex:0 0 auto;padding:13px 22px}
+
+  .outcome-banner{
+    display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
+    margin-top:18px;padding:15px 17px;
+    background:var(--success-soft);border:1px solid var(--success);border-radius:12px;
+    color:var(--success);font-size:12.5px;line-height:1.55;
     animation:step-in .3s ease both;
   }
-  .composer .btn-primary{margin-top:16px}
-  .composer[hidden]{display:none}
-  .cat-row[hidden]{display:none}
-  .composer .field textarea{cursor:default;resize:vertical;min-height:90px}
+  .outcome-banner.is-hold{background:var(--warning-soft);border-color:var(--warning);color:var(--warning)}
+  .outcome-banner.is-transferred{background:var(--info-soft);border-color:var(--info);color:var(--info)}
+  .outcome-banner b{display:block;font-size:13px;margin-bottom:2px}
+  .outcome-banner button{
+    flex-shrink:0;background:none;border:none;padding:0;
+    font-size:11.5px;font-weight:700;text-decoration:underline;cursor:pointer;color:inherit;font-family:inherit;
+  }
+
+  @media (max-width:980px){
+    .admin-rail{width:180px;flex-basis:180px}
+    .admin-right{width:255px;flex-basis:255px}
+    .admin-main{padding:22px}
+  }
 
   /* ---------- responsive ---------- */
   @media (min-width:900px){
-    .deck-shell{display:grid;grid-template-columns:44% 56%;height:100vh;overflow:hidden}
-    .deck-left{align-items:flex-end;padding:0 60px 0 56px}
-    .deck-left-inner{padding:56px 0}
-    .deck-right{padding:0 56px 0 16px}
-    .deck-hint .kbd{display:inline}
-    .browser-frame{height:min(920px, calc(100vh - 32px))}
+    .flow-topbar{padding:36px 56px 0}
+    .flow-stage{padding:24px 56px 48px}
+    .browser-frame{height:min(880px, calc(100vh - 160px))}
     #appMount{height:auto}
   }
   @media (max-width:640px){
-    .deck-buttons{flex-wrap:wrap}
+    .menu-card{flex-wrap:wrap}
+    .menu-card-icon{width:52px;height:52px}
     #appMount{height:min(520px,58vh);--mount-pad-x:18px;--mount-pad-top:24px;padding:var(--mount-pad-top) var(--mount-pad-x) 32px}
     .browser-chrome{padding:8px 10px}
   }
 </style>
 
 <div class="stage">
-  <div class="deck-shell">
-    <div class="deck-left">
-      <div class="deck-left-inner" id="deckLeftInner">
-        <p class="deck-eyebrow" id="deckEyebrow">Walkthrough · 1 / 3</p>
-        <h1 class="deck-title" id="deckTitle">Customer Request</h1>
-        <p class="deck-subtitle" id="deckSubtitle"></p>
-        <p class="deck-note" id="deckNote"></p>
+  <div class="menu-view" id="menuView">
+    <div class="menu-inner" id="menuInner">
+      <p class="deck-eyebrow">Rymax &middot; Customer Support AI POC</p>
+      <h1 class="deck-title">Pick a flow to preview</h1>
+      <p class="deck-subtitle">Two walkthroughs live in this prototype &mdash; the customer-facing request form, and the specialist's admin dashboard. Open either one below, then use Back to return here.</p>
 
-        <div class="deck-buttons">
-          <button class="deck-btn deck-btn--prev" id="prevBtn" aria-label="Previous slide">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            Prev
-          </button>
-          <button class="deck-btn deck-btn--next" id="nextBtn" aria-label="Next slide">
-            Next
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </button>
-        </div>
-        <p class="deck-hint"><span class="kbd">←  →</span> arrow keys also navigate</p>
+      <div class="menu-cards" id="menuCards">
+        <button type="button" class="menu-card" data-flow="customer">
+          <span class="menu-card-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></svg>
+          </span>
+          <span class="menu-card-text">
+            <span class="menu-card-title">Customer flow</span>
+            <span class="menu-card-sub">Website</span>
+          </span>
+          <span class="menu-card-arrow">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </span>
+        </button>
 
-        <div class="deck-dots" id="deckDots"></div>
-        <p class="deck-caption">Rymax — Customer Support AI POC · Prototype v0.1</p>
+        <button type="button" class="menu-card" data-flow="admin">
+          <span class="menu-card-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="14" y="12" width="7" height="9" rx="1.5"></rect><rect x="3" y="16" width="7" height="5" rx="1.5"></rect></svg>
+          </span>
+          <span class="menu-card-text">
+            <span class="menu-card-title">Admin flow</span>
+            <span class="menu-card-sub">Dashboard</span>
+          </span>
+          <span class="menu-card-arrow">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </span>
+        </button>
+      </div>
+
+      <p class="deck-caption">Rymax — Customer Support AI POC · Prototype v0.2</p>
+    </div>
+  </div>
+
+  <div class="flow-view" id="flowView" hidden>
+    <div class="flow-topbar" id="flowTopbar">
+      <button type="button" class="deck-btn" id="backBtn" aria-label="Back to menu">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        Back
+      </button>
+      <div>
+        <p class="flow-eyebrow" id="flowEyebrow"></p>
+        <h1 class="flow-title" id="flowTitle"></h1>
       </div>
     </div>
 
-    <div class="deck-right">
+    <div class="flow-stage">
       <div class="browser-frame" id="browserFrame">
         <div class="browser-chrome">
           <div class="traffic"><span></span><span></span><span></span></div>
@@ -666,11 +905,17 @@
           </div>
           <div class="browser-url">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
-            <span id="urlBar">rymax.customersupport.com</span>
+            <span id="urlBar"></span>
           </div>
         </div>
         <div class="browser-viewport">
-          <div class="app-topbar"><span class="app-topbar__title">Support</span></div>
+          <div class="app-topbar">
+            <span class="app-topbar__title">Support</span>
+            <div class="topbar-account">
+              <span class="topbar-account-avatar">RS</span>
+              <span class="topbar-account-name">Rymax Specialist</span>
+            </div>
+          </div>
           <div class="app-scroll">
             <div id="appMount"></div>
             <div class="scroll-thumb" id="scrollThumb"></div>
@@ -748,17 +993,6 @@
     })();
   }
 
-  function animateCount(el, target, duration){
-    if(!duration){ el.textContent = target; return; }
-    var start = performance.now();
-    function frame(t){
-      var p = Math.min(1, (t - start) / duration);
-      el.textContent = Math.round(target * p);
-      if(p < 1) requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
-  }
-
   function shake(el){
     el.classList.remove('shake'); void el.offsetWidth;
     el.classList.add('shake');
@@ -766,9 +1000,10 @@
 
   var svgPhoto = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="8.5" cy="10" r="1.5"></circle><path d="M21 15l-5-5L5 19"></path></svg>';
 
-  /* ---------------- slide 1 : request form ---------------- */
-  function renderSlide1(mount){
+  /* ---------------- customer flow : request form ---------------- */
+  function renderCustomerFlow(mount){
     mount.innerHTML =
+      '<div id="requestForm">' +
       '<div class="stepper">' +
         '<span class="step-pill is-active" data-pill="1">1 &middot; Your details</span>' +
         '<span class="step-line"></span>' +
@@ -781,8 +1016,10 @@
         '<div class="card">' +
           '<div class="field"><label for="fName">Full name</label>' +
             '<input id="fName" type="text" readonly placeholder="Click to fill in" data-fill="Marcus Reyes"></div>' +
-          '<div class="field"><label for="fEmail">Email or phone</label>' +
+          '<div class="field"><label for="fEmail">Email</label>' +
             '<input id="fEmail" type="text" readonly placeholder="Click to fill in" data-fill="marcus.reyes@email.com"></div>' +
+          '<div class="field"><label for="fPhone">Phone</label>' +
+            '<input id="fPhone" type="text" readonly placeholder="Click to fill in" data-fill="+1 (555) 214-8890"></div>' +
           '<div class="field"><label for="fOrder">Order number</label>' +
             '<input id="fOrder" type="text" readonly placeholder="Click to fill in" data-fill="#4821">' +
             '<p class="field-help">Optional &mdash; helps us pull up your order instantly</p></div>' +
@@ -907,6 +1144,18 @@
             '<textarea id="pricingQuestion" rows="2" readonly placeholder="Click to fill in" data-fill="How many points do I need for the next reward tier?"></textarea></div>' +
           '<button class="btn-primary" id="submitPricing" style="margin-top:20px" disabled>Send message</button>' +
         '</div>' +
+      '</div>' +
+      '</div>' +
+
+      '<div class="success-view" id="successView" hidden>' +
+        '<h2 class="app-h2" id="successTitle">Request received!</h2>' +
+        '<p class="app-sub" id="successSubtitle">The support will contact you shortly for further action.</p>' +
+        '<div class="card success-summary">' +
+          '<dl class="kv-list" id="successSummaryList"></dl>' +
+        '</div>' +
+        '<div class="success-actions">' +
+          '<button type="button" class="btn-restart" id="restartFlowBtn">Start flow again</button>' +
+        '</div>' +
       '</div>';
 
     var step1 = mount.querySelector('[data-step="1"]');
@@ -914,9 +1163,44 @@
     var continueBtn = mount.querySelector('#continueBtn');
     var fName = mount.querySelector('#fName');
     var fEmail = mount.querySelector('#fEmail');
+    var fPhone = mount.querySelector('#fPhone');
+
+    var requestForm = mount.querySelector('#requestForm');
+    var successView = mount.querySelector('#successView');
+    var successTitleEl = mount.querySelector('#successTitle');
+    var successSubtitleEl = mount.querySelector('#successSubtitle');
+    var successListEl = mount.querySelector('#successSummaryList');
+    var restartBtn = mount.querySelector('#restartFlowBtn');
+
+    function countPhotos(panel){
+      var total = panel.querySelectorAll('.photo-box').length;
+      var added = panel.querySelectorAll('.photo-box.is-added').length;
+      return added + ' of ' + total;
+    }
+
+    function showSuccess(opts){
+      var rows = [['Submitted by', fName.value + ' (' + fEmail.value + ', ' + fPhone.value + ')']].concat(opts.rows);
+      successTitleEl.textContent = opts.title;
+      successSubtitleEl.textContent = opts.subtitle;
+      successListEl.innerHTML = rows.map(function(r){
+        return '<div class="kv-row"><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>';
+      }).join('');
+      requestForm.hidden = true;
+      successView.hidden = false;
+      appMount.scrollTop = 0;
+      scrollThumb.classList.remove('is-visible');
+      updateThumb();
+    }
+
+    restartBtn.addEventListener('click', function(){
+      renderCustomerFlow(mount);
+      appMount.scrollTop = 0;
+      scrollThumb.classList.remove('is-visible');
+      updateThumb();
+    });
 
     function checkStep1(){
-      continueBtn.disabled = !(fName.value && fEmail.value);
+      continueBtn.disabled = !(fName.value && fEmail.value && fPhone.value);
     }
     step1.querySelectorAll('input[data-fill]').forEach(function(input){
       input.addEventListener('click', function(){
@@ -949,6 +1233,14 @@
         panelCancel.hidden = cat !== 'cancel';
         panelOther.hidden = cat !== 'other';
         panelPricing.hidden = cat !== 'pricing';
+        var shownPanel = mount.querySelector('.cat-panel:not([hidden])');
+        if(shownPanel){
+          shownPanel.querySelectorAll('.photo-box').forEach(function(box){
+            box.style.animation = 'none';
+            void box.offsetWidth;
+            box.style.animation = '';
+          });
+        }
         if(cat === 'damaged') initDamaged();
         if(cat === 'wrong') initWrong();
         if(cat === 'track') initTrack();
@@ -987,12 +1279,17 @@
     panelDamaged.querySelector('#submitDamaged').addEventListener('click', function(e){
       var btn = e.currentTarget;
       if(btn.disabled) return;
-      btn.disabled = true;
-      btn.textContent = 'Request submitted';
-      var banner = document.createElement('div');
-      banner.className = 'success-banner';
-      banner.innerHTML = '<b>Request submitted</b>We\'ve logged the damage and will follow up with your ' + (damagedChoice === 'exchange' ? 'exchange' : 'refund') + '.';
-      btn.insertAdjacentElement('afterend', banner);
+      showSuccess({
+        title: 'Request received!',
+        subtitle: 'We\'ve logged the damage and will follow up with your ' + (damagedChoice === 'exchange' ? 'exchange' : 'refund') + '.',
+        rows: [
+          ['Category', 'Damaged item or empty box'],
+          ['Order number', damagedOrder.value],
+          ['Description', issueText.value],
+          ['Photos attached', countPhotos(panelDamaged)],
+          ['Requested outcome', damagedChoice === 'exchange' ? 'Exchange' : 'Refund']
+        ]
+      });
     });
 
     var submitWrongBtn = panelWrong.querySelector('#submitWrong');
@@ -1027,12 +1324,18 @@
     submitWrongBtn.addEventListener('click', function(e){
       var btn = e.currentTarget;
       if(btn.disabled) return;
-      btn.disabled = true;
-      btn.textContent = 'Request submitted';
-      var banner = document.createElement('div');
-      banner.className = 'success-banner';
-      banner.innerHTML = '<b>Request submitted</b>We\'ve logged the mismatch and will follow up with your ' + (wrongChoice === 'exchange' ? 'exchange' : 'refund') + '.';
-      btn.insertAdjacentElement('afterend', banner);
+      showSuccess({
+        title: 'Request received!',
+        subtitle: 'We\'ve logged the mismatch and will follow up with your ' + (wrongChoice === 'exchange' ? 'exchange' : 'refund') + '.',
+        rows: [
+          ['Category', 'Wrong item or size'],
+          ['Order number', wrongOrder.value],
+          ['Received', wrongReceived.value],
+          ['Expected', wrongExpected.value],
+          ['Photos attached', countPhotos(panelWrong)],
+          ['Requested outcome', wrongChoice === 'exchange' ? 'Exchange' : 'Refund']
+        ]
+      });
     });
 
     var trackTimer = null;
@@ -1053,12 +1356,17 @@
       var btn = e.currentTarget;
       if(btn.disabled) return;
       var notify = panelTrack.querySelector('#notifyChk').checked;
-      btn.disabled = true;
-      btn.textContent = 'Tracking confirmed';
-      var banner = document.createElement('div');
-      banner.className = 'success-banner';
-      banner.innerHTML = '<b>All set</b>' + (notify ? 'We\'ll text you the moment it\'s delivered.' : 'Tracking saved to your account.');
-      btn.insertAdjacentElement('afterend', banner);
+      showSuccess({
+        title: 'Tracking confirmed!',
+        subtitle: notify ? 'We\'ll text you the moment it\'s delivered.' : 'Tracking saved to your account.',
+        rows: [
+          ['Category', 'Where is my order'],
+          ['Order number', panelTrack.querySelector('#trackOrder').value],
+          ['Status', 'Shipped — in transit'],
+          ['Carrier', 'UPS · 1Z999AA10123456784'],
+          ['SMS notifications', notify ? 'On' : 'Off']
+        ]
+      });
     });
 
     var submitCancelBtn = panelCancel.querySelector('#submitCancel');
@@ -1078,12 +1386,15 @@
     submitCancelBtn.addEventListener('click', function(e){
       var btn = e.currentTarget;
       if(btn.disabled) return;
-      btn.disabled = true;
-      btn.textContent = 'Cancellation requested';
-      var banner = document.createElement('div');
-      banner.className = 'success-banner';
-      banner.innerHTML = '<b>Cancellation requested</b>We\'ll confirm as soon as the order is stopped from shipping.';
-      btn.insertAdjacentElement('afterend', banner);
+      showSuccess({
+        title: 'Cancellation requested!',
+        subtitle: 'We\'ll confirm as soon as the order is stopped from shipping.',
+        rows: [
+          ['Category', 'Cancel an order'],
+          ['Order number', cancelOrder.value],
+          ['Reason', cancelReason.value]
+        ]
+      });
     });
 
     var submitOtherBtn = panelOther.querySelector('#submitOther');
@@ -1104,12 +1415,15 @@
     submitOtherBtn.addEventListener('click', function(e){
       var btn = e.currentTarget;
       if(btn.disabled) return;
-      btn.disabled = true;
-      btn.textContent = 'Message sent';
-      var banner = document.createElement('div');
-      banner.className = 'success-banner';
-      banner.innerHTML = '<b>Message sent</b>A specialist will get back to you by email.';
-      btn.insertAdjacentElement('afterend', banner);
+      showSuccess({
+        title: 'Message sent!',
+        subtitle: 'A specialist will get back to you by email.',
+        rows: [
+          ['Category', 'Something else'],
+          ['Question', otherQuestion.value],
+          ['Photo attached', panelOther.querySelector('.photo-box').classList.contains('is-added') ? 'Yes' : 'No']
+        ]
+      });
     });
 
     var submitPricingBtn = panelPricing.querySelector('#submitPricing');
@@ -1127,72 +1441,38 @@
     submitPricingBtn.addEventListener('click', function(e){
       var btn = e.currentTarget;
       if(btn.disabled) return;
-      btn.disabled = true;
-      btn.textContent = 'Message sent';
-      var banner = document.createElement('div');
-      banner.className = 'success-banner';
-      banner.innerHTML = '<b>Message sent</b>A specialist will get back to you by email.';
-      btn.insertAdjacentElement('afterend', banner);
+      showSuccess({
+        title: 'Message sent!',
+        subtitle: 'A specialist will get back to you by email.',
+        rows: [
+          ['Category', 'Pricing & points'],
+          ['Question', pricingQuestion.value]
+        ]
+      });
     });
   }
 
-  /* ---------------- slide 2 : AI case summary ---------------- */
-  function renderSlide2(mount){
-    mount.innerHTML =
-      '<p class="eyebrow-mini">AI Summary</p>' +
-      '<h2 class="app-h2">Preparing the case file</h2>' +
-      '<p class="app-sub">Rymax AI reviewed the request and extracted everything a specialist will need.</p>' +
-      '<div class="loading-row" id="summaryLoading"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="loading-label">Reading the request&hellip;</span></div>' +
-      '<div class="summary-content" id="summaryContent" hidden>' +
-        '<div class="badge-row">' +
-          '<span class="pill-badge pill-badge--accent">Confidence <b id="confVal">0</b>%</span>' +
-          '<span class="pill-badge">Auto-drafted &middot; 2 sec</span>' +
-        '</div>' +
-        '<div class="card">' +
-          '<p class="card-label">What support will see</p>' +
-          '<div class="kv-list">' +
-            '<div class="kv-row"><dt>Customer</dt><dd>Marcus Reyes</dd></div>' +
-            '<div class="kv-row"><dt>Order</dt><dd>#4821 &middot; Merino Sweater, M</dd></div>' +
-            '<div class="kv-row"><dt>Category</dt><dd>Damaged item or empty box</dd></div>' +
-            '<div class="kv-row"><dt>Priority</dt><dd>Standard</dd></div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="card">' +
-          '<p class="card-label">Issue reported</p>' +
-          '<p style="font-size:13px;line-height:1.6;color:var(--ink-soft);font-style:italic">&ldquo;The box arrived crushed and the sweater inside is torn near the collar.&rdquo;</p>' +
-        '</div>' +
-        '<div class="card">' +
-          '<p class="card-label">Recommended solution</p>' +
-          '<ol class="rec-list">' +
-            '<li><span class="rec-num">1</span>Confirm order #4821 is eligible for replacement &mdash; delivered Sep 6, within the return policy window.</li>' +
-            '<li><span class="rec-num">2</span>Offer a free replacement of the Merino Crew Sweater, Navy, size M, at no cost to the customer.</li>' +
-            '<li><span class="rec-num">3</span>Send a prepaid return label for the damaged item &mdash; no additional photos required for this case type.</li>' +
-          '</ol>' +
-        '</div>' +
-      '</div>';
-
-    var loading = mount.querySelector('#summaryLoading');
-    var content = mount.querySelector('#summaryContent');
-    var confVal = mount.querySelector('#confVal');
-    var myGen = ++renderGen;
-    setTimeout(function(){
-      if(myGen !== renderGen) return;
-      loading.hidden = true;
-      content.hidden = false;
-      animateCount(confVal, 92, motionOK ? 700 : 0);
-    }, motionOK ? 900 : 0);
-  }
-
-  /* ---------------- slide 3 : specialist dashboard ---------------- */
-  var CASE_ORDER = ['4821', '5560', '5561', '5544'];
+  /* ---------------- admin flow : specialist CRM dashboard ---------------- */
+  var CASE_ORDER = ['4821', '5560', '5561', '5544', '6002', '6003', '6004', '6005'];
   var CASES = {
     '4821': {
+      orderId: '4821',
       shortName: 'Marcus R.',
+      customerName: 'Marcus Reyes',
       customerLine: 'Marcus Reyes &middot; marcus.reyes@email.com',
       orderLine: '#4821 &middot; Merino Crew Sweater, Navy, M &middot; $135.90',
       category: 'Damaged item or empty box',
+      categoryKey: 'damaged',
+      categoryShort: 'Damaged item',
+      dateLabel: 'Sep 6',
+      dateTs: 6,
       issueLine: '&ldquo;The box arrived crushed and the sweater inside is torn near the collar.&rdquo;',
+      issueSummary: 'damaged packaging, torn item',
       priority: 'Standard &mdash; no safety concern',
+      carrierFact: 'Delivered Sep 6, 11:04',
+      confidence: 92,
+      status: 'needs_review',
+      meta: 'Damaged item &middot; summary ready',
       steps: [
         'Confirm order #4821 is eligible for replacement &mdash; delivered Sep 6, within policy window.',
         'Offer a free replacement of the Merino Crew Sweater, Navy, size M.',
@@ -1211,12 +1491,23 @@
       }
     },
     '5560': {
+      orderId: '5560',
       shortName: 'Dana K.',
+      customerName: 'Dana Keller',
       customerLine: 'Dana Keller &middot; dana.keller@email.com',
       orderLine: '#5560 &middot; Merino Crew Sweater, Navy, S &middot; $128.90',
       category: 'Wrong item or size',
+      categoryKey: 'wrong',
+      categoryShort: 'Wrong size',
+      dateLabel: 'Sep 7',
+      dateTs: 7,
       issueLine: '&ldquo;I ordered a size S but received a size L instead.&rdquo;',
+      issueSummary: 'wrong size shipped (L instead of S)',
       priority: 'Standard &mdash; no safety concern',
+      carrierFact: 'Delivered Sep 7, 09:20',
+      confidence: 88,
+      status: 'in_progress',
+      meta: 'Wrong size &middot; in review',
       steps: [
         'Confirm order #5560 was delivered Sep 7 with the incorrect size shipped in error.',
         'Offer a free exchange for the correct size (S) of the Merino Crew Sweater, Navy.',
@@ -1235,12 +1526,23 @@
       }
     },
     '5561': {
+      orderId: '5561',
       shortName: 'Theo P.',
+      customerName: 'Theo Patterson',
       customerLine: 'Theo Patterson &middot; theo.patterson@email.com',
       orderLine: '#5561 &middot; Trail Runner Jacket, Charcoal, L &middot; $189.00',
       category: 'Cancel an order',
+      categoryKey: 'cancel',
+      categoryShort: 'Cancel order',
+      dateLabel: 'Sep 5',
+      dateTs: 5,
       issueLine: '&ldquo;I found the same jacket for less elsewhere and would like to cancel before it ships.&rdquo;',
+      issueSummary: 'wants to cancel before shipment',
       priority: 'Standard &mdash; order not yet shipped',
+      carrierFact: 'Order not yet shipped',
+      confidence: 95,
+      status: 'waiting',
+      meta: 'Cancel order &middot; awaiting customer confirmation',
       steps: [
         'Confirm order #5561 has not yet shipped &mdash; cancellation is available at no charge.',
         'Process a full refund of $189.00 to the original payment method.',
@@ -1259,12 +1561,23 @@
       }
     },
     '5544': {
+      orderId: '5544',
       shortName: 'Priya S.',
+      customerName: 'Priya Sharma',
       customerLine: 'Priya Sharma &middot; priya.sharma@email.com',
       orderLine: '#5544 &middot; Alpine Daypack, Moss Green &middot; $79.50',
       category: 'Where is my order',
+      categoryKey: 'track',
+      categoryShort: 'Delivery delayed',
+      dateLabel: 'Sep 9',
+      dateTs: 9,
       issueLine: '&ldquo;My order shows as shipped 6 days ago but tracking hasn&rsquo;t updated since.&rdquo;',
+      issueSummary: 'tracking has not updated in 6 days',
       priority: 'Standard &mdash; delivery delayed',
+      carrierFact: 'Shipped Sep 3 &middot; UPS &middot; in transit',
+      confidence: 81,
+      status: 'needs_review',
+      meta: 'Delivery delayed &middot; summary ready',
       steps: [
         'Confirm order #5544 shipped Sep 3 via UPS &mdash; tracking shows it is currently in transit.',
         'Proactively apply a $10 shipping credit for the delay.',
@@ -1281,22 +1594,417 @@
         decline: 'Declined — Priya was offered a discount code instead and notified by email just now.',
         escalate: 'Escalated — a specialist will call Priya within the hour. Priya was notified by email just now.'
       }
+    },
+    '6002': {
+      orderId: '6002',
+      shortName: 'Noah B.',
+      customerName: 'Noah Bennett',
+      customerLine: 'Noah Bennett &middot; noah.bennett@email.com',
+      orderLine: '#6002 &middot; Loyalty account &middot; 1,240 points',
+      category: 'Pricing & points',
+      categoryKey: 'pricing',
+      categoryShort: 'Pricing question',
+      dateLabel: 'Sep 8',
+      dateTs: 8,
+      issueLine: '&ldquo;My order confirmation shows a different price than what was listed on the site, and I&rsquo;m not sure my points were applied.&rdquo;',
+      issueSummary: 'price mismatch, points not applied',
+      priority: 'Standard &mdash; billing review',
+      carrierFact: 'Order placed Sep 8, not yet shipped',
+      confidence: 81,
+      status: 'needs_review',
+      meta: 'Pricing question &middot; summary ready',
+      steps: [
+        'Confirm the listed price at checkout for order #6002 and compare to the charged amount.',
+        'Apply the $12.40 price difference as a refund to the original payment method.',
+        'Manually credit the missing 124 loyalty points to Noah&rsquo;s account.'
+      ],
+      replyToName: 'Noah',
+      replies: {
+        approve: "Dear Mr. Bennett,\n\nThank you for contacting Rymax Customer Support regarding order #6002. We found a $12.40 discrepancy between the listed and charged price and have refunded the difference to your original payment method. We've also credited the missing 124 loyalty points to your account.\n\nWe apologize for the inconvenience and thank you for your understanding.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Mr. Bennett,\n\nThank you for contacting Rymax Customer Support regarding order #6002. After reviewing your order, the price charged matches the price displayed at checkout, so we're unable to issue a refund at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Mr. Bennett,\n\nThank you for your patience regarding order #6002. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+      },
+      finishMsg: {
+        approve: 'Approved — the price difference was refunded and points were credited. Noah was notified by email just now.',
+        decline: 'Declined — Noah was offered a discount code instead and notified by email just now.',
+        escalate: 'Escalated — a specialist will call Noah within the hour. Noah was notified by email just now.'
+      }
+    },
+    '6003': {
+      orderId: '6003',
+      shortName: 'Elena V.',
+      customerName: 'Elena Voss',
+      customerLine: 'Elena Voss &middot; elena.voss@email.com',
+      orderLine: '#6003 &middot; Alpine Daypack, Moss Green &middot; $79.50',
+      category: 'Something else',
+      categoryKey: 'other',
+      categoryShort: 'General inquiry',
+      dateLabel: 'Sep 10',
+      dateTs: 10,
+      issueLine: '&ldquo;I want to update the shipping address on an order I just placed before it ships.&rdquo;',
+      issueSummary: 'requesting address change before shipment',
+      priority: 'Standard &mdash; order not yet shipped',
+      carrierFact: 'Order not yet shipped',
+      confidence: 90,
+      status: 'in_progress',
+      meta: 'General inquiry &middot; in review',
+      steps: [
+        'Confirm order #6003 has not yet shipped &mdash; address changes are available at no charge.',
+        'Update the shipping address to the one Elena provided.',
+        'Send a confirmation email once the address change is complete.'
+      ],
+      replyToName: 'Elena',
+      replies: {
+        approve: "Dear Ms. Voss,\n\nThank you for contacting Rymax Customer Support regarding order #6003. We have updated your shipping address as requested, since the order has not yet shipped.\n\nWe appreciate you reaching out and hope you enjoy your order.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Ms. Voss,\n\nThank you for contacting Rymax Customer Support regarding order #6003. After reviewing your order, we found that it has already entered the fulfillment process, so we're unable to change the shipping address at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Ms. Voss,\n\nThank you for your patience regarding order #6003. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+      },
+      finishMsg: {
+        approve: 'Approved — the shipping address was updated. Elena was notified by email just now.',
+        decline: 'Declined — Elena was offered a discount code instead and notified by email just now.',
+        escalate: 'Escalated — a specialist will call Elena within the hour. Elena was notified by email just now.'
+      }
+    },
+    '6004': {
+      orderId: '6004',
+      shortName: 'Liam O.',
+      customerName: "Liam O'Connor",
+      customerLine: "Liam O'Connor &middot; liam.oconnor@email.com",
+      orderLine: '#6004 &middot; Trail Runner Jacket, Charcoal, M &middot; $189.00',
+      category: 'Damaged item or empty box',
+      categoryKey: 'damaged',
+      categoryShort: 'Damaged item',
+      dateLabel: 'Sep 4',
+      dateTs: 4,
+      issueLine: '&ldquo;The zipper on the jacket is broken and won&rsquo;t stay closed.&rdquo;',
+      issueSummary: 'broken zipper on arrival',
+      priority: 'Standard &mdash; no safety concern',
+      carrierFact: 'Delivered Sep 3, 16:40',
+      confidence: 90,
+      status: 'needs_review',
+      meta: 'Damaged item &middot; summary ready',
+      steps: [
+        'Confirm order #6004 is eligible for replacement &mdash; delivered Sep 3, within policy window.',
+        'Offer a free replacement of the Trail Runner Jacket, Charcoal, size M.',
+        'Send a prepaid return label &mdash; no additional photos required for this case type.'
+      ],
+      replyToName: 'Liam',
+      replies: {
+        approve: "Dear Mr. O'Connor,\n\nThank you for contacting Rymax Customer Support regarding order #6004. We have reviewed your case and confirmed that the Trail Runner Jacket (Charcoal, M) qualifies for a complimentary replacement. Your new item will be shipped today, along with a prepaid return label for the damaged product.\n\nWe apologize for the inconvenience and thank you for your understanding.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Mr. O'Connor,\n\nThank you for contacting Rymax Customer Support regarding order #6004. After carefully reviewing your account and order history, we are unable to approve a free replacement for this claim, as it does not meet our current eligibility criteria.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Mr. O'Connor,\n\nThank you for your patience regarding order #6004. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+      },
+      finishMsg: {
+        approve: 'Approved — the replacement is being packed now. Liam was notified by email just now.',
+        decline: 'Declined — Liam was offered a discount code instead and notified by email just now.',
+        escalate: 'Escalated — a specialist will call Liam within the hour. Liam was notified by email just now.'
+      }
+    },
+    '6005': {
+      orderId: '6005',
+      shortName: 'Sofia M.',
+      customerName: 'Sofia Martins',
+      customerLine: 'Sofia Martins &middot; sofia.martins@email.com',
+      orderLine: '#6005 &middot; Alpine Daypack, Slate Grey &middot; $79.50',
+      category: 'Where is my order',
+      categoryKey: 'track',
+      categoryShort: 'Delivery delayed',
+      dateLabel: 'Sep 2',
+      dateTs: 2,
+      issueLine: '&ldquo;Tracking still says label created and it&rsquo;s been over a week.&rdquo;',
+      issueSummary: 'tracking has not updated in over a week',
+      priority: 'Standard &mdash; delivery delayed',
+      carrierFact: 'Label created Aug 26 &middot; UPS &middot; not yet scanned',
+      confidence: 76,
+      status: 'needs_review',
+      meta: 'Delivery delayed &middot; summary ready',
+      steps: [
+        'Confirm order #6005 has had no carrier scan since the label was created Aug 26.',
+        'Proactively apply a $10 shipping credit for the delay.',
+        'Enable SMS delivery notifications so Sofia is alerted the moment it arrives.'
+      ],
+      replyToName: 'Sofia',
+      replies: {
+        approve: "Dear Ms. Martins,\n\nThank you for contacting Rymax Customer Support regarding order #6005. We have confirmed with our carrier that your package has not yet been scanned and are following up on your behalf. As an apology for the delay, we have applied a $10 credit to your account.\n\nWe have also enabled SMS notifications so you'll be alerted the moment it's delivered.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Ms. Martins,\n\nThank you for contacting Rymax Customer Support regarding order #6005. After reviewing your shipment, we found that it is on track to arrive within the carrier's standard delivery window, so we are unable to process a refund or credit at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Ms. Martins,\n\nThank you for your patience regarding order #6005. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+      },
+      finishMsg: {
+        approve: 'Approved — a shipping credit was applied and SMS alerts are on. Sofia was notified by email just now.',
+        decline: 'Declined — Sofia was offered a discount code instead and notified by email just now.',
+        escalate: 'Escalated — a specialist will call Sofia within the hour. Sofia was notified by email just now.'
+      }
     }
   };
 
-  function renderSlide3(mount){
-    var activeId = CASE_ORDER[0];
+  var STATUS_META = {
+    needs_review: { label: 'Needs review', dot: 'var(--accent)' },
+    in_progress: { label: 'In progress', dot: 'var(--ink-soft)' },
+    waiting: { label: 'Waiting on customer', dot: 'var(--text-tertiary)' },
+    hold: { label: 'On hold', dot: 'var(--warning)' },
+    transferred: { label: 'Transferred', dot: 'var(--info)' },
+    resolved: { label: 'Resolved', dot: 'var(--success)' }
+  };
+  var STATUS_ORDER = ['needs_review', 'in_progress', 'waiting', 'hold', 'transferred', 'resolved'];
+  var CATEGORY_META = {
+    damaged: { label: 'Damaged item or empty box' },
+    wrong: { label: 'Wrong item or size' },
+    cancel: { label: 'Cancel an order' },
+    track: { label: 'Where is my order' },
+    pricing: { label: 'Pricing & points' },
+    other: { label: 'Something else' }
+  };
+  var CATEGORY_FILTERS = ['all', 'damaged', 'wrong', 'cancel', 'track', 'pricing', 'other'];
+  var CATEGORY_GROUPS = ['damaged', 'wrong', 'cancel', 'track', 'pricing', 'other'];
+  var OUTCOME_TITLES = { approve: 'Request approved', decline: 'Request declined', escalate: 'Escalated to a phone call' };
+  var TRANSFER_TEAMS = ['Returns & Exchanges Team', 'Billing & Refunds Team', 'Tier 2 Specialist', 'Fraud & Risk Team'];
+  var HOLD_REASONS = ['Awaiting parts or inventory', 'Waiting on carrier investigation', 'Needs manager approval', 'Waiting on customer response'];
 
-    function draw(){
-      var c = CASES[activeId];
-      mount.innerHTML =
-        '<div class="tabs-row" id="tabsRow">' +
-          CASE_ORDER.map(function(id){
-            return '<button class="tab' + (id === activeId ? ' is-active' : '') + '" data-tab="' + id + '">#' + id + ' &middot; ' + CASES[id].shortName + '</button>';
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, function(ch){
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch];
+    });
+  }
+
+  /* ---------------- custom dropdown (replaces native <select>) ---------------- */
+  var DDOWN_CHEVRON = '<svg class="ddown-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+
+  function ddownHtml(id, modifierClass, triggerLabel, options, selectedValue){
+    return '<div class="ddown ' + modifierClass + '" id="' + id + '">' +
+        '<button type="button" class="ddown-trigger"><span class="ddown-trigger-label">' + triggerLabel + '</span>' + DDOWN_CHEVRON + '</button>' +
+        '<div class="ddown-menu" role="listbox">' +
+          options.map(function(o){
+            return '<button type="button" class="ddown-option' + (o.value === selectedValue ? ' is-selected' : '') + '" data-value="' + o.value + '" role="option">' + o.label + '</button>';
           }).join('') +
         '</div>' +
+      '</div>';
+  }
+
+  function wireDdown(root, id, onSelect){
+    var wrap = root.querySelector('#' + id);
+    if(!wrap) return;
+    var trigger = wrap.querySelector('.ddown-trigger');
+    trigger.addEventListener('click', function(e){
+      e.stopPropagation();
+      var willOpen = !wrap.classList.contains('is-open');
+      document.querySelectorAll('.ddown.is-open').forEach(function(d){ d.classList.remove('is-open'); });
+      if(willOpen) wrap.classList.add('is-open');
+    });
+    wrap.querySelectorAll('.ddown-option').forEach(function(opt){
+      opt.addEventListener('click', function(e){
+        e.stopPropagation();
+        wrap.classList.remove('is-open');
+        wrap.querySelectorAll('.ddown-option').forEach(function(o){ o.classList.toggle('is-selected', o === opt); });
+        trigger.querySelector('.ddown-trigger-label').textContent = opt.textContent;
+        onSelect(opt.dataset.value, opt.textContent);
+      });
+    });
+  }
+
+  document.addEventListener('click', function(){
+    document.querySelectorAll('.ddown.is-open').forEach(function(d){ d.classList.remove('is-open'); });
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') document.querySelectorAll('.ddown.is-open').forEach(function(d){ d.classList.remove('is-open'); });
+  });
+
+  function baseFileEntries(c){
+    return [
+      { title: 'Order #' + c.orderId, sub: 'From the account' },
+      { title: c.customerName + ' &middot; contact details', sub: 'From the account' },
+      { title: c.carrierFact, sub: 'From the carrier' },
+      { title: 'Issue: ' + c.issueSummary, sub: 'AI summary' },
+      { title: 'Confidence: ' + c.confidence + '%', sub: 'AI summary' }
+    ];
+  }
+
+  function renderAdminFlow(mount){
+    var activeId = CASE_ORDER[0];
+    var filterCategory = 'all';
+    var searchQuery = '';
+    var sortNewestFirst = true;
+    var ui = { openForm: null };
+    var selectedTransferTeam = TRANSFER_TEAMS[0];
+    var selectedHoldReason = HOLD_REASONS[0];
+    var SORT_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 16 4 4 4-4"></path><path d="M7 20V4"></path><path d="m21 8-4-4-4 4"></path><path d="M17 4v16"></path></svg>';
+
+    mount.innerHTML =
+      '<div class="admin-shell" id="adminShell">' +
+        '<div class="admin-rail" id="adminRail">' +
+          '<input type="text" class="admin-search" id="railSearch" placeholder="Search by name or order #">' +
+          '<div class="rail-toolbar" id="railChips"></div>' +
+          '<div id="railList"></div>' +
+        '</div>' +
+        '<div class="admin-main" id="adminMain"></div>' +
+        '<div class="admin-right" id="adminRight"></div>' +
+      '</div>';
+
+    var railSearchEl = mount.querySelector('#railSearch');
+    var railChipsEl = mount.querySelector('#railChips');
+    var railListEl = mount.querySelector('#railList');
+    var adminMainEl = mount.querySelector('#adminMain');
+    var adminRightEl = mount.querySelector('#adminRight');
+
+    function matchesCase(c, id){
+      if(filterCategory !== 'all' && c.categoryKey !== filterCategory) return false;
+      if(!searchQuery) return true;
+      var hay = (c.shortName + ' ' + c.customerName + ' ' + id + ' ' + c.category).toLowerCase();
+      return hay.indexOf(searchQuery.toLowerCase()) !== -1;
+    }
+
+    function caseRowHtml(id){
+      var c = CASES[id];
+      var meta = STATUS_META[c.status];
+      return '<button type="button" class="case-row' + (id === activeId ? ' is-active' : '') + '" data-case="' + id + '">' +
+          '<span class="case-row-title"><span class="status-dot" style="background:' + meta.dot + '"></span>' + c.shortName + ' &middot; #' + id + '</span>' +
+          '<span class="case-row-meta">' + c.dateLabel + ' &middot; ' + c.meta + '</span>' +
+        '</button>';
+    }
+
+    function renderRailList(){
+      var counts = { all: 0 };
+      CATEGORY_GROUPS.forEach(function(k){ counts[k] = 0; });
+      CASE_ORDER.forEach(function(id){ counts.all++; counts[CASES[id].categoryKey]++; });
+
+      var filterOptions = CATEGORY_FILTERS.map(function(k){
+        if(k !== 'all' && k !== filterCategory && counts[k] === 0) return null;
+        var label = k === 'all' ? 'All' : CATEGORY_META[k].label;
+        return { value: k, label: label + ' &middot; ' + counts[k] };
+      }).filter(Boolean);
+      var currentFilterLabel = filterOptions.filter(function(o){ return o.value === filterCategory; })[0].label;
+
+      railChipsEl.innerHTML =
+        ddownHtml('railFilterDdown', 'ddown--rail', currentFilterLabel, filterOptions, filterCategory) +
+        '<button type="button" class="rail-sort-btn' + (sortNewestFirst ? ' is-active' : '') + '" id="railSortBtn" aria-label="Sort by date" title="' + (sortNewestFirst ? 'Sorted: newest first' : 'Sorted: oldest first') + '">' + SORT_ICON + '</button>';
+
+      var matches = CASE_ORDER.filter(function(id){ return matchesCase(CASES[id], id); });
+      matches.sort(function(a, b){
+        return sortNewestFirst ? CASES[b].dateTs - CASES[a].dateTs : CASES[a].dateTs - CASES[b].dateTs;
+      });
+
+      railListEl.innerHTML = matches.length
+        ? matches.map(caseRowHtml).join('')
+        : '<p class="rail-empty">No requests match this filter.</p>';
+
+      wireDdown(railChipsEl, 'railFilterDdown', function(value){
+        filterCategory = value;
+        renderRailList();
+      });
+      railChipsEl.querySelector('#railSortBtn').addEventListener('click', function(){
+        sortNewestFirst = !sortNewestFirst;
+        renderRailList();
+      });
+      railListEl.querySelectorAll('.case-row').forEach(function(row){
+        row.addEventListener('click', function(){
+          var id = row.dataset.case;
+          if(id === activeId) return;
+          activeId = id;
+          ui.openForm = null;
+          renderRailList();
+          renderCase();
+        });
+      });
+    }
+
+    railSearchEl.addEventListener('input', function(){
+      searchQuery = railSearchEl.value.trim();
+      renderRailList();
+    });
+
+    function subjectFor(c){
+      return 'Re: Order #' + c.orderId + ' &mdash; ' + c.categoryShort;
+    }
+
+    function composerHtml(c, action){
+      return (
+        '<div class="card composer-inline">' +
+          '<p class="card-label">Draft reply &middot; edit before sending</p>' +
+          '<div class="kv-list">' +
+            '<div class="kv-row"><dt>To</dt><dd>' + c.replyToName + ' &middot; ' + c.customerLine.split(' &middot; ')[1] + '</dd></div>' +
+            '<div class="kv-row"><dt>Subject</dt><dd>' + subjectFor(c) + '</dd></div>' +
+          '</div>' +
+          '<textarea id="replyInput" rows="9">' + escapeHtml(c.replies[action]) + '</textarea>' +
+          '<p class="composer-hint">Drafted automatically &mdash; review and edit the wording before it goes out.</p>' +
+          '<div class="composer-actions">' +
+            '<button type="button" class="btn-primary" id="sendBtn">Send reply</button>' +
+            '<button type="button" class="btn-ghost" id="discardBtn">Discard draft</button>' +
+          '</div>' +
+        '</div>'
+      );
+    }
+
+    function transferFormHtml(){
+      selectedTransferTeam = TRANSFER_TEAMS[0];
+      return (
+        '<div class="card composer-inline">' +
+          '<p class="card-label">Transfer this case</p>' +
+          '<div class="field"><label>Send to</label>' +
+            ddownHtml('transferTeamDdown', 'ddown--field', selectedTransferTeam, TRANSFER_TEAMS.map(function(t){ return { value: t, label: t }; }), selectedTransferTeam) +
+          '</div>' +
+          '<div class="field"><label for="transferNote">Note for the receiving team (optional)</label>' +
+            '<textarea id="transferNote" rows="3" placeholder="Add context for whoever picks this up..."></textarea></div>' +
+          '<div class="composer-actions">' +
+            '<button type="button" class="btn-primary" id="confirmTransferBtn">Transfer case</button>' +
+            '<button type="button" class="btn-ghost" id="cancelFormBtn">Cancel</button>' +
+          '</div>' +
+        '</div>'
+      );
+    }
+
+    function holdFormHtml(){
+      selectedHoldReason = HOLD_REASONS[0];
+      return (
+        '<div class="card composer-inline">' +
+          '<p class="card-label">Put this case on hold</p>' +
+          '<div class="field"><label>Reason</label>' +
+            ddownHtml('holdReasonDdown', 'ddown--field', selectedHoldReason, HOLD_REASONS.map(function(r){ return { value: r, label: r }; }), selectedHoldReason) +
+          '</div>' +
+          '<div class="field"><label for="holdUntil">Follow up by (optional)</label>' +
+            '<input id="holdUntil" type="text" placeholder="e.g. Sep 18"></div>' +
+          '<div class="composer-actions">' +
+            '<button type="button" class="btn-primary" id="confirmHoldBtn">Put on hold</button>' +
+            '<button type="button" class="btn-ghost" id="cancelFormBtn">Cancel</button>' +
+          '</div>' +
+        '</div>'
+      );
+    }
+
+    function outcomeBannerHtml(c){
+      var bannerClass = c.outcome.type === 'hold' ? ' is-hold' : c.outcome.type === 'transfer' ? ' is-transferred' : '';
+      return (
+        '<div class="outcome-banner' + bannerClass + '">' +
+          '<div><b>' + c.outcome.title + '</b>' + c.outcome.message + '</div>' +
+          '<button type="button" id="reopenBtn">Reopen actions</button>' +
+        '</div>'
+      );
+    }
+
+    function renderMain(){
+      var c = CASES[activeId];
+      var meta = STATUS_META[c.status];
+      var zone = '';
+      if(c.outcome){
+        zone = outcomeBannerHtml(c);
+      } else if(ui.openForm === 'approve' || ui.openForm === 'decline' || ui.openForm === 'escalate'){
+        zone = composerHtml(c, ui.openForm);
+      } else if(ui.openForm === 'transfer'){
+        zone = transferFormHtml();
+      } else if(ui.openForm === 'hold'){
+        zone = holdFormHtml();
+      }
+
+      var statusOptions = STATUS_ORDER.map(function(s){
+        return { value: s, label: '<span class="status-dot" style="background:' + STATUS_META[s].dot + '"></span>' + STATUS_META[s].label };
+      });
+      var statusTriggerLabel = '<span class="status-dot" style="background:' + meta.dot + '"></span>' + meta.label;
+
+      adminMainEl.innerHTML =
+        '<div class="admin-case-header">' +
+          '<h3>#' + c.orderId + ' &middot; ' + c.customerName + '</h3>' +
+          ddownHtml('statusDdown', 'ddown--status', statusTriggerLabel, statusOptions, c.status) +
+        '</div>' +
         '<div class="card">' +
-          '<p class="dash-note">Case summary ready &mdash; everything below was compiled automatically before this reached you.</p>' +
+          '<p class="card-label">What support will see</p>' +
           '<div class="kv-list kv-list--info">' +
             '<div class="kv-row"><dt>Customer</dt><dd>' + c.customerLine + '</dd></div>' +
             '<div class="kv-row"><dt>Order</dt><dd>' + c.orderLine + '</dd></div>' +
@@ -1304,156 +2012,310 @@
             '<div class="kv-row"><dt>Issue reported</dt><dd>' + c.issueLine + '</dd></div>' +
             '<div class="kv-row"><dt>Priority</dt><dd>' + c.priority + '</dd></div>' +
           '</div>' +
-        '</div>' +
-        '<div class="card">' +
+          '<div class="action-divider"></div>' +
           '<p class="card-label">Recommended solution</p>' +
           '<ol class="rec-list">' +
             c.steps.map(function(step, i){ return '<li><span class="rec-num">' + (i + 1) + '</span>' + step + '</li>'; }).join('') +
           '</ol>' +
         '</div>' +
-        '<p class="field-label-like" style="margin-top:18px">Choose how to respond</p>' +
-        '<div class="cat-row" id="actionRow" style="justify-content:flex-start;margin:8px 0 0">' +
-          '<button type="button" class="cat-pill" data-action="approve">Approve the request</button>' +
-          '<button type="button" class="cat-pill" data-action="decline">Decline the request</button>' +
-          '<button type="button" class="cat-pill" data-action="escalate">Escalate to a phone call</button>' +
-        '</div>' +
-        '<div class="composer" id="composer" hidden>' +
-          '<div class="field"><label for="replyInput">Reply to ' + c.replyToName + '</label>' +
-            '<textarea id="replyInput" rows="7" readonly></textarea></div>' +
-          '<button class="btn-primary" id="sendBtn">Send reply</button>' +
-        '</div>' +
-        '<div class="dash-banner" id="dashBanner" hidden></div>';
+        '<div id="actionZone">' + zone + '</div>';
 
-      mount.querySelectorAll('.tab').forEach(function(tab){
-        tab.addEventListener('click', function(){
-          var id = tab.dataset.tab;
-          if(id === activeId) return;
-          activeId = id;
-          draw();
-        });
-      });
+      wireMainEvents();
 
-      var actionRow = mount.querySelector('#actionRow');
-      var composer = mount.querySelector('#composer');
-      var replyInput = mount.querySelector('#replyInput');
-      var sendBtn = mount.querySelector('#sendBtn');
-      var dashBanner = mount.querySelector('#dashBanner');
-      var selectedAction = null;
-
-      actionRow.querySelectorAll('.cat-pill').forEach(function(pill){
-        pill.addEventListener('click', function(){
-          actionRow.querySelectorAll('.cat-pill').forEach(function(p){ p.classList.remove('is-active'); });
-          pill.classList.add('is-active');
-          selectedAction = pill.dataset.action;
-          replyInput.value = c.replies[selectedAction];
-          composer.hidden = false;
-        });
-      });
-
-      sendBtn.addEventListener('click', function(){
-        if(!replyInput.value || !selectedAction) return;
-        actionRow.hidden = true;
-        composer.hidden = true;
-        dashBanner.hidden = false;
-        dashBanner.textContent = '✓ ' + c.finishMsg[selectedAction];
-      });
+      if(zone){
+        var zoneEl = adminMainEl.querySelector('#actionZone');
+        if(zoneEl) zoneEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
 
-    draw();
+    function fileRowsHtml(c){
+      var rows = c.fileLog.concat(baseFileEntries(c));
+      return rows.map(function(row){
+        return '<div class="file-row"><span class="file-icon">&#10003;</span><div class="file-text"><b>' + row.title + '</b><span>' + row.sub + '</span></div></div>';
+      }).join('');
+    }
+
+    function renderRight(){
+      var c = CASES[activeId];
+      var actionsHtml = '';
+      if(!c.outcome){
+        actionsHtml =
+          '<div class="action-group">' +
+            '<button type="button" class="action-btn' + (ui.openForm === 'approve' ? ' is-active' : '') + '" data-action="approve">Approve the request</button>' +
+            '<button type="button" class="action-btn' + (ui.openForm === 'decline' ? ' is-active' : '') + '" data-action="decline">Decline the request</button>' +
+            '<button type="button" class="action-btn' + (ui.openForm === 'escalate' ? ' is-active' : '') + '" data-action="escalate">Escalate to a phone call</button>' +
+          '</div>' +
+          '<div class="action-group">' +
+            '<button type="button" class="action-btn action-btn--muted' + (ui.openForm === 'transfer' ? ' is-active' : '') + '" data-action="transfer">Transfer the case</button>' +
+            '<button type="button" class="action-btn action-btn--muted' + (ui.openForm === 'hold' ? ' is-active' : '') + '" data-action="hold">Put on hold</button>' +
+          '</div>';
+      }
+
+      adminRightEl.innerHTML =
+        '<p class="card-label">Actions</p>' +
+        actionsHtml +
+        (actionsHtml ? '<div class="action-divider"></div>' : '<div style="height:6px"></div>') +
+        '<p class="card-label">Case file</p>' +
+        '<div id="fileRows">' + fileRowsHtml(c) + '</div>' +
+        '<button type="button" class="note-add-link" id="noteAddLink">' + (ui.noteOpen ? '&minus; Cancel note' : '+ Add internal note') + '</button>' +
+        (ui.noteOpen ? (
+          '<div class="note-add-form">' +
+            '<textarea id="noteInput" placeholder="Add a note for the team..."></textarea>' +
+            '<div class="note-add-actions">' +
+              '<button type="button" class="btn-primary" id="saveNoteBtn">Add note</button>' +
+              '<button type="button" class="btn-ghost" id="cancelNoteBtn">Cancel</button>' +
+            '</div>' +
+          '</div>'
+        ) : '');
+
+      wireRightEvents();
+
+      if(ui.noteOpen){
+        var noteFormEl = adminRightEl.querySelector('.note-add-form');
+        if(noteFormEl) noteFormEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function refreshCase(){
+      renderMain();
+      renderRight();
+    }
+
+    function wireMainEvents(){
+      var c = CASES[activeId];
+
+      wireDdown(adminMainEl, 'statusDdown', function(value){
+        if(value === c.status) return;
+        c.status = value;
+        c.meta = c.categoryShort + ' &middot; ' + STATUS_META[value].label.toLowerCase();
+        c.outcome = null;
+        ui.openForm = null;
+        renderRailList();
+        refreshCase();
+      });
+
+      var sendBtn = adminMainEl.querySelector('#sendBtn');
+      var discardBtn = adminMainEl.querySelector('#discardBtn');
+      var confirmTransferBtn = adminMainEl.querySelector('#confirmTransferBtn');
+      var confirmHoldBtn = adminMainEl.querySelector('#confirmHoldBtn');
+      var cancelFormBtn = adminMainEl.querySelector('#cancelFormBtn');
+      var reopenBtn = adminMainEl.querySelector('#reopenBtn');
+
+      if(sendBtn){
+        sendBtn.addEventListener('click', function(){
+          var replyInput = adminMainEl.querySelector('#replyInput');
+          if(!replyInput.value.trim()) return;
+          var action = ui.openForm;
+          c.prevStatus = c.status; c.prevMeta = c.meta;
+          c.status = 'resolved';
+          c.meta = c.categoryShort + ' &middot; reply sent';
+          c.fileLog.unshift({ title: 'Reply sent to ' + c.customerName.split(' ')[0], sub: 'Emailed just now' });
+          c.outcome = { type: action, title: OUTCOME_TITLES[action], message: c.finishMsg[action] };
+          ui.openForm = null;
+          renderRailList();
+          refreshCase();
+        });
+      }
+      if(discardBtn){
+        discardBtn.addEventListener('click', function(){
+          ui.openForm = null;
+          refreshCase();
+        });
+      }
+      wireDdown(adminMainEl, 'transferTeamDdown', function(value){ selectedTransferTeam = value; });
+      wireDdown(adminMainEl, 'holdReasonDdown', function(value){ selectedHoldReason = value; });
+
+      if(confirmTransferBtn){
+        confirmTransferBtn.addEventListener('click', function(){
+          var team = selectedTransferTeam;
+          var note = adminMainEl.querySelector('#transferNote').value.trim();
+          c.prevStatus = c.status; c.prevMeta = c.meta;
+          c.status = 'transferred';
+          c.meta = c.categoryShort + ' &middot; transferred to ' + team;
+          c.fileLog.unshift({ title: 'Transferred to ' + team, sub: note ? 'Note: ' + escapeHtml(note) : 'Case management' });
+          c.outcome = { type: 'transfer', title: 'Case transferred', message: 'Sent to the ' + team + '. ' + (note ? 'Your note was included for the receiving team.' : 'They will pick this up shortly.') };
+          ui.openForm = null;
+          renderRailList();
+          refreshCase();
+        });
+      }
+      if(confirmHoldBtn){
+        confirmHoldBtn.addEventListener('click', function(){
+          var reason = selectedHoldReason;
+          var until = adminMainEl.querySelector('#holdUntil').value.trim();
+          c.prevStatus = c.status; c.prevMeta = c.meta;
+          c.status = 'hold';
+          c.meta = c.categoryShort + ' &middot; on hold';
+          c.fileLog.unshift({ title: 'Put on hold — ' + reason, sub: until ? 'Follow up by ' + escapeHtml(until) : 'Case management' });
+          c.outcome = { type: 'hold', title: 'Case on hold', message: reason + '.' + (until ? ' We will follow up by ' + until + '.' : ' We will check back soon.') };
+          ui.openForm = null;
+          renderRailList();
+          refreshCase();
+        });
+      }
+      if(cancelFormBtn){
+        cancelFormBtn.addEventListener('click', function(){
+          ui.openForm = null;
+          refreshCase();
+        });
+      }
+      if(reopenBtn){
+        reopenBtn.addEventListener('click', function(){
+          c.outcome = null;
+          if(c.prevStatus){ c.status = c.prevStatus; c.meta = c.prevMeta; }
+          renderRailList();
+          refreshCase();
+        });
+      }
+    }
+
+    function wireRightEvents(){
+      var c = CASES[activeId];
+      adminRightEl.querySelectorAll('.action-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          ui.openForm = ui.openForm === btn.dataset.action ? null : btn.dataset.action;
+          refreshCase();
+        });
+      });
+      var noteAddLink = adminRightEl.querySelector('#noteAddLink');
+      noteAddLink.addEventListener('click', function(){
+        ui.noteOpen = !ui.noteOpen;
+        renderRight();
+      });
+      var saveNoteBtn = adminRightEl.querySelector('#saveNoteBtn');
+      if(saveNoteBtn){
+        saveNoteBtn.addEventListener('click', function(){
+          var noteInput = adminRightEl.querySelector('#noteInput');
+          var text = noteInput.value.trim();
+          if(!text) return;
+          c.fileLog.unshift({ title: escapeHtml(text), sub: 'Internal note' });
+          ui.noteOpen = false;
+          renderRight();
+        });
+      }
+      var cancelNoteBtn = adminRightEl.querySelector('#cancelNoteBtn');
+      if(cancelNoteBtn){
+        cancelNoteBtn.addEventListener('click', function(){
+          ui.noteOpen = false;
+          renderRight();
+        });
+      }
+    }
+
+    function renderCase(){
+      ui.noteOpen = false;
+      renderMain();
+      renderRight();
+    }
+
+    CASE_ORDER.forEach(function(id){
+      if(!CASES[id].fileLog) CASES[id].fileLog = [];
+      if(CASES[id].outcome === undefined) CASES[id].outcome = null;
+    });
+
+    renderRailList();
+    renderCase();
   }
 
-  /* ---------------- deck orchestration ---------------- */
-  var SLIDES = [
-    {
-      id:'request-form',
-      eyebrow:'Walkthrough &middot; 1 / 3',
-      title:'Customer Request',
-      subtitle:"The customer submits one simple form — contact details, order number, and a plain-language description of the issue. No chat, no back-and-forth: the AI gets complete, structured information in a single pass, every time.",
-      note:'',
-      url:'rymax.customersupport.com/new-request',
-      render: renderSlide1
+  /* ---------------- navigation : main menu + flows ---------------- */
+  var FLOWS = {
+    customer: {
+      eyebrow: 'Customer flow &middot; Website',
+      title: 'Customer Request',
+      url: 'rymax.customersupport.com/new-request',
+      render: renderCustomerFlow
     },
-    {
-      id:'case-summary',
-      eyebrow:'Walkthrough &middot; 2 / 3',
-      title:'AI Case Summary',
-      subtitle:'The moment the form is submitted, Rymax AI compiles a case file — customer, order, issue — and drafts a recommended resolution, all in seconds and fully automatic. Nothing for the customer to wait on.',
-      note:'',
-      url:'rymax.customersupport.com/ai/cases/4821',
-      render: renderSlide2
-    },
-    {
-      id:'specialist-dashboard',
-      eyebrow:'Walkthrough &middot; 3 / 3',
-      title:'Specialist Dashboard',
-      subtitle:"The case lands in the specialist's queue alongside their other open tickets, showing the AI summary, recommendation, and full context in one view — with one-click actions to approve, edit, or escalate.",
-      note:'',
-      url:'rymax-agent.customersupport.com/queue',
-      render: renderSlide3
+    admin: {
+      eyebrow: 'Admin flow &middot; Dashboard',
+      title: 'Specialist Dashboard',
+      url: 'rymax-agent.customersupport.com/queue',
+      render: renderAdminFlow,
+      wide: true
     }
-  ];
+  };
 
-  var current = 0;
-  var eyebrowEl = document.getElementById('deckEyebrow');
-  var titleEl = document.getElementById('deckTitle');
-  var subtitleEl = document.getElementById('deckSubtitle');
-  var noteEl = document.getElementById('deckNote');
+  var menuView = document.getElementById('menuView');
+  var flowView = document.getElementById('flowView');
+  var menuInner = document.getElementById('menuInner');
+  var flowTopbar = document.getElementById('flowTopbar');
+  var flowEyebrowEl = document.getElementById('flowEyebrow');
+  var flowTitleEl = document.getElementById('flowTitle');
   var urlBarEl = document.getElementById('urlBar');
-  var leftInner = document.getElementById('deckLeftInner');
-  var dotsEl = document.getElementById('deckDots');
+  var browserFrameEl = document.getElementById('browserFrame');
+  var currentFlow = null;
 
-  SLIDES.forEach(function(s, i){
-    var dot = document.createElement('button');
-    dot.className = 'deck-dot' + (i === 0 ? ' is-active' : '');
-    dot.setAttribute('aria-label', 'Go to slide ' + (i+1));
-    dot.addEventListener('click', function(){ applySlide(i); });
-    dotsEl.appendChild(dot);
-  });
+  function replay(el){
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = '';
+  }
 
-  function applySlide(index, opts){
+  function showMenu(opts){
     opts = opts || {};
-    current = (index + SLIDES.length) % SLIDES.length;
-    var s = SLIDES[current];
+    currentFlow = null;
+    flowView.hidden = true;
+    menuView.hidden = false;
+    replay(menuInner);
+    if(opts.pushHash !== false && location.hash){
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  }
 
-    eyebrowEl.innerHTML = s.eyebrow;
-    titleEl.textContent = s.title;
-    subtitleEl.textContent = s.subtitle;
-    noteEl.innerHTML = s.note;
-    noteEl.hidden = !s.note;
-    urlBarEl.textContent = s.url;
-
-    dotsEl.querySelectorAll('.deck-dot').forEach(function(d, i){ d.classList.toggle('is-active', i === current); });
+  function showFlow(key, opts){
+    opts = opts || {};
+    var f = FLOWS[key];
+    if(!f) return;
+    currentFlow = key;
+    menuView.hidden = true;
+    flowView.hidden = false;
+    flowEyebrowEl.innerHTML = f.eyebrow;
+    flowTitleEl.textContent = f.title;
+    urlBarEl.textContent = f.url;
+    browserFrameEl.classList.toggle('is-wide', !!f.wide);
+    browserFrameEl.classList.toggle('is-admin', key === 'admin');
+    replay(flowTopbar);
 
     appMount.innerHTML = '';
-    s.render(appMount);
+    ++renderGen;
+    f.render(appMount);
     appMount.scrollTop = 0;
     scrollThumb.classList.remove('is-visible');
     updateThumb();
     setTimeout(updateThumb, 1000);
 
-    if(opts.pushHash !== false && location.hash !== '#' + s.id){
-      history.replaceState(null, '', '#' + s.id);
+    if(opts.pushHash !== false && location.hash !== '#' + key){
+      history.replaceState(null, '', '#' + key);
     }
-
-    leftInner.classList.remove('deck-left-inner');
-    void leftInner.offsetWidth;
-    leftInner.style.animation = 'none';
-    void leftInner.offsetWidth;
-    leftInner.style.animation = '';
   }
 
-  document.getElementById('prevBtn').addEventListener('click', function(){ applySlide(current - 1); });
-  document.getElementById('nextBtn').addEventListener('click', function(){ applySlide(current + 1); });
-  window.addEventListener('keydown', function(e){
-    if(e.key === 'ArrowRight') applySlide(current + 1);
-    if(e.key === 'ArrowLeft') applySlide(current - 1);
-  });
-  window.addEventListener('hashchange', function(){
-    var idx = SLIDES.findIndex(function(s){ return '#' + s.id === location.hash; });
-    if(idx >= 0 && idx !== current) applySlide(idx, {pushHash:false});
+  document.getElementById('menuCards').addEventListener('click', function(e){
+    var card = e.target.closest('.menu-card');
+    if(!card) return;
+    showFlow(card.dataset.flow);
   });
 
-  var initIdx = SLIDES.findIndex(function(s){ return '#' + s.id === location.hash; });
-  applySlide(initIdx >= 0 ? initIdx : 0, {pushHash:false});
+  document.getElementById('backBtn').addEventListener('click', function(){
+    showMenu();
+  });
+
+  window.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && currentFlow) showMenu();
+  });
+
+  window.addEventListener('hashchange', function(){
+    var key = location.hash.replace('#', '');
+    if(FLOWS[key]){
+      if(key !== currentFlow) showFlow(key, { pushHash:false });
+    } else if(currentFlow){
+      showMenu({ pushHash:false });
+    }
+  });
+
+  var initKey = location.hash.replace('#', '');
+  if(FLOWS[initKey]){
+    showFlow(initKey, { pushHash:false });
+  } else {
+    showMenu({ pushHash:false });
+  }
 })();
 </script>
