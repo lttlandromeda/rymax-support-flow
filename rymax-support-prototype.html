@@ -496,12 +496,13 @@
   .item-card.is-selected .item-check{background:var(--ink);border-color:var(--ink);color:var(--app-bg)}
 
   .photo-row{display:flex;align-items:flex-start;gap:10px;margin-top:8px}
-  .photo-box{flex:1;cursor:pointer;animation:photo-in .4s ease both}
+  .photo-box{flex:1;cursor:pointer;display:grid;animation:photo-in .5s cubic-bezier(.22,1,.36,1) both}
   .photo-box:nth-child(1){animation-delay:0s}
   .photo-box:nth-child(2){animation-delay:.1s}
   .photo-box:nth-child(3){animation-delay:.2s}
   @keyframes photo-in{from{opacity:0}to{opacity:1}}
   .photo-box-empty{
+    grid-area:1/1;
     aspect-ratio:1.2;
     border:1.5px dashed var(--input-border);
     border-radius:10px;
@@ -509,29 +510,69 @@
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
     font-size:10.5px;color:var(--text-tertiary);text-align:center;
     padding:8px;
-    transition:border-color .15s ease, background .15s ease, transform .12s ease;
+    opacity:1;
+    transition:opacity .4s ease, border-color .15s ease, background .15s ease, transform .12s ease;
   }
   .photo-box-empty svg{opacity:.55}
   .photo-box-added{
-    display:none;
+    grid-area:1/1;
     aspect-ratio:1.2;
+    display:flex;
     flex-direction:column;
     padding:10px;
     background:#fff;
     border:1px solid var(--input-border);
     border-radius:10px;
-    transition:transform .12s ease;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .4s ease, transform .12s ease;
   }
   .photo-box:active .photo-box-empty,
   .photo-box:active .photo-box-added{transform:scale(.96)}
-  .photo-thumb{flex:1;width:100%;border-radius:8px;background:#e5e5e5}
+  .photo-thumb{flex:1;width:100%;border-radius:8px;background:#e5e5e5;transition:opacity .4s ease}
   .photo-added-label{
     margin-top:8px;
     font-size:11px;font-weight:400;color:#8a8a8a;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    transition:opacity .4s ease;
   }
-  .photo-box.is-added .photo-box-empty{display:none}
-  .photo-box.is-added .photo-box-added{display:flex}
+  .photo-box.is-added .photo-box-empty{opacity:0;pointer-events:none}
+  .photo-box.is-added .photo-box-added{opacity:1;pointer-events:auto}
+
+  .admin-photo-row{display:flex;flex-wrap:wrap;gap:10px}
+  .admin-photo-thumb{
+    width:96px;
+    background:none;border:none;padding:0;margin:0;font:inherit;color:inherit;text-align:left;
+    display:flex;flex-direction:column;gap:6px;
+    cursor:pointer;
+  }
+  .admin-photo-img{
+    aspect-ratio:1.2;width:100%;border-radius:8px;
+    background:#e5e5e5;border:1px solid var(--input-border);
+    transition:opacity .12s ease, transform .1s ease;
+  }
+  .admin-photo-thumb:hover .admin-photo-img{opacity:.85}
+  .admin-photo-thumb:active .admin-photo-img{transform:scale(.96)}
+  .admin-photo-caption{
+    font-size:10.5px;color:var(--text-tertiary);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+
+  .admin-lightbox-overlay{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(20,16,12,.72);
+    display:flex;align-items:center;justify-content:center;padding:24px;
+    opacity:0;pointer-events:none;transition:opacity .18s ease;
+  }
+  .admin-lightbox-overlay.is-open{opacity:1;pointer-events:auto}
+  .admin-lightbox{
+    background:#fff;border-radius:14px;padding:18px;
+    max-width:380px;width:100%;
+    box-shadow:0 20px 60px rgba(0,0,0,.35);
+  }
+  .admin-lightbox-img{display:block;width:100%;aspect-ratio:1.2;border-radius:10px;background:#e5e5e5}
+  .admin-lightbox-caption{margin-top:14px;font-size:13px;font-weight:600;color:var(--ink);text-align:center}
+  .admin-lightbox .btn-ghost{width:100%;margin-top:16px;border:1px solid var(--app-border)}
 
   .success-view{animation:step-in .4s ease both}
   .success-summary{margin-top:22px}
@@ -1460,6 +1501,7 @@
       shortName: 'Marcus R.',
       customerName: 'Marcus Reyes',
       customerLine: 'Marcus Reyes &middot; marcus.reyes@email.com',
+      customerPhone: '+1 (555) 214-8890',
       orderLine: 'SO4K9XPZ2Q &middot; Merino Crew Sweater, Navy, M &middot; $135.90',
       category: 'Damaged item or empty box',
       categoryKey: 'damaged',
@@ -1468,9 +1510,9 @@
       dateTs: 6,
       issueLine: '&ldquo;The box arrived crushed and the sweater inside is torn near the collar.&rdquo;',
       issueSummary: 'damaged packaging, torn item',
+      photos: ['Box outside', 'Shipping label', 'What was inside'],
       priority: 'Standard &mdash; no safety concern',
       carrierFact: 'Delivered Sep 6, 11:04',
-      confidence: 92,
       status: 'needs_review',
       meta: 'Damaged item &middot; summary ready',
       steps: [
@@ -1495,6 +1537,7 @@
       shortName: 'Dana K.',
       customerName: 'Dana Keller',
       customerLine: 'Dana Keller &middot; dana.keller@email.com',
+      customerPhone: '+1 (555) 348-2217',
       orderLine: 'SO5N7BWQ4T &middot; Merino Crew Sweater, Navy, S &middot; $128.90',
       category: 'Wrong item or size',
       categoryKey: 'wrong',
@@ -1503,9 +1546,9 @@
       dateTs: 7,
       issueLine: '&ldquo;I ordered a size S but received a size L instead.&rdquo;',
       issueSummary: 'wrong size shipped (L instead of S)',
+      photos: ['Box outside', 'Shipping label', 'What was inside'],
       priority: 'Standard &mdash; no safety concern',
       carrierFact: 'Delivered Sep 7, 09:20',
-      confidence: 88,
       status: 'in_progress',
       meta: 'Wrong size &middot; in review',
       steps: [
@@ -1530,6 +1573,7 @@
       shortName: 'Theo P.',
       customerName: 'Theo Patterson',
       customerLine: 'Theo Patterson &middot; theo.patterson@email.com',
+      customerPhone: '+1 (555) 762-4103',
       orderLine: 'SO5R2LKD8H &middot; Trail Runner Jacket, Charcoal, L &middot; $189.00',
       category: 'Cancel an order',
       categoryKey: 'cancel',
@@ -1540,7 +1584,6 @@
       issueSummary: 'wants to cancel before shipment',
       priority: 'Standard &mdash; order not yet shipped',
       carrierFact: 'Order not yet shipped',
-      confidence: 95,
       status: 'waiting',
       meta: 'Cancel order &middot; awaiting customer confirmation',
       steps: [
@@ -1565,6 +1608,7 @@
       shortName: 'Priya S.',
       customerName: 'Priya Sharma',
       customerLine: 'Priya Sharma &middot; priya.sharma@email.com',
+      customerPhone: '+1 (555) 590-3348',
       orderLine: 'SO5F9CMZ3Y &middot; Alpine Daypack, Moss Green &middot; $79.50',
       category: 'Where is my order',
       categoryKey: 'track',
@@ -1575,7 +1619,6 @@
       issueSummary: 'tracking has not updated in 6 days',
       priority: 'Standard &mdash; delivery delayed',
       carrierFact: 'Shipped Sep 3 &middot; UPS &middot; in transit',
-      confidence: 81,
       status: 'needs_review',
       meta: 'Delivery delayed &middot; summary ready',
       steps: [
@@ -1600,6 +1643,7 @@
       shortName: 'Noah B.',
       customerName: 'Noah Bennett',
       customerLine: 'Noah Bennett &middot; noah.bennett@email.com',
+      customerPhone: '+1 (555) 128-6675',
       orderLine: 'SO6T4XHN7P &middot; Loyalty account &middot; 1,240 points',
       category: 'Pricing & points',
       categoryKey: 'pricing',
@@ -1610,7 +1654,6 @@
       issueSummary: 'price mismatch, points not applied',
       priority: 'Standard &mdash; billing review',
       carrierFact: 'Order placed Sep 8, not yet shipped',
-      confidence: 81,
       status: 'needs_review',
       meta: 'Pricing question &middot; summary ready',
       steps: [
@@ -1635,6 +1678,7 @@
       shortName: 'Elena V.',
       customerName: 'Elena Voss',
       customerLine: 'Elena Voss &middot; elena.voss@email.com',
+      customerPhone: '+1 (555) 903-1256',
       orderLine: 'SO6V8QRC2M &middot; Alpine Daypack, Moss Green &middot; $79.50',
       category: 'Something else',
       categoryKey: 'other',
@@ -1645,7 +1689,6 @@
       issueSummary: 'requesting address change before shipment',
       priority: 'Standard &mdash; order not yet shipped',
       carrierFact: 'Order not yet shipped',
-      confidence: 90,
       status: 'in_progress',
       meta: 'General inquiry &middot; in review',
       steps: [
@@ -1670,6 +1713,7 @@
       shortName: 'Liam O.',
       customerName: "Liam O'Connor",
       customerLine: "Liam O'Connor &middot; liam.oconnor@email.com",
+      customerPhone: '+1 (555) 447-8821',
       orderLine: 'SO6J3ZKX9W &middot; Trail Runner Jacket, Charcoal, M &middot; $189.00',
       category: 'Damaged item or empty box',
       categoryKey: 'damaged',
@@ -1678,9 +1722,9 @@
       dateTs: 4,
       issueLine: '&ldquo;The zipper on the jacket is broken and won&rsquo;t stay closed.&rdquo;',
       issueSummary: 'broken zipper on arrival',
+      photos: ['Box outside', 'Shipping label', 'What was inside'],
       priority: 'Standard &mdash; no safety concern',
       carrierFact: 'Delivered Sep 3, 16:40',
-      confidence: 90,
       status: 'needs_review',
       meta: 'Damaged item &middot; summary ready',
       steps: [
@@ -1705,6 +1749,7 @@
       shortName: 'Sofia M.',
       customerName: 'Sofia Martins',
       customerLine: 'Sofia Martins &middot; sofia.martins@email.com',
+      customerPhone: '+1 (555) 615-2094',
       orderLine: 'SO6D7MTB4L &middot; Alpine Daypack, Slate Grey &middot; $79.50',
       category: 'Where is my order',
       categoryKey: 'track',
@@ -1715,7 +1760,6 @@
       issueSummary: 'tracking has not updated in over a week',
       priority: 'Standard &mdash; delivery delayed',
       carrierFact: 'Label created Aug 26 &middot; UPS &middot; not yet scanned',
-      confidence: 76,
       status: 'needs_review',
       meta: 'Delivery delayed &middot; summary ready',
       steps: [
@@ -1813,8 +1857,7 @@
       { title: 'Order ' + c.orderId, sub: 'From the account' },
       { title: c.customerName + ' &middot; contact details', sub: 'From the account' },
       { title: c.carrierFact, sub: 'From the carrier' },
-      { title: 'Issue: ' + c.issueSummary, sub: 'AI summary' },
-      { title: 'Confidence: ' + c.confidence + '%', sub: 'AI summary' }
+      { title: 'Issue: ' + c.issueSummary, sub: 'AI summary' }
     ];
   }
 
@@ -1918,7 +1961,7 @@
     function composerHtml(c, action){
       return (
         '<div class="card composer-inline">' +
-          '<p class="card-label">Draft reply &middot; edit before sending</p>' +
+          '<p class="card-label">AI-suggested reply &middot; edit before sending</p>' +
           '<div class="kv-list">' +
             '<div class="kv-row"><dt>To</dt><dd>' + c.replyToName + ' &middot; ' + c.customerLine.split(' &middot; ')[1] + '</dd></div>' +
             '<div class="kv-row"><dt>Subject</dt><dd>' + subjectFor(c) + '</dd></div>' +
@@ -1998,6 +2041,19 @@
       });
       var statusTriggerLabel = '<span class="status-dot" style="background:' + meta.dot + '"></span>' + meta.label;
 
+      var photosHtml = c.photos ? (
+        '<div class="action-divider"></div>' +
+        '<p class="card-label">Photos from the customer</p>' +
+        '<div class="admin-photo-row">' +
+          c.photos.map(function(label){
+            return '<button type="button" class="admin-photo-thumb" data-label="' + escapeHtml(label) + '">' +
+              '<span class="admin-photo-img"></span>' +
+              '<span class="admin-photo-caption">' + escapeHtml(label) + '</span>' +
+            '</button>';
+          }).join('') +
+        '</div>'
+      ) : '';
+
       adminMainEl.innerHTML =
         '<div class="admin-case-header">' +
           '<h3>' + c.orderId + ' &middot; ' + c.customerName + '</h3>' +
@@ -2007,18 +2063,27 @@
           '<p class="card-label">What support will see</p>' +
           '<div class="kv-list kv-list--info">' +
             '<div class="kv-row"><dt>Customer</dt><dd>' + c.customerLine + '</dd></div>' +
+            '<div class="kv-row"><dt>Phone</dt><dd>' + c.customerPhone + '</dd></div>' +
             '<div class="kv-row"><dt>Order</dt><dd>' + c.orderLine + '</dd></div>' +
             '<div class="kv-row"><dt>Category</dt><dd>' + c.category + '</dd></div>' +
             '<div class="kv-row"><dt>Issue reported</dt><dd>' + c.issueLine + '</dd></div>' +
             '<div class="kv-row"><dt>Priority</dt><dd>' + c.priority + '</dd></div>' +
           '</div>' +
+          photosHtml +
           '<div class="action-divider"></div>' +
           '<p class="card-label">Recommended solution</p>' +
           '<ol class="rec-list">' +
             c.steps.map(function(step, i){ return '<li><span class="rec-num">' + (i + 1) + '</span>' + step + '</li>'; }).join('') +
           '</ol>' +
         '</div>' +
-        '<div id="actionZone">' + zone + '</div>';
+        '<div id="actionZone">' + zone + '</div>' +
+        '<div class="admin-lightbox-overlay" id="photoLightboxOverlay">' +
+          '<div class="admin-lightbox">' +
+            '<span class="admin-lightbox-img"></span>' +
+            '<p class="admin-lightbox-caption" id="photoLightboxCaption"></p>' +
+            '<button type="button" class="btn-ghost" id="photoLightboxClose">Close</button>' +
+          '</div>' +
+        '</div>';
 
       wireMainEvents();
 
@@ -2083,6 +2148,26 @@
 
     function wireMainEvents(){
       var c = CASES[activeId];
+
+      var lightboxOverlay = adminMainEl.querySelector('#photoLightboxOverlay');
+      var lightboxCaption = adminMainEl.querySelector('#photoLightboxCaption');
+      var lightboxClose = adminMainEl.querySelector('#photoLightboxClose');
+      adminMainEl.querySelectorAll('.admin-photo-thumb').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          lightboxCaption.textContent = btn.dataset.label;
+          lightboxOverlay.classList.add('is-open');
+        });
+      });
+      if(lightboxClose){
+        lightboxClose.addEventListener('click', function(){
+          lightboxOverlay.classList.remove('is-open');
+        });
+      }
+      if(lightboxOverlay){
+        lightboxOverlay.addEventListener('click', function(e){
+          if(e.target === lightboxOverlay) lightboxOverlay.classList.remove('is-open');
+        });
+      }
 
       wireDdown(adminMainEl, 'statusDdown', function(value){
         if(value === c.status) return;
