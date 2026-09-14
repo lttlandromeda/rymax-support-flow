@@ -1021,7 +1021,7 @@
           '<div class="field"><label for="fPhone">Phone</label>' +
             '<input id="fPhone" type="text" readonly placeholder="Click to fill in" data-fill="+1 (555) 214-8890"></div>' +
           '<div class="field"><label for="fOrder">Order number</label>' +
-            '<input id="fOrder" type="text" readonly placeholder="Click to fill in" data-fill="#4821">' +
+            '<input id="fOrder" type="text" readonly placeholder="Click to fill in" data-fill="SO4K9XPZ2Q">' +
             '<p class="field-help">Optional &mdash; helps us pull up your order instantly</p></div>' +
           '<button class="btn-primary" id="continueBtn" style="margin-top:18px" disabled>Continue</button>' +
         '</div>' +
@@ -1257,7 +1257,7 @@
       submitDamagedBtn.disabled = !(damagedOrder.value.trim() && issueText.value.trim() && damagedChoice);
     }
     function initDamaged(){
-      damagedOrder.value = '#4821';
+      damagedOrder.value = 'SO4K9XPZ2Q';
       checkDamaged();
     }
     var issueText = panelDamaged.querySelector('#issueText');
@@ -1301,7 +1301,7 @@
       submitWrongBtn.disabled = !(wrongOrder.value.trim() && wrongReceived.value.trim() && wrongExpected.value.trim() && wrongChoice);
     }
     function initWrong(){
-      wrongOrder.value = '#4821';
+      wrongOrder.value = 'SO4K9XPZ2Q';
       checkWrong();
     }
     [wrongReceived, wrongExpected].forEach(function(input){
@@ -1343,7 +1343,7 @@
       var orderField = panelTrack.querySelector('#trackOrder');
       var skeleton = panelTrack.querySelector('#lookupSkeleton');
       var result = panelTrack.querySelector('#lookupResult');
-      orderField.value = '#4821';
+      orderField.value = 'SO4K9XPZ2Q';
       result.hidden = true;
       skeleton.hidden = false;
       clearTimeout(trackTimer);
@@ -1376,7 +1376,7 @@
       submitCancelBtn.disabled = !(cancelOrder.value.trim() && cancelReason.value.trim());
     }
     function initCancel(){
-      cancelOrder.value = '#4821';
+      cancelOrder.value = 'SO4K9XPZ2Q';
       checkCancel();
     }
     cancelReason.addEventListener('click', function(){
@@ -1453,14 +1453,14 @@
   }
 
   /* ---------------- admin flow : specialist CRM dashboard ---------------- */
-  var CASE_ORDER = ['4821', '5560', '5561', '5544', '6002', '6003', '6004', '6005'];
+  var CASE_ORDER = ['SO4K9XPZ2Q', 'SO5N7BWQ4T', 'SO5R2LKD8H', 'SO5F9CMZ3Y', 'SO6T4XHN7P', 'SO6V8QRC2M', 'SO6J3ZKX9W', 'SO6D7MTB4L'];
   var CASES = {
-    '4821': {
-      orderId: '4821',
+    'SO4K9XPZ2Q': {
+      orderId: 'SO4K9XPZ2Q',
       shortName: 'Marcus R.',
       customerName: 'Marcus Reyes',
       customerLine: 'Marcus Reyes &middot; marcus.reyes@email.com',
-      orderLine: '#4821 &middot; Merino Crew Sweater, Navy, M &middot; $135.90',
+      orderLine: 'SO4K9XPZ2Q &middot; Merino Crew Sweater, Navy, M &middot; $135.90',
       category: 'Damaged item or empty box',
       categoryKey: 'damaged',
       categoryShort: 'Damaged item',
@@ -1474,15 +1474,15 @@
       status: 'needs_review',
       meta: 'Damaged item &middot; summary ready',
       steps: [
-        'Confirm order #4821 is eligible for replacement &mdash; delivered Sep 6, within policy window.',
+        'Confirm order SO4K9XPZ2Q is eligible for replacement &mdash; delivered Sep 6, within policy window.',
         'Offer a free replacement of the Merino Crew Sweater, Navy, size M.',
         'Send a prepaid return label &mdash; no additional photos required for this case type.'
       ],
       replyToName: 'Marcus',
       replies: {
-        approve: "Dear Mr. Reyes,\n\nThank you for contacting Rymax Customer Support regarding order #4821. We have reviewed your case and confirmed that the Merino Crew Sweater (Navy, M) qualifies for a complimentary replacement. Your new item will be shipped today, along with a prepaid return label for the damaged product.\n\nWe apologize for the inconvenience and thank you for your understanding.\n\nKind regards,\nRymax Customer Support",
-        decline: "Dear Mr. Reyes,\n\nThank you for contacting Rymax Customer Support regarding order #4821. After carefully reviewing your account and order history, we are unable to approve a free replacement for this claim, as it does not meet our current eligibility criteria.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
-        escalate: "Dear Mr. Reyes,\n\nThank you for your patience regarding order #4821. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+        approve: "Dear Mr. Reyes,\n\nThank you for contacting Rymax Customer Support regarding order SO4K9XPZ2Q. We have reviewed your case and confirmed that the Merino Crew Sweater (Navy, M) qualifies for a complimentary replacement. Your new item will be shipped today, along with a prepaid return label for the damaged product.\n\nWe apologize for the inconvenience and thank you for your understanding.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Mr. Reyes,\n\nThank you for contacting Rymax Customer Support regarding order SO4K9XPZ2Q. After carefully reviewing your account and order history, we are unable to approve a free replacement for this claim, as it does not meet our current eligibility criteria.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Mr. Reyes,\n\nThank you for your patience regarding order SO4K9XPZ2Q. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
       },
       finishMsg: {
         approve: 'Approved — the replacement is being packed now. Marcus was notified by email just now.',
@@ -1490,12 +1490,12 @@
         escalate: 'Escalated — a specialist will call Marcus within the hour. Marcus was notified by email just now.'
       }
     },
-    '5560': {
-      orderId: '5560',
+    'SO5N7BWQ4T': {
+      orderId: 'SO5N7BWQ4T',
       shortName: 'Dana K.',
       customerName: 'Dana Keller',
       customerLine: 'Dana Keller &middot; dana.keller@email.com',
-      orderLine: '#5560 &middot; Merino Crew Sweater, Navy, S &middot; $128.90',
+      orderLine: 'SO5N7BWQ4T &middot; Merino Crew Sweater, Navy, S &middot; $128.90',
       category: 'Wrong item or size',
       categoryKey: 'wrong',
       categoryShort: 'Wrong size',
@@ -1509,15 +1509,15 @@
       status: 'in_progress',
       meta: 'Wrong size &middot; in review',
       steps: [
-        'Confirm order #5560 was delivered Sep 7 with the incorrect size shipped in error.',
+        'Confirm order SO5N7BWQ4T was delivered Sep 7 with the incorrect size shipped in error.',
         'Offer a free exchange for the correct size (S) of the Merino Crew Sweater, Navy.',
         'Send a prepaid return label for the incorrect item &mdash; no additional photos required.'
       ],
       replyToName: 'Dana',
       replies: {
-        approve: "Dear Ms. Keller,\n\nThank you for contacting Rymax Customer Support regarding order #5560. We have confirmed the mix-up and are shipping the correct size (S) of your Merino Crew Sweater today, along with a prepaid label to return the incorrect item.\n\nWe apologize for the inconvenience and thank you for your understanding.\n\nKind regards,\nRymax Customer Support",
-        decline: "Dear Ms. Keller,\n\nThank you for contacting Rymax Customer Support regarding order #5560. After carefully reviewing your account and order history, we are unable to approve a free exchange for this claim, as it does not meet our current eligibility criteria.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
-        escalate: "Dear Ms. Keller,\n\nThank you for your patience regarding order #5560. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+        approve: "Dear Ms. Keller,\n\nThank you for contacting Rymax Customer Support regarding order SO5N7BWQ4T. We have confirmed the mix-up and are shipping the correct size (S) of your Merino Crew Sweater today, along with a prepaid label to return the incorrect item.\n\nWe apologize for the inconvenience and thank you for your understanding.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Ms. Keller,\n\nThank you for contacting Rymax Customer Support regarding order SO5N7BWQ4T. After carefully reviewing your account and order history, we are unable to approve a free exchange for this claim, as it does not meet our current eligibility criteria.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Ms. Keller,\n\nThank you for your patience regarding order SO5N7BWQ4T. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
       },
       finishMsg: {
         approve: 'Approved — the correct size is being packed now. Dana was notified by email just now.',
@@ -1525,12 +1525,12 @@
         escalate: 'Escalated — a specialist will call Dana within the hour. Dana was notified by email just now.'
       }
     },
-    '5561': {
-      orderId: '5561',
+    'SO5R2LKD8H': {
+      orderId: 'SO5R2LKD8H',
       shortName: 'Theo P.',
       customerName: 'Theo Patterson',
       customerLine: 'Theo Patterson &middot; theo.patterson@email.com',
-      orderLine: '#5561 &middot; Trail Runner Jacket, Charcoal, L &middot; $189.00',
+      orderLine: 'SO5R2LKD8H &middot; Trail Runner Jacket, Charcoal, L &middot; $189.00',
       category: 'Cancel an order',
       categoryKey: 'cancel',
       categoryShort: 'Cancel order',
@@ -1544,15 +1544,15 @@
       status: 'waiting',
       meta: 'Cancel order &middot; awaiting customer confirmation',
       steps: [
-        'Confirm order #5561 has not yet shipped &mdash; cancellation is available at no charge.',
+        'Confirm order SO5R2LKD8H has not yet shipped &mdash; cancellation is available at no charge.',
         'Process a full refund of $189.00 to the original payment method.',
         'Send a confirmation email once the cancellation is complete.'
       ],
       replyToName: 'Theo',
       replies: {
-        approve: "Dear Mr. Patterson,\n\nThank you for contacting Rymax Customer Support regarding order #5561. We have confirmed that your order has not yet shipped and have cancelled it as requested. A full refund of $189.00 will be credited to your original payment method within 3-5 business days.\n\nWe're sorry to see this order go and hope to serve you again soon.\n\nKind regards,\nRymax Customer Support",
-        decline: "Dear Mr. Patterson,\n\nThank you for contacting Rymax Customer Support regarding order #5561. After reviewing your order, we found that it has already entered the fulfillment process and cannot be cancelled at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
-        escalate: "Dear Mr. Patterson,\n\nThank you for your patience regarding order #5561. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+        approve: "Dear Mr. Patterson,\n\nThank you for contacting Rymax Customer Support regarding order SO5R2LKD8H. We have confirmed that your order has not yet shipped and have cancelled it as requested. A full refund of $189.00 will be credited to your original payment method within 3-5 business days.\n\nWe're sorry to see this order go and hope to serve you again soon.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Mr. Patterson,\n\nThank you for contacting Rymax Customer Support regarding order SO5R2LKD8H. After reviewing your order, we found that it has already entered the fulfillment process and cannot be cancelled at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Mr. Patterson,\n\nThank you for your patience regarding order SO5R2LKD8H. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
       },
       finishMsg: {
         approve: 'Approved — the order has been cancelled and refunded. Theo was notified by email just now.',
@@ -1560,12 +1560,12 @@
         escalate: 'Escalated — a specialist will call Theo within the hour. Theo was notified by email just now.'
       }
     },
-    '5544': {
-      orderId: '5544',
+    'SO5F9CMZ3Y': {
+      orderId: 'SO5F9CMZ3Y',
       shortName: 'Priya S.',
       customerName: 'Priya Sharma',
       customerLine: 'Priya Sharma &middot; priya.sharma@email.com',
-      orderLine: '#5544 &middot; Alpine Daypack, Moss Green &middot; $79.50',
+      orderLine: 'SO5F9CMZ3Y &middot; Alpine Daypack, Moss Green &middot; $79.50',
       category: 'Where is my order',
       categoryKey: 'track',
       categoryShort: 'Delivery delayed',
@@ -1579,15 +1579,15 @@
       status: 'needs_review',
       meta: 'Delivery delayed &middot; summary ready',
       steps: [
-        'Confirm order #5544 shipped Sep 3 via UPS &mdash; tracking shows it is currently in transit.',
+        'Confirm order SO5F9CMZ3Y shipped Sep 3 via UPS &mdash; tracking shows it is currently in transit.',
         'Proactively apply a $10 shipping credit for the delay.',
         'Enable SMS delivery notifications so Priya is alerted the moment it arrives.'
       ],
       replyToName: 'Priya',
       replies: {
-        approve: "Dear Ms. Sharma,\n\nThank you for contacting Rymax Customer Support regarding order #5544. We have confirmed with our carrier that your package is currently in transit and expected to arrive within 2 business days. As an apology for the delay, we have applied a $10 credit to your account.\n\nWe have also enabled SMS notifications so you'll be alerted the moment it's delivered.\n\nKind regards,\nRymax Customer Support",
-        decline: "Dear Ms. Sharma,\n\nThank you for contacting Rymax Customer Support regarding order #5544. After reviewing your shipment, we found that it is on track to arrive within the carrier's standard delivery window, so we are unable to process a refund or credit at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
-        escalate: "Dear Ms. Sharma,\n\nThank you for your patience regarding order #5544. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+        approve: "Dear Ms. Sharma,\n\nThank you for contacting Rymax Customer Support regarding order SO5F9CMZ3Y. We have confirmed with our carrier that your package is currently in transit and expected to arrive within 2 business days. As an apology for the delay, we have applied a $10 credit to your account.\n\nWe have also enabled SMS notifications so you'll be alerted the moment it's delivered.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Ms. Sharma,\n\nThank you for contacting Rymax Customer Support regarding order SO5F9CMZ3Y. After reviewing your shipment, we found that it is on track to arrive within the carrier's standard delivery window, so we are unable to process a refund or credit at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Ms. Sharma,\n\nThank you for your patience regarding order SO5F9CMZ3Y. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
       },
       finishMsg: {
         approve: 'Approved — a shipping credit was applied and SMS alerts are on. Priya was notified by email just now.',
@@ -1595,12 +1595,12 @@
         escalate: 'Escalated — a specialist will call Priya within the hour. Priya was notified by email just now.'
       }
     },
-    '6002': {
-      orderId: '6002',
+    'SO6T4XHN7P': {
+      orderId: 'SO6T4XHN7P',
       shortName: 'Noah B.',
       customerName: 'Noah Bennett',
       customerLine: 'Noah Bennett &middot; noah.bennett@email.com',
-      orderLine: '#6002 &middot; Loyalty account &middot; 1,240 points',
+      orderLine: 'SO6T4XHN7P &middot; Loyalty account &middot; 1,240 points',
       category: 'Pricing & points',
       categoryKey: 'pricing',
       categoryShort: 'Pricing question',
@@ -1614,15 +1614,15 @@
       status: 'needs_review',
       meta: 'Pricing question &middot; summary ready',
       steps: [
-        'Confirm the listed price at checkout for order #6002 and compare to the charged amount.',
+        'Confirm the listed price at checkout for order SO6T4XHN7P and compare to the charged amount.',
         'Apply the $12.40 price difference as a refund to the original payment method.',
         'Manually credit the missing 124 loyalty points to Noah&rsquo;s account.'
       ],
       replyToName: 'Noah',
       replies: {
-        approve: "Dear Mr. Bennett,\n\nThank you for contacting Rymax Customer Support regarding order #6002. We found a $12.40 discrepancy between the listed and charged price and have refunded the difference to your original payment method. We've also credited the missing 124 loyalty points to your account.\n\nWe apologize for the inconvenience and thank you for your understanding.\n\nKind regards,\nRymax Customer Support",
-        decline: "Dear Mr. Bennett,\n\nThank you for contacting Rymax Customer Support regarding order #6002. After reviewing your order, the price charged matches the price displayed at checkout, so we're unable to issue a refund at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
-        escalate: "Dear Mr. Bennett,\n\nThank you for your patience regarding order #6002. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+        approve: "Dear Mr. Bennett,\n\nThank you for contacting Rymax Customer Support regarding order SO6T4XHN7P. We found a $12.40 discrepancy between the listed and charged price and have refunded the difference to your original payment method. We've also credited the missing 124 loyalty points to your account.\n\nWe apologize for the inconvenience and thank you for your understanding.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Mr. Bennett,\n\nThank you for contacting Rymax Customer Support regarding order SO6T4XHN7P. After reviewing your order, the price charged matches the price displayed at checkout, so we're unable to issue a refund at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Mr. Bennett,\n\nThank you for your patience regarding order SO6T4XHN7P. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
       },
       finishMsg: {
         approve: 'Approved — the price difference was refunded and points were credited. Noah was notified by email just now.',
@@ -1630,12 +1630,12 @@
         escalate: 'Escalated — a specialist will call Noah within the hour. Noah was notified by email just now.'
       }
     },
-    '6003': {
-      orderId: '6003',
+    'SO6V8QRC2M': {
+      orderId: 'SO6V8QRC2M',
       shortName: 'Elena V.',
       customerName: 'Elena Voss',
       customerLine: 'Elena Voss &middot; elena.voss@email.com',
-      orderLine: '#6003 &middot; Alpine Daypack, Moss Green &middot; $79.50',
+      orderLine: 'SO6V8QRC2M &middot; Alpine Daypack, Moss Green &middot; $79.50',
       category: 'Something else',
       categoryKey: 'other',
       categoryShort: 'General inquiry',
@@ -1649,15 +1649,15 @@
       status: 'in_progress',
       meta: 'General inquiry &middot; in review',
       steps: [
-        'Confirm order #6003 has not yet shipped &mdash; address changes are available at no charge.',
+        'Confirm order SO6V8QRC2M has not yet shipped &mdash; address changes are available at no charge.',
         'Update the shipping address to the one Elena provided.',
         'Send a confirmation email once the address change is complete.'
       ],
       replyToName: 'Elena',
       replies: {
-        approve: "Dear Ms. Voss,\n\nThank you for contacting Rymax Customer Support regarding order #6003. We have updated your shipping address as requested, since the order has not yet shipped.\n\nWe appreciate you reaching out and hope you enjoy your order.\n\nKind regards,\nRymax Customer Support",
-        decline: "Dear Ms. Voss,\n\nThank you for contacting Rymax Customer Support regarding order #6003. After reviewing your order, we found that it has already entered the fulfillment process, so we're unable to change the shipping address at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
-        escalate: "Dear Ms. Voss,\n\nThank you for your patience regarding order #6003. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+        approve: "Dear Ms. Voss,\n\nThank you for contacting Rymax Customer Support regarding order SO6V8QRC2M. We have updated your shipping address as requested, since the order has not yet shipped.\n\nWe appreciate you reaching out and hope you enjoy your order.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Ms. Voss,\n\nThank you for contacting Rymax Customer Support regarding order SO6V8QRC2M. After reviewing your order, we found that it has already entered the fulfillment process, so we're unable to change the shipping address at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Ms. Voss,\n\nThank you for your patience regarding order SO6V8QRC2M. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
       },
       finishMsg: {
         approve: 'Approved — the shipping address was updated. Elena was notified by email just now.',
@@ -1665,12 +1665,12 @@
         escalate: 'Escalated — a specialist will call Elena within the hour. Elena was notified by email just now.'
       }
     },
-    '6004': {
-      orderId: '6004',
+    'SO6J3ZKX9W': {
+      orderId: 'SO6J3ZKX9W',
       shortName: 'Liam O.',
       customerName: "Liam O'Connor",
       customerLine: "Liam O'Connor &middot; liam.oconnor@email.com",
-      orderLine: '#6004 &middot; Trail Runner Jacket, Charcoal, M &middot; $189.00',
+      orderLine: 'SO6J3ZKX9W &middot; Trail Runner Jacket, Charcoal, M &middot; $189.00',
       category: 'Damaged item or empty box',
       categoryKey: 'damaged',
       categoryShort: 'Damaged item',
@@ -1684,15 +1684,15 @@
       status: 'needs_review',
       meta: 'Damaged item &middot; summary ready',
       steps: [
-        'Confirm order #6004 is eligible for replacement &mdash; delivered Sep 3, within policy window.',
+        'Confirm order SO6J3ZKX9W is eligible for replacement &mdash; delivered Sep 3, within policy window.',
         'Offer a free replacement of the Trail Runner Jacket, Charcoal, size M.',
         'Send a prepaid return label &mdash; no additional photos required for this case type.'
       ],
       replyToName: 'Liam',
       replies: {
-        approve: "Dear Mr. O'Connor,\n\nThank you for contacting Rymax Customer Support regarding order #6004. We have reviewed your case and confirmed that the Trail Runner Jacket (Charcoal, M) qualifies for a complimentary replacement. Your new item will be shipped today, along with a prepaid return label for the damaged product.\n\nWe apologize for the inconvenience and thank you for your understanding.\n\nKind regards,\nRymax Customer Support",
-        decline: "Dear Mr. O'Connor,\n\nThank you for contacting Rymax Customer Support regarding order #6004. After carefully reviewing your account and order history, we are unable to approve a free replacement for this claim, as it does not meet our current eligibility criteria.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
-        escalate: "Dear Mr. O'Connor,\n\nThank you for your patience regarding order #6004. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+        approve: "Dear Mr. O'Connor,\n\nThank you for contacting Rymax Customer Support regarding order SO6J3ZKX9W. We have reviewed your case and confirmed that the Trail Runner Jacket (Charcoal, M) qualifies for a complimentary replacement. Your new item will be shipped today, along with a prepaid return label for the damaged product.\n\nWe apologize for the inconvenience and thank you for your understanding.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Mr. O'Connor,\n\nThank you for contacting Rymax Customer Support regarding order SO6J3ZKX9W. After carefully reviewing your account and order history, we are unable to approve a free replacement for this claim, as it does not meet our current eligibility criteria.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Mr. O'Connor,\n\nThank you for your patience regarding order SO6J3ZKX9W. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
       },
       finishMsg: {
         approve: 'Approved — the replacement is being packed now. Liam was notified by email just now.',
@@ -1700,12 +1700,12 @@
         escalate: 'Escalated — a specialist will call Liam within the hour. Liam was notified by email just now.'
       }
     },
-    '6005': {
-      orderId: '6005',
+    'SO6D7MTB4L': {
+      orderId: 'SO6D7MTB4L',
       shortName: 'Sofia M.',
       customerName: 'Sofia Martins',
       customerLine: 'Sofia Martins &middot; sofia.martins@email.com',
-      orderLine: '#6005 &middot; Alpine Daypack, Slate Grey &middot; $79.50',
+      orderLine: 'SO6D7MTB4L &middot; Alpine Daypack, Slate Grey &middot; $79.50',
       category: 'Where is my order',
       categoryKey: 'track',
       categoryShort: 'Delivery delayed',
@@ -1719,15 +1719,15 @@
       status: 'needs_review',
       meta: 'Delivery delayed &middot; summary ready',
       steps: [
-        'Confirm order #6005 has had no carrier scan since the label was created Aug 26.',
+        'Confirm order SO6D7MTB4L has had no carrier scan since the label was created Aug 26.',
         'Proactively apply a $10 shipping credit for the delay.',
         'Enable SMS delivery notifications so Sofia is alerted the moment it arrives.'
       ],
       replyToName: 'Sofia',
       replies: {
-        approve: "Dear Ms. Martins,\n\nThank you for contacting Rymax Customer Support regarding order #6005. We have confirmed with our carrier that your package has not yet been scanned and are following up on your behalf. As an apology for the delay, we have applied a $10 credit to your account.\n\nWe have also enabled SMS notifications so you'll be alerted the moment it's delivered.\n\nKind regards,\nRymax Customer Support",
-        decline: "Dear Ms. Martins,\n\nThank you for contacting Rymax Customer Support regarding order #6005. After reviewing your shipment, we found that it is on track to arrive within the carrier's standard delivery window, so we are unable to process a refund or credit at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
-        escalate: "Dear Ms. Martins,\n\nThank you for your patience regarding order #6005. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
+        approve: "Dear Ms. Martins,\n\nThank you for contacting Rymax Customer Support regarding order SO6D7MTB4L. We have confirmed with our carrier that your package has not yet been scanned and are following up on your behalf. As an apology for the delay, we have applied a $10 credit to your account.\n\nWe have also enabled SMS notifications so you'll be alerted the moment it's delivered.\n\nKind regards,\nRymax Customer Support",
+        decline: "Dear Ms. Martins,\n\nThank you for contacting Rymax Customer Support regarding order SO6D7MTB4L. After reviewing your shipment, we found that it is on track to arrive within the carrier's standard delivery window, so we are unable to process a refund or credit at this time.\n\nAs a gesture of goodwill, we would like to offer you a 20% discount on your next order. Please let us know if you would like to proceed with this offer or if there is any further information you would like us to consider.\n\nWe apologize for any inconvenience and appreciate your understanding.\n\nKind regards,\nRymax Customer Support",
+        escalate: "Dear Ms. Martins,\n\nThank you for your patience regarding order SO6D7MTB4L. To ensure your case is resolved promptly, we are escalating it to one of our specialists, who will contact you by phone within the hour.\n\nWe appreciate your understanding.\n\nKind regards,\nRymax Customer Support"
       },
       finishMsg: {
         approve: 'Approved — a shipping credit was applied and SMS alerts are on. Sofia was notified by email just now.',
@@ -1810,7 +1810,7 @@
 
   function baseFileEntries(c){
     return [
-      { title: 'Order #' + c.orderId, sub: 'From the account' },
+      { title: 'Order ' + c.orderId, sub: 'From the account' },
       { title: c.customerName + ' &middot; contact details', sub: 'From the account' },
       { title: c.carrierFact, sub: 'From the carrier' },
       { title: 'Issue: ' + c.issueSummary, sub: 'AI summary' },
@@ -1856,7 +1856,7 @@
       var c = CASES[id];
       var meta = STATUS_META[c.status];
       return '<button type="button" class="case-row' + (id === activeId ? ' is-active' : '') + '" data-case="' + id + '">' +
-          '<span class="case-row-title"><span class="status-dot" style="background:' + meta.dot + '"></span>' + c.shortName + ' &middot; #' + id + '</span>' +
+          '<span class="case-row-title"><span class="status-dot" style="background:' + meta.dot + '"></span>' + c.shortName + ' &middot; ' + id + '</span>' +
           '<span class="case-row-meta">' + c.dateLabel + ' &middot; ' + c.meta + '</span>' +
         '</button>';
     }
@@ -1912,7 +1912,7 @@
     });
 
     function subjectFor(c){
-      return 'Re: Order #' + c.orderId + ' &mdash; ' + c.categoryShort;
+      return 'Re: Order ' + c.orderId + ' &mdash; ' + c.categoryShort;
     }
 
     function composerHtml(c, action){
@@ -2000,7 +2000,7 @@
 
       adminMainEl.innerHTML =
         '<div class="admin-case-header">' +
-          '<h3>#' + c.orderId + ' &middot; ' + c.customerName + '</h3>' +
+          '<h3>' + c.orderId + ' &middot; ' + c.customerName + '</h3>' +
           ddownHtml('statusDdown', 'ddown--status', statusTriggerLabel, statusOptions, c.status) +
         '</div>' +
         '<div class="card">' +
