@@ -1979,7 +1979,7 @@
                 '<span class="admin-photo-img" style="background-image:url(&quot;' + photoImgUrl(photo.label) + '&quot;)"></span>' +
                 (photo.aiSuspect ? '<span class="admin-photo-ai-badge">AI</span>' : '') +
               '</span>' +
-              '<span class="admin-photo-caption">' + escapeHtml(photo.label) + (photo.aiSuspect ? ' &middot; <span class="admin-photo-caption-flag">possible AI image</span>' : '') + '</span>' +
+              '<span class="admin-photo-caption">' + escapeHtml(photo.label) + '</span>' +
             '</button>';
           }).join('') +
         '</div>' +
@@ -2003,7 +2003,7 @@
           '</div>' +
           photosHtml +
           '<div class="action-divider"></div>' +
-          '<p class="card-label">Recommended solution</p>' +
+          '<p class="card-label">AI-suggested solution &middot; verify before applying</p>' +
           '<ol class="rec-list">' +
             c.steps.map(function(step, i){ return '<li><span class="rec-num">' + (i + 1) + '</span>' + step + '</li>'; }).join('') +
           '</ol>' +
